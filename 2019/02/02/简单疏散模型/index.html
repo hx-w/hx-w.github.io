@@ -196,6 +196,7 @@
         <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>这一切要从<strong>2019MCM/ICM</strong>(<a target="_blank" rel="noopener" href="https://www.comap.com/undergraduate/contests/mcm/contests/2019/problems/">题目下载地址</a>)开始说起，我们小组拿到题目之后经过讨论选择了D题。这其实也是我个人的意向，因为今年的题目普遍需要生物和金融方面的知识，而我们组除了我是计科专业的，其他两位都是做理论物理方向，而今年的题目普遍没有物理发挥的余地，所以我尽量去找一些适合计科的题目。但B题C题给我的第一感觉就是只有我一个人写程序做数据处理肯定搞不定，所以我和小组都将目标放在了我有点思路的D题上。</p>
 <p>D题说的是模拟卢浮宫中发生恐怖袭击的人群疏散情况，具体的题目就不详细说了，我这里详细介绍一下我在队友帮助下建立起的简单疏散模型。</p>
 <a id="more"></a>
+
 <h2 id="模型设计"><a href="#模型设计" class="headerlink" title="模型设计"></a>模型设计</h2><h3 id="预处理"><a href="#预处理" class="headerlink" title="预处理"></a>预处理</h3><p>将实际的人群分布抽象成网络图，即每个点表示一个区域，连接两个点的边表示该两区域之间可以通行。</p>
 <p>其中每个点和每条边都存有若干属性：</p>
 <ul>
@@ -213,66 +214,62 @@
 </blockquote>
 <h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>我们的模型目的是去模拟在有多个出口且位置已知的情况下，不同结点在各个时间段的人群分布情况，进而获得全局的疏散情况。</p>
 <p>因此，我们需要定义一些符号来解释这些逻辑。</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
-<th style="text-align:center">符号</th>
-<th style="text-align:center">含义</th>
+<th align="center">符号</th>
+<th align="center">含义</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">$U_t$</td>
-<td style="text-align:center">单位时间</td>
+<tbody><tr>
+<td align="center">$U_t$</td>
+<td align="center">单位时间</td>
 </tr>
 <tr>
-<td style="text-align:center">$v_i $</td>
-<td style="text-align:center">$v_i = \{N, M_v\}$，标记为$i$的结点</td>
+<td align="center">$v_i $</td>
+<td align="center">$v_i = {N, M_v}$，标记为$i$的结点</td>
 </tr>
 <tr>
-<td style="text-align:center">$e(v_i, v_j)$</td>
-<td style="text-align:center">$e(v_i, v_j) = \{F_l, M_c, \epsilon\}$，连接$v_i$和$v_j$的边</td>
+<td align="center">$e(v_i, v_j)$</td>
+<td align="center">$e(v_i, v_j) = {F_l, M_c, \epsilon}$，连接$v_i$和$v_j$的边</td>
 </tr>
 <tr>
-<td style="text-align:center">$\delta$</td>
-<td style="text-align:center">单位时间内该结点人数的减少量</td>
+<td align="center">$\delta$</td>
+<td align="center">单位时间内该结点人数的减少量</td>
 </tr>
 <tr>
-<td style="text-align:center">$F_l $</td>
-<td style="text-align:center">某条边在单位时间内通过的人数</td>
+<td align="center">$F_l $</td>
+<td align="center">某条边在单位时间内通过的人数</td>
 </tr>
 <tr>
-<td style="text-align:center">$M_e $</td>
-<td style="text-align:center">某条边在单位时间内能通过的最大人数</td>
+<td align="center">$M_e $</td>
+<td align="center">某条边在单位时间内能通过的最大人数</td>
 </tr>
 <tr>
-<td style="text-align:center">$\epsilon$</td>
-<td style="text-align:center">人群对某条边的偏向程度</td>
+<td align="center">$\epsilon$</td>
+<td align="center">人群对某条边的偏向程度</td>
 </tr>
 <tr>
-<td style="text-align:center">$N$</td>
-<td style="text-align:center">某一结点的人数</td>
+<td align="center">$N$</td>
+<td align="center">某一结点的人数</td>
 </tr>
 <tr>
-<td style="text-align:center">$M_v $</td>
-<td style="text-align:center">某一结点能容纳的最大人数</td>
+<td align="center">$M_v $</td>
+<td align="center">某一结点能容纳的最大人数</td>
 </tr>
 <tr>
-<td style="text-align:center">$N^+(v_i)$</td>
-<td style="text-align:center">与$v_i$邻接且已经更新过的结点的集合</td>
+<td align="center">$N^+(v_i)$</td>
+<td align="center">与$v_i$邻接且已经更新过的结点的集合</td>
 </tr>
 <tr>
-<td style="text-align:center">$N^-(v_i)$</td>
-<td style="text-align:center">与$v_i$邻接且未更新的结点的集合</td>
+<td align="center">$N^-(v_i)$</td>
+<td align="center">与$v_i$邻接且未更新的结点的集合</td>
 </tr>
 <tr>
-<td style="text-align:center">$lt^T, lt^E, lt^D$</td>
-<td style="text-align:center">限制某个结点人数转移的三个限制因素</td>
+<td align="center">$lt^T, lt^E, lt^D$</td>
+<td align="center">限制某个结点人数转移的三个限制因素</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <h3 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h3><p>首先我们认为$\rightarrow$代表引用集合中某个元素，例如$v_i\rightarrow N$表示$v_i $中的人数。</p>
 <p>且规定$v_i\rightarrow \delta = \min(lt^T, lt^E, lt^D)$。也就是说只要知道那三个限制因素，就知道在单位时间内某个结点的人数变化。</p>
 <p>为了更好地在计算机中处理数据，我这里对整个疏散过程离散化。也就是定义一个单位时间，在该单位时间内计算所有结点的人数减少量，即可反应该单位时间内的人数变化趋势，直到人数都为0为止，疏散完成。</p>
@@ -280,162 +277,153 @@
 <p>针对扩散到的某一结点$v_i$，我们很容易就可以算出来$N^+(v_i)$和$N^-(v_i)$。接下来就要算那三个限制因素。</p>
 <h4 id="目标结点限制"><a href="#目标结点限制" class="headerlink" title="目标结点限制"></a>目标结点限制</h4><p>假设我们处在某一结点上，前面有多个方向都发生了人数流动，且人数都在减少。该结点上的每一个人都会选择多个方向中的其中一个方向前进，由定义可知，$v_i$结点人数的流动一定是向$N^+(v_i)$中的结点的。</p>
 <p>假如我们已经知道了$v_i$向$N^+(v_i)$中某个结点$v_t$的偏向性$\epsilon$，即$e(v_i, v_t)\rightarrow \epsilon, v_t \in N^+(v_i)$，那么：</p>
-<script type="math/tex; mode=display">
-lt^T = e(v_i, v_t)\rightarrow \epsilon \times(v_t \rightarrow M_v - v_t\rightarrow N)</script><p>也就是说，该方向的偏向性乘上目标结点还可以容纳的人数就是该结点在该方向的<strong>结点取向限制 $lt^T $</strong>。</p>
+<p>$$<br>lt^T = e(v_i, v_t)\rightarrow \epsilon \times(v_t \rightarrow M_v - v_t\rightarrow N)<br>$$</p>
+<p>也就是说，该方向的偏向性乘上目标结点还可以容纳的人数就是该结点在该方向的**结点取向限制 $lt^T $**。</p>
 <p>而某条边的偏向性$\epsilon$可以通过这样的公式得到：</p>
-<script type="math/tex; mode=display">
-\forall v_k \in N^-(v_i) \
-e(v_i, v_k) \rightarrow \epsilon \\[2ex]= \frac{\min(v_k\rightarrow N, e(v_i, v_k) \rightarrow F_l \times U_t)}{\sum_{v\in N^-(v_i)} \min(v\rightarrow N, e(v_i, v) \rightarrow F_l \times U_t)}</script><h4 id="边流量限制"><a href="#边流量限制" class="headerlink" title="边流量限制"></a>边流量限制</h4><p>边所能承载的流量也是限制结点人数转移的一大因素。假设我们要从$v_i$向$v_t$转移人数，且$v_t \in N^+(v_i)$。</p>
-<script type="math/tex; mode=display">
-lt^E = e(v_i, v_t) \rightarrow F_l \times U_t</script><p>该方向边的流量乘上单位时间即该结点在该方向的<strong>边流量限制$lt^E$</strong>。</p>
+<p>$$<br>\forall v_k \in N^-(v_i) <br>e(v_i, v_k) \rightarrow \epsilon \[2ex]= \frac{\min(v_k\rightarrow N, e(v_i, v_k) \rightarrow F_l \times U_t)}{\sum_{v\in N^-(v_i)} \min(v\rightarrow N, e(v_i, v) \rightarrow F_l \times U_t)}<br>$$</p>
+<h4 id="边流量限制"><a href="#边流量限制" class="headerlink" title="边流量限制"></a>边流量限制</h4><p>边所能承载的流量也是限制结点人数转移的一大因素。假设我们要从$v_i$向$v_t$转移人数，且$v_t \in N^+(v_i)$。</p>
+<p>$$<br>lt^E = e(v_i, v_t) \rightarrow F_l \times U_t<br>$$</p>
+<p>该方向边的流量乘上单位时间即该结点在该方向的**边流量限制$lt^E$**。</p>
 <p>特别地，边流量也可能随着时间的变化而变化，影响其变化的主要因素就是起点与终点的人数差。人数差越大，边流量也就越大，反之亦然。表示为：</p>
-<script type="math/tex; mode=display">
-e(v_i, v_t) \rightarrow F_l \propto \mid v_i\rightarrow N - v_t \rightarrow B\mid</script><h4 id="结点偏向性限制"><a href="#结点偏向性限制" class="headerlink" title="结点偏向性限制"></a>结点偏向性限制</h4><p>当人群有多种出口选择的时候，人们会偏向选择流动最快的。但是在紧急疏散过程中，根据人群的从众心理，很有可能在有多种选择时，人们偏向选择人数多方向。即在向目标结点转移限制的表示为：</p>
-<script type="math/tex; mode=display">
-lt^D = v_i \rightarrow N \times \frac{v_t \rightarrow N + v_t \rightarrow \delta}{\sum_{v\in N^+(v_i) }v_t \rightarrow N + v_t \rightarrow \delta}</script><p>即多个目标方向中，人数越多的，该结点向目标结点的偏向性越大，即<strong>结点的偏向性限制$lt^D$</strong>。</p>
-<h2 id="模型测试"><a href="#模型测试" class="headerlink" title="模型测试"></a>模型测试</h2><h3 id="输入"><a href="#输入" class="headerlink" title="输入"></a>输入</h3><p>仍然用<a href="#预处理">预处理</a>中的图片作为输入，再加上每个结点的相关信息。</p>
-<h4 id="结点信息"><a href="#结点信息" class="headerlink" title="结点信息"></a>结点信息</h4><div class="table-container">
-<table>
+<p>$$<br>e(v_i, v_t) \rightarrow F_l \propto \mid v_i\rightarrow N - v_t \rightarrow B\mid<br>$$</p>
+<h4 id="结点偏向性限制"><a href="#结点偏向性限制" class="headerlink" title="结点偏向性限制"></a>结点偏向性限制</h4><p>当人群有多种出口选择的时候，人们会偏向选择流动最快的。但是在紧急疏散过程中，根据人群的从众心理，很有可能在有多种选择时，人们偏向选择人数多方向。即在向目标结点转移限制的表示为：</p>
+<p>$$<br>lt^D = v_i \rightarrow N \times \frac{v_t \rightarrow N + v_t \rightarrow \delta}{\sum_{v\in N^+(v_i) }v_t \rightarrow N + v_t \rightarrow \delta}<br>$$</p>
+<p>即多个目标方向中，人数越多的，该结点向目标结点的偏向性越大，即**结点的偏向性限制$lt^D$**。</p>
+<h2 id="模型测试"><a href="#模型测试" class="headerlink" title="模型测试"></a>模型测试</h2><h3 id="输入"><a href="#输入" class="headerlink" title="输入"></a>输入</h3><p>仍然用<a href="#%E9%A2%84%E5%A4%84%E7%90%86">预处理</a>中的图片作为输入，再加上每个结点的相关信息。</p>
+<h4 id="结点信息"><a href="#结点信息" class="headerlink" title="结点信息"></a>结点信息</h4><table>
 <thead>
 <tr>
-<th style="text-align:center">标签</th>
-<th style="text-align:center">是否出口</th>
-<th style="text-align:center">$N$</th>
-<th style="text-align:center">$M_v$</th>
+<th align="center">标签</th>
+<th align="center">是否出口</th>
+<th align="center">$N$</th>
+<th align="center">$M_v$</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">false</td>
-<td style="text-align:center">1600</td>
-<td style="text-align:center">3000</td>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">false</td>
+<td align="center">1600</td>
+<td align="center">3000</td>
 </tr>
 <tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">false</td>
-<td style="text-align:center">2000</td>
-<td style="text-align:center">3000</td>
+<td align="center">2</td>
+<td align="center">false</td>
+<td align="center">2000</td>
+<td align="center">3000</td>
 </tr>
 <tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">false</td>
-<td style="text-align:center">2500</td>
-<td style="text-align:center">2500</td>
+<td align="center">3</td>
+<td align="center">false</td>
+<td align="center">2500</td>
+<td align="center">2500</td>
 </tr>
 <tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">false</td>
-<td style="text-align:center">3000</td>
-<td style="text-align:center">3000</td>
+<td align="center">4</td>
+<td align="center">false</td>
+<td align="center">3000</td>
+<td align="center">3000</td>
 </tr>
 <tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">false</td>
-<td style="text-align:center">2600</td>
-<td style="text-align:center">3000</td>
+<td align="center">5</td>
+<td align="center">false</td>
+<td align="center">2600</td>
+<td align="center">3000</td>
 </tr>
 <tr>
-<td style="text-align:center">6</td>
-<td style="text-align:center">false</td>
-<td style="text-align:center">3000</td>
-<td style="text-align:center">3000</td>
+<td align="center">6</td>
+<td align="center">false</td>
+<td align="center">3000</td>
+<td align="center">3000</td>
 </tr>
 <tr>
-<td style="text-align:center">7</td>
-<td style="text-align:center">false</td>
-<td style="text-align:center">4000</td>
-<td style="text-align:center">4000</td>
+<td align="center">7</td>
+<td align="center">false</td>
+<td align="center">4000</td>
+<td align="center">4000</td>
 </tr>
 <tr>
-<td style="text-align:center">A</td>
-<td style="text-align:center">true</td>
-<td style="text-align:center">NA</td>
-<td style="text-align:center">NA</td>
+<td align="center">A</td>
+<td align="center">true</td>
+<td align="center">NA</td>
+<td align="center">NA</td>
 </tr>
 <tr>
-<td style="text-align:center">H</td>
-<td style="text-align:center">true</td>
-<td style="text-align:center">NA</td>
-<td style="text-align:center">NA</td>
+<td align="center">H</td>
+<td align="center">true</td>
+<td align="center">NA</td>
+<td align="center">NA</td>
 </tr>
-</tbody>
-</table>
-</div>
-<h4 id="边值信息"><a href="#边值信息" class="headerlink" title="边值信息"></a>边值信息</h4><div class="table-container">
-<table>
+</tbody></table>
+<h4 id="边值信息"><a href="#边值信息" class="headerlink" title="边值信息"></a>边值信息</h4><table>
 <thead>
 <tr>
-<th style="text-align:center">结点编号</th>
-<th style="text-align:center">结点编号</th>
-<th style="text-align:center">$F_l$</th>
-<th style="text-align:center">$M_e$</th>
+<th align="center">结点编号</th>
+<th align="center">结点编号</th>
+<th align="center">$F_l$</th>
+<th align="center">$M_e$</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">2</td>
-<td style="text-align:center">6</td>
-<td style="text-align:center">10</td>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">6</td>
+<td align="center">10</td>
 </tr>
 <tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">7</td>
-<td style="text-align:center">4</td>
-<td style="text-align:center">10</td>
+<td align="center">1</td>
+<td align="center">7</td>
+<td align="center">4</td>
+<td align="center">10</td>
 </tr>
 <tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">5</td>
-<td style="text-align:center">3</td>
-<td style="text-align:center">10</td>
+<td align="center">1</td>
+<td align="center">5</td>
+<td align="center">3</td>
+<td align="center">10</td>
 </tr>
 <tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">A</td>
-<td style="text-align:center">5</td>
-<td style="text-align:center">10</td>
+<td align="center">1</td>
+<td align="center">A</td>
+<td align="center">5</td>
+<td align="center">10</td>
 </tr>
 <tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">H</td>
-<td style="text-align:center">7</td>
-<td style="text-align:center">10</td>
+<td align="center">5</td>
+<td align="center">H</td>
+<td align="center">7</td>
+<td align="center">10</td>
 </tr>
 <tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">6</td>
-<td style="text-align:center">3</td>
-<td style="text-align:center">10</td>
+<td align="center">5</td>
+<td align="center">6</td>
+<td align="center">3</td>
+<td align="center">10</td>
 </tr>
 <tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">4</td>
-<td style="text-align:center">2</td>
-<td style="text-align:center">5</td>
+<td align="center">5</td>
+<td align="center">4</td>
+<td align="center">2</td>
+<td align="center">5</td>
 </tr>
 <tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">7</td>
-<td style="text-align:center">3</td>
-<td style="text-align:center">5</td>
+<td align="center">4</td>
+<td align="center">7</td>
+<td align="center">3</td>
+<td align="center">5</td>
 </tr>
 <tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">7</td>
-<td style="text-align:center">4</td>
-<td style="text-align:center">5</td>
+<td align="center">2</td>
+<td align="center">7</td>
+<td align="center">4</td>
+<td align="center">5</td>
 </tr>
 <tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">4</td>
-<td style="text-align:center">6</td>
-<td style="text-align:center">10</td>
+<td align="center">3</td>
+<td align="center">4</td>
+<td align="center">6</td>
+<td align="center">10</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <h3 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h3><p>经过程序模拟，得到疏散的过程，我们把数据放到MATLAB中进行数据的可视化，得到结果：</p>
 <p><img src="https://hx-w.github.io/img/simple_model/result.png" alt="结果"></p>
 <p>结果就如看到的这样，每个结点的人数随时间的变化趋势。</p>
@@ -758,15 +746,11 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Python - 算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">算法</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">图论</a>
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -782,7 +766,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+                <a href="javascript:void(0)" class="js-tag color3">图论</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -794,7 +778,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color2">Python - 算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">代码之外</a>
               </li>
             
             <div class="clearfix"></div>
