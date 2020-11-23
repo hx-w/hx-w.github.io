@@ -45,9 +45,6 @@
   
 
   
-    
- 	  <script src="/lib/clickLove.js"></script>
-  
   
 
 <script>
@@ -97,9 +94,9 @@
 		<nav class="header-menu">
 			<ul>
 			
-				<li><a href="/" target="_blank">主页</a></li>
+				<li><a href="/" >主页</a></li>
 			
-				<li><a href="/tags/%E4%BB%A3%E7%A0%81%E4%B9%8B%E5%A4%96/" target="_blank">随笔</a></li>
+				<li><a href="/tags/%E4%BB%A3%E7%A0%81%E4%B9%8B%E5%A4%96/" >随笔</a></li>
 			
 			</ul>
 		</nav>
@@ -122,28 +119,28 @@
 			<div class="social">
 				
 					
-						<a class="github" href="https://github.com/hx-w" 
-												title="GitHub" target="_blank"><i class="icon-github"></i></a>
+						<a class="github" target="_blank" rel="noopener" href="https://github.com/hx-w" 
+												title="GitHub" ><i class="icon-github"></i></a>
 					
 				
 					
-						<a class="zhihu" href="https://www.zhihu.com/people/he-xiang-51-99" 
-												title="知乎" target="_blank"><i class="icon-zhihu"></i></a>
+						<a class="zhihu" target="_blank" rel="noopener" href="https://www.zhihu.com/people/he-xiang-51-99" 
+												title="知乎" ><i class="icon-zhihu"></i></a>
 					
 				
 					
 						<a class="qq" href="/img/myqq.png" 
-												title="QQ" target="_blank"><i class="icon-qq"></i></a>
+												title="QQ" ><i class="icon-qq"></i></a>
 					
 				
 					
-						<a class="bilibili" href="https://space.bilibili.com/12301465" 
-												title="哔哩哔哩" target="_blank"><i class="icon-bilibili"></i></a>
+						<a class="bilibili" target="_blank" rel="noopener" href="https://space.bilibili.com/12301465" 
+												title="哔哩哔哩" ><i class="icon-bilibili"></i></a>
 					
 				
 					
 						<a class="mail" href="mailto:herixth@163.com" 
-												title="邮件联系" target="_blank"><i class="icon-mail"></i></a>
+												title="邮件联系" ><i class="icon-mail"></i></a>
 					
 				
 			</div>
@@ -154,12 +151,6 @@
 
     </div>
     <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
-      
-      
-      <a class="forkMe" style="position:absolute;z-index:999;top:0;right:0.5em;" 
-        href="https://github.com/hx-w/hx-w.github.io" target="_blank">
-        <img src="/img/forkme.png"
-          class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
       
       
 <nav id="mobile-nav">
@@ -589,7 +580,7 @@
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
-		open_in_new: true,
+		open_in_new: false,
 		toc_hide_index: true,
 		root: "/",
 		innerArchive: true,
@@ -623,23 +614,6 @@
 
 
 <!--  -->
-
-<script>
-  /* 标签页标题切换 */
-  var originTitle = document.title;
-  var titleTime;
-  document.addEventListener("visibilitychange", function () {
-    if (document.hidden) {
-      document.title = "(つェ⊂) 我藏好了哦~ " + originTitle;
-      clearTimeout(titleTime);
-    } else {
-      document.title = "(*´∇｀*) 被你发现啦~ " + originTitle;
-      titleTime = setTimeout(function () {
-        document.title = originTitle;
-      }, 2000);
-    }
-  });
-</script>
 
 
     
