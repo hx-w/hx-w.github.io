@@ -6,20 +6,16 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://hx-w.github.io">
-  <title>Decision Tree with ID3 Algorithm | 贺翔的博客</title>
+  <title>贺翔的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Decision Tree name: He Xiang (贺翔)   date: 2018-11-10  Experimental enviroment  OS: Windows 10 IDE: Visual Studio 2017 &amp; vim 8.1">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Decision Tree with ID3 Algorithm">
-<meta property="og:url" content="http://hx-w.github.io/2018/11/20/DecisionTree/index.html">
+  <meta name="description" content="如果文章内容不准确请联系我更改">
+<meta property="og:type" content="website">
+<meta property="og:title" content="贺翔的博客">
+<meta property="og:url" content="http://hx-w.github.io/page/2/index.html">
 <meta property="og:site_name" content="贺翔的博客">
-<meta property="og:description" content="Decision Tree name: He Xiang (贺翔)   date: 2018-11-10  Experimental enviroment  OS: Windows 10 IDE: Visual Studio 2017 &amp; vim 8.1">
+<meta property="og:description" content="如果文章内容不准确请联系我更改">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2018-11-19T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-11-22T13:11:23.629Z">
 <meta property="article:author" content="贺翔&#x2F;hx-w">
-<meta property="article:tag" content="信息熵">
-<meta property="article:tag" content="决策树">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="贺翔的博客" type="application/atom+xml">
@@ -158,14 +154,16 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-DecisionTree" class="article article-type-post " itemscope itemprop="blogPost">
+            
+  
+    <article id="post-DecisionTree" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 class="article-title" itemprop="name">
-      Decision Tree with ID3 Algorithm
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/20/DecisionTree/">Decision Tree with ID3 Algorithm</a>
     </h1>
   
 
@@ -196,170 +194,9 @@
 </li>
 </ul>
 <hr>
-<a id="more"></a>
-<h3 id="Requirement"><a href="#Requirement" class="headerlink" title="Requirement"></a>Requirement</h3><p>  ​    A decision tree is a flowchart-like structure in which each internal node represents a “test” on an attribute (e.g whether a coin flip comes up heads or tails), each branch represents the outcome of the test, and each leaf node represents a class label (decision taken after computing all attributes). The paths from root to leaf represent classification rules.</p>
-<p>  ​    In Decision Tree the major challenge is the identification of the attribute for the root node in each level. This processis known as attribute selection. We have a popular attribute selection measure, Information Gain, which is defined based on entropy. Entropy is the measure of uncertainty of a random variable; it characterizes the impurity of an arbitrary collection of examples. As we use a node in decision tree to partition the training instances into smaller subsets, the entropy changes. Information gain is a measure of this change in entropy. The best attribute should maximize the information gain given a set of training instances. </p>
-<p>  ​    The table below specifies the conditions for whether to play badmintion or not. You are required to construct a decision tree based on the information in the table.</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>No.</th>
-<th>Outlook</th>
-<th>Temperature</th>
-<th>Humidity</th>
-<th>Windy</th>
-<th>Play?</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>Sunny</td>
-<td>Hot</td>
-<td>High</td>
-<td>False</td>
-<td>No</td>
-</tr>
-<tr>
-<td>2</td>
-<td>Sunny</td>
-<td>Hot</td>
-<td>High</td>
-<td>True</td>
-<td>No</td>
-</tr>
-<tr>
-<td>3</td>
-<td>Overcast</td>
-<td>Hot</td>
-<td>High</td>
-<td>False</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>4</td>
-<td>Rain</td>
-<td>Mild</td>
-<td>High</td>
-<td>False</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>5</td>
-<td>Rain</td>
-<td>Cool</td>
-<td>Normal</td>
-<td>False</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>6</td>
-<td>Rain</td>
-<td>Cool</td>
-<td>Normal</td>
-<td>True</td>
-<td>No</td>
-</tr>
-<tr>
-<td>7</td>
-<td>Overcast</td>
-<td>Cool</td>
-<td>Normal</td>
-<td>True</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>8</td>
-<td>Sunny</td>
-<td>Mild</td>
-<td>High</td>
-<td>False</td>
-<td>No</td>
-</tr>
-<tr>
-<td>9</td>
-<td>Sunny</td>
-<td>Cool</td>
-<td>Normal</td>
-<td>False</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>10</td>
-<td>Rain</td>
-<td>Mild</td>
-<td>Normal</td>
-<td>False</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>11</td>
-<td>Sunny</td>
-<td>Mild</td>
-<td>Normal</td>
-<td>True</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>12</td>
-<td>Overcast</td>
-<td>Mild</td>
-<td>High</td>
-<td>True</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>13</td>
-<td>Overcast</td>
-<td>Hot</td>
-<td>Normal</td>
-<td>False</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>14</td>
-<td>Rain</td>
-<td>Mild</td>
-<td>High</td>
-<td>True</td>
-<td>No</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h3><p>The decision tree build is ruled by the ID3 algorithm(Iterative Dichotomiser 3). And its main theory is Information theory.</p>
-<h4 id="description"><a href="#description" class="headerlink" title="description"></a>description</h4><p> If $X$ is a discrete random variable and its probability distribution is $p(x)=P(X=x), x\in X$, then the information entropy of $X$ is $H(X)$</p>
-<script type="math/tex; mode=display">
-  H(X) = -\sum_{i}^{}{p(x_i)\log_2p(x_i)}</script><p>  ​    $H(X)$ is also called Prior Entropy of X.</p>
-<p>  ​    Support that condition that an event $y_j$ happens, the conditional probability of the random event $x_i$ occurring is $p(x_i\mid y_j)$. Under the condition of $y_j$, the uncertainty about $X$ is defined as the posterior entropy $H(X\mid y_j)$.</p>
-<script type="math/tex; mode=display">
-  H(X|y_j)=-\sum_{i}^{}p(x_i|y_j)\log_2(p(x_i|y_j))</script><p>  ​    For attribute $Y$ (the set of each $y_j$), the conditional entropy of set $X$ is $H(X\mid Y)$</p>
-<script type="math/tex; mode=display">
-  H(X|Y)=\sum_{j}{p(y_j)H(X|y_j)}=-\sum_{j}{p(y_j)\sum_{i}{p(x_i|y_j)\log_2p(x_i|y_j)}}</script><p>​      With prior entropy $H(X)$ and conditional entropy $H(X \mid Y)$, We can define the information gain $IG(X,Y)$, means that how much information gain can variable $X$ get from  attribute $Y$</p>
-<script type="math/tex; mode=display">
-IG(X,Y)=H(X)-H(X|Y)</script><h4 id="example"><a href="#example" class="headerlink" title="example"></a>example</h4><p>For the training table. Consider attribute $Outlook=\{Sunny, Overcast,Rainy\}$.</p>
-<ul>
-<li>$H(Play\mid Sunny)=-\frac{2}{5}\cdot\log_2\frac{2}{5}-\frac{3}{5}\cdot\log_2\frac{3}{5}=0.970951$</li>
-<li>$H(Play \mid Overcast)=-\frac{4}{4}\cdot\log_2\frac{4}{4}-0\cdot\log_20=0$</li>
-<li>$H(Play\mid Rainy)=-\frac{3}{5}\cdot\log_2\frac{3}{5}-\frac{2}{3}\cdot\log_2\frac{2}{3}=0.970951$</li>
-</ul>
-<p>So the conditional entropy of $Outlook$ is $H(Play\mid Outlook)=\frac{5}{14}\cdot0.970951+\frac{4}{14}\cdot0+\frac{5}{14}\cdot0.970951=0.693536$. and then the information gain from $Outlook$ to $Play$ is $IG(Play,Outlook)=H(Play)-H(Play\mid Outlook)=0.24675$. </p>
-<p>  ​    For all attributes are the same:</p>
-<ul>
-<li>$IG(Play,Outlook)=0.24675$</li>
-<li>$IG(Play,Temperature)=0.0292226$</li>
-<li>$IG(Play, Humidity)=0.151836$</li>
-<li><p>$IG(Play, Windy)=0.048127$</p>
-<p>​    Alfter get all attributes’ IG, then choose the maximum IG. Here is $IG(Play, Outlook)$, For the decision tree current node, make $Outlook$ as the node’s attribute and make all its value be the node’s child nodes’ index.</p>
-<p>​    Divide the from when process the child node, and recursively build the tree.</p>
-</li>
-</ul>
-<h6 id="class-definition"><a href="#class-definition" class="headerlink" title="class definition"></a>class definition</h6><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**   </span></span><br><span class="line"><span class="comment"> * @Brief store the attribute(col) in the sample  </span></span><br><span class="line"><span class="comment"> */</span>  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Attr</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// which col  </span></span><br><span class="line">    <span class="keyword">int</span> colIndex;  </span><br><span class="line">    <span class="comment">// how many types of the attr</span></span><br><span class="line">    <span class="keyword">int</span> typeNum;  </span><br><span class="line">    <span class="keyword">double</span> conEntroy, InforGain;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> attribute; </span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>&gt; attriValue;</span><br><span class="line">    <span class="comment">// init 0.0</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, <span class="keyword">double</span>&gt; typeEntropy;</span><br><span class="line">    <span class="comment">// start from 1</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, <span class="keyword">unsigned</span> <span class="keyword">int</span>&gt; typeCnt;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, <span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, <span class="keyword">unsigned</span> <span class="keyword">int</span>&gt; &gt; attriValue_to_result;</span><br><span class="line"></span><br><span class="line">    Attr(<span class="keyword">int</span> col = <span class="number">0</span>, <span class="built_in">std</span>::<span class="built_in">string</span> str = <span class="string">&quot;&quot;</span>):</span><br><span class="line">        colIndex(col), typeNum(<span class="number">0</span>), conEntroy(<span class="number">0</span>), InforGain(<span class="number">0</span>), attribute(str) &#123; &#125;</span><br><span class="line">    ~Attr() &#123; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**  </span></span><br><span class="line"><span class="comment"> * @Brief define the node infor</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// current attribute Infor</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> attri; </span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, TreeNode *&gt; attri_To_Children;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;Attr&gt; Table;</span><br><span class="line">    <span class="keyword">int</span> rowNum, colNum;</span><br><span class="line">    <span class="keyword">double</span> InforGain;</span><br><span class="line">    <span class="keyword">int</span> biggestIGidx;</span><br><span class="line">    <span class="keyword">bool</span> isLeaf;</span><br><span class="line"></span><br><span class="line">    TreeNode(): biggestIGidx(<span class="number">0</span>), InforGain(<span class="number">0.0</span>),</span><br><span class="line">    isLeaf(<span class="literal">true</span>), rowNum(<span class="number">0</span>), colNum(<span class="number">0</span>) &#123; &#125;</span><br><span class="line">    ~TreeNode() &#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">chooseIG</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">clearCol</span><span class="params">()</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**  </span></span><br><span class="line"><span class="comment"> * @Brief define the decision tree</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DecisionTree</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    DecisionTree() &#123; root = <span class="keyword">new</span> TreeNode; &#125;</span><br><span class="line">    ~DecisionTree() &#123; removeAll(root); &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">BuildTree</span><span class="params">()</span> </span>&#123; builder(root); &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">ReadTable</span><span class="params">(<span class="built_in">std</span>::ifstream &amp;)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">testTree</span><span class="params">()</span> </span>&#123; testTreeHelp(root); &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">printTree</span><span class="params">()</span> </span>&#123; printTreeHelp(root, <span class="string">&quot;NULL&quot;</span>); &#125;; </span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">removeAll</span><span class="params">(TreeNode *)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">printSample</span><span class="params">(TreeNode *)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">computeEntropyFir</span><span class="params">(TreeNode *)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">computeEntropySec</span><span class="params">(TreeNode *)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">builder</span><span class="params">(TreeNode *)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">processSample</span><span class="params">(TreeNode *)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">divideChild</span><span class="params">(TreeNode *)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">testTreeHelp</span><span class="params">(TreeNode *)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">printTreeHelp</span><span class="params">(TreeNode *, <span class="built_in">std</span>::<span class="built_in">string</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">    TreeNode *root;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h3 id="Analysis-and-discussion"><a href="#Analysis-and-discussion" class="headerlink" title="Analysis and discussion"></a>Analysis and discussion</h3><p>​    ID3 algorithm is a kind of greedy algorithm, when set a node’s attribute, alway choose the IG max one.</p>
-<p>​    this algorithm is easy to train data, but there are also same disadvantages. First, it only can process descrete data, if data is continuous, it does not work. Second, this algorithm is very reply on the training data, so it is easy to build a insufficient decision tree. And at most time, there may be some attribute won’t support any effective information, in this condition, the tree be built may be a bit unsuitable.</p>
-<p>   For me to implement this algorithm, I use a lot of $STL$ like $string$, $map$ and $vector$, may waste a lot of space and make the time efficiency lower.</p>
-
+        
+          <a class="article-more-a" href="/2018/11/20/DecisionTree/#more">more >></a>
+        
       
 
       
@@ -385,98 +222,16 @@ IG(X,Y)=H(X)-H(X|Y)</script><h4 id="example"><a href="#example" class="headerlin
       
 
       
-
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/11/20/DecisionTree/">展开全文 >></a>
+        </p>
       
-        <!- 百度自动推送方式提交 -->
 
-  <script>
-  (function(){
-      var bp = document.createElement('script');
-      var curProtocol = window.location.protocol.split(':')[0];
-      if (curProtocol === 'https') {
-          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-      }
-      else {
-          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-      }
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(bp, s);
-  })();
-  </script>
-
-<!- 百度自动推送方式提交结束 -->
-
-
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
-        </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://hx-w.github.io/2018/11/20/DecisionTree/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2018/12/04/HuffmanFilestructure/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Huffman编码压缩文件时的文件储存结构
-        
-      </div>
-    </a>
-  
-  
-</nav>
-
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -496,42 +251,14 @@ IG(X,Y)=H(X)-H(X|Y)</script><h4 id="example"><a href="#example" class="headerlin
 
 
 
-  
-  
-  
 
   
   
-
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    </nav>
   
 
-
-	
-	    <section id="comments" class="comments">
-	      <style>
-	        .comments{margin:30px;padding:10px;background:#fff}
-	        @media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#fff}}
-	      </style>
-	      <div id="vcomment" class="comment"></div> 
-<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
-<script src="https://cdnjs.loli.net/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script>
-    var notify = 'false' == true ? true : false;
-    var verify = 'false' == true ? true : false;
-    new Valine({
-        av: AV,
-        el: '#vcomment',
-        notify: notify,
-        app_id: "KGzA0BMlgSw6Oxjy2UPF0NzM-gzGzoHsz",
-        app_key: "NNDD4vd1fmK87haL2quLN9OI",
-        placeholder: "我认为...",
-        avatar:"mm",
-    });
-</script>
-
-	  </section>
-	
 
           </div>
         </div>
@@ -559,8 +286,8 @@ IG(X,Y)=H(X)-H(X|Y)</script><h4 id="example"><a href="#example" class="headerlin
     <script>
 	var yiliaConfig = {
 		mathjax: true,
-		isHome: false,
-		isPost: true,
+		isHome: true,
+		isPost: false,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,

@@ -6,20 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://hx-w.github.io">
-  <title>Decision Tree with ID3 Algorithm | 贺翔的博客</title>
+  <title>日常随笔-1 | 贺翔的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Decision Tree name: He Xiang (贺翔)   date: 2018-11-10  Experimental enviroment  OS: Windows 10 IDE: Visual Studio 2017 &amp; vim 8.1">
+  <meta name="description" content="现状课程方面这学期的课程量少，比上学期要轻松一些。但是学术论文研读的那个课程的考核也很让我头疼，第四周那个老师就要和每个学生谈话，根据谈话的内容现场打分。虽然我目前面试的效果都不错，但是我还是从内心里害怕和不了解的人交流，希望我能够体面的通过这门课。 此外值得一提的是，这学期我选了一门生活急救训练的课，最后要有三次实战测试，我还是很期待的。 专业方面先从编程来说，我目前已经放弃打ACM的想法，但并">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Decision Tree with ID3 Algorithm">
-<meta property="og:url" content="http://hx-w.github.io/2018/11/20/DecisionTree/index.html">
+<meta property="og:title" content="日常随笔-1">
+<meta property="og:url" content="http://hx-w.github.io/2019/03/09/%E6%97%A5%E5%B8%B8%E9%9A%8F%E7%AC%94-1/index.html">
 <meta property="og:site_name" content="贺翔的博客">
-<meta property="og:description" content="Decision Tree name: He Xiang (贺翔)   date: 2018-11-10  Experimental enviroment  OS: Windows 10 IDE: Visual Studio 2017 &amp; vim 8.1">
+<meta property="og:description" content="现状课程方面这学期的课程量少，比上学期要轻松一些。但是学术论文研读的那个课程的考核也很让我头疼，第四周那个老师就要和每个学生谈话，根据谈话的内容现场打分。虽然我目前面试的效果都不错，但是我还是从内心里害怕和不了解的人交流，希望我能够体面的通过这门课。 此外值得一提的是，这学期我选了一门生活急救训练的课，最后要有三次实战测试，我还是很期待的。 专业方面先从编程来说，我目前已经放弃打ACM的想法，但并">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2018-11-19T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-11-22T13:11:23.629Z">
+<meta property="article:published_time" content="2019-03-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-11-23T10:21:59.486Z">
 <meta property="article:author" content="贺翔&#x2F;hx-w">
-<meta property="article:tag" content="信息熵">
-<meta property="article:tag" content="决策树">
+<meta property="article:tag" content="随笔">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="贺翔的博客" type="application/atom+xml">
@@ -158,21 +157,21 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-DecisionTree" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-日常随笔-1" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Decision Tree with ID3 Algorithm
+      日常随笔-1
     </h1>
   
 
         
-        <a href="/2018/11/20/DecisionTree/" class="archive-article-date">
-  <time datetime="2018-11-19T16:00:00.000Z" itemprop="datePublished"
-    ><i class="icon-calendar icon"></i>2018-11-20</time
+        <a href="/2019/03/09/%E6%97%A5%E5%B8%B8%E9%9A%8F%E7%AC%94-1/" class="archive-article-date">
+  <time datetime="2019-03-08T16:00:00.000Z" itemprop="datePublished"
+    ><i class="icon-calendar icon"></i>2019-03-09</time
   >
     |
   <span id="busuanzi_container_page_pv">  本文总阅读量<span id="busuanzi_value_page_pv"></span>次</span>
@@ -183,182 +182,13 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Decision-Tree"><a href="#Decision-Tree" class="headerlink" title="Decision Tree"></a>Decision Tree</h1><ul>
-<li><p>name: He Xiang (贺翔) </p>
-</li>
-<li><p>date: 2018-11-10</p>
-</li>
-<li><p>Experimental enviroment</p>
-<blockquote>
-<p>OS: Windows 10</p>
-<p>IDE: Visual Studio 2017 &amp; vim 8.1</p>
-</blockquote>
-</li>
-</ul>
-<hr>
-<a id="more"></a>
-<h3 id="Requirement"><a href="#Requirement" class="headerlink" title="Requirement"></a>Requirement</h3><p>  ​    A decision tree is a flowchart-like structure in which each internal node represents a “test” on an attribute (e.g whether a coin flip comes up heads or tails), each branch represents the outcome of the test, and each leaf node represents a class label (decision taken after computing all attributes). The paths from root to leaf represent classification rules.</p>
-<p>  ​    In Decision Tree the major challenge is the identification of the attribute for the root node in each level. This processis known as attribute selection. We have a popular attribute selection measure, Information Gain, which is defined based on entropy. Entropy is the measure of uncertainty of a random variable; it characterizes the impurity of an arbitrary collection of examples. As we use a node in decision tree to partition the training instances into smaller subsets, the entropy changes. Information gain is a measure of this change in entropy. The best attribute should maximize the information gain given a set of training instances. </p>
-<p>  ​    The table below specifies the conditions for whether to play badmintion or not. You are required to construct a decision tree based on the information in the table.</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>No.</th>
-<th>Outlook</th>
-<th>Temperature</th>
-<th>Humidity</th>
-<th>Windy</th>
-<th>Play?</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>Sunny</td>
-<td>Hot</td>
-<td>High</td>
-<td>False</td>
-<td>No</td>
-</tr>
-<tr>
-<td>2</td>
-<td>Sunny</td>
-<td>Hot</td>
-<td>High</td>
-<td>True</td>
-<td>No</td>
-</tr>
-<tr>
-<td>3</td>
-<td>Overcast</td>
-<td>Hot</td>
-<td>High</td>
-<td>False</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>4</td>
-<td>Rain</td>
-<td>Mild</td>
-<td>High</td>
-<td>False</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>5</td>
-<td>Rain</td>
-<td>Cool</td>
-<td>Normal</td>
-<td>False</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>6</td>
-<td>Rain</td>
-<td>Cool</td>
-<td>Normal</td>
-<td>True</td>
-<td>No</td>
-</tr>
-<tr>
-<td>7</td>
-<td>Overcast</td>
-<td>Cool</td>
-<td>Normal</td>
-<td>True</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>8</td>
-<td>Sunny</td>
-<td>Mild</td>
-<td>High</td>
-<td>False</td>
-<td>No</td>
-</tr>
-<tr>
-<td>9</td>
-<td>Sunny</td>
-<td>Cool</td>
-<td>Normal</td>
-<td>False</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>10</td>
-<td>Rain</td>
-<td>Mild</td>
-<td>Normal</td>
-<td>False</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>11</td>
-<td>Sunny</td>
-<td>Mild</td>
-<td>Normal</td>
-<td>True</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>12</td>
-<td>Overcast</td>
-<td>Mild</td>
-<td>High</td>
-<td>True</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>13</td>
-<td>Overcast</td>
-<td>Hot</td>
-<td>Normal</td>
-<td>False</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>14</td>
-<td>Rain</td>
-<td>Mild</td>
-<td>High</td>
-<td>True</td>
-<td>No</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h3><p>The decision tree build is ruled by the ID3 algorithm(Iterative Dichotomiser 3). And its main theory is Information theory.</p>
-<h4 id="description"><a href="#description" class="headerlink" title="description"></a>description</h4><p> If $X$ is a discrete random variable and its probability distribution is $p(x)=P(X=x), x\in X$, then the information entropy of $X$ is $H(X)$</p>
-<script type="math/tex; mode=display">
-  H(X) = -\sum_{i}^{}{p(x_i)\log_2p(x_i)}</script><p>  ​    $H(X)$ is also called Prior Entropy of X.</p>
-<p>  ​    Support that condition that an event $y_j$ happens, the conditional probability of the random event $x_i$ occurring is $p(x_i\mid y_j)$. Under the condition of $y_j$, the uncertainty about $X$ is defined as the posterior entropy $H(X\mid y_j)$.</p>
-<script type="math/tex; mode=display">
-  H(X|y_j)=-\sum_{i}^{}p(x_i|y_j)\log_2(p(x_i|y_j))</script><p>  ​    For attribute $Y$ (the set of each $y_j$), the conditional entropy of set $X$ is $H(X\mid Y)$</p>
-<script type="math/tex; mode=display">
-  H(X|Y)=\sum_{j}{p(y_j)H(X|y_j)}=-\sum_{j}{p(y_j)\sum_{i}{p(x_i|y_j)\log_2p(x_i|y_j)}}</script><p>​      With prior entropy $H(X)$ and conditional entropy $H(X \mid Y)$, We can define the information gain $IG(X,Y)$, means that how much information gain can variable $X$ get from  attribute $Y$</p>
-<script type="math/tex; mode=display">
-IG(X,Y)=H(X)-H(X|Y)</script><h4 id="example"><a href="#example" class="headerlink" title="example"></a>example</h4><p>For the training table. Consider attribute $Outlook=\{Sunny, Overcast,Rainy\}$.</p>
-<ul>
-<li>$H(Play\mid Sunny)=-\frac{2}{5}\cdot\log_2\frac{2}{5}-\frac{3}{5}\cdot\log_2\frac{3}{5}=0.970951$</li>
-<li>$H(Play \mid Overcast)=-\frac{4}{4}\cdot\log_2\frac{4}{4}-0\cdot\log_20=0$</li>
-<li>$H(Play\mid Rainy)=-\frac{3}{5}\cdot\log_2\frac{3}{5}-\frac{2}{3}\cdot\log_2\frac{2}{3}=0.970951$</li>
-</ul>
-<p>So the conditional entropy of $Outlook$ is $H(Play\mid Outlook)=\frac{5}{14}\cdot0.970951+\frac{4}{14}\cdot0+\frac{5}{14}\cdot0.970951=0.693536$. and then the information gain from $Outlook$ to $Play$ is $IG(Play,Outlook)=H(Play)-H(Play\mid Outlook)=0.24675$. </p>
-<p>  ​    For all attributes are the same:</p>
-<ul>
-<li>$IG(Play,Outlook)=0.24675$</li>
-<li>$IG(Play,Temperature)=0.0292226$</li>
-<li>$IG(Play, Humidity)=0.151836$</li>
-<li><p>$IG(Play, Windy)=0.048127$</p>
-<p>​    Alfter get all attributes’ IG, then choose the maximum IG. Here is $IG(Play, Outlook)$, For the decision tree current node, make $Outlook$ as the node’s attribute and make all its value be the node’s child nodes’ index.</p>
-<p>​    Divide the from when process the child node, and recursively build the tree.</p>
-</li>
-</ul>
-<h6 id="class-definition"><a href="#class-definition" class="headerlink" title="class definition"></a>class definition</h6><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**   </span></span><br><span class="line"><span class="comment"> * @Brief store the attribute(col) in the sample  </span></span><br><span class="line"><span class="comment"> */</span>  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Attr</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// which col  </span></span><br><span class="line">    <span class="keyword">int</span> colIndex;  </span><br><span class="line">    <span class="comment">// how many types of the attr</span></span><br><span class="line">    <span class="keyword">int</span> typeNum;  </span><br><span class="line">    <span class="keyword">double</span> conEntroy, InforGain;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> attribute; </span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>&gt; attriValue;</span><br><span class="line">    <span class="comment">// init 0.0</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, <span class="keyword">double</span>&gt; typeEntropy;</span><br><span class="line">    <span class="comment">// start from 1</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, <span class="keyword">unsigned</span> <span class="keyword">int</span>&gt; typeCnt;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, <span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, <span class="keyword">unsigned</span> <span class="keyword">int</span>&gt; &gt; attriValue_to_result;</span><br><span class="line"></span><br><span class="line">    Attr(<span class="keyword">int</span> col = <span class="number">0</span>, <span class="built_in">std</span>::<span class="built_in">string</span> str = <span class="string">&quot;&quot;</span>):</span><br><span class="line">        colIndex(col), typeNum(<span class="number">0</span>), conEntroy(<span class="number">0</span>), InforGain(<span class="number">0</span>), attribute(str) &#123; &#125;</span><br><span class="line">    ~Attr() &#123; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**  </span></span><br><span class="line"><span class="comment"> * @Brief define the node infor</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// current attribute Infor</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> attri; </span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, TreeNode *&gt; attri_To_Children;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;Attr&gt; Table;</span><br><span class="line">    <span class="keyword">int</span> rowNum, colNum;</span><br><span class="line">    <span class="keyword">double</span> InforGain;</span><br><span class="line">    <span class="keyword">int</span> biggestIGidx;</span><br><span class="line">    <span class="keyword">bool</span> isLeaf;</span><br><span class="line"></span><br><span class="line">    TreeNode(): biggestIGidx(<span class="number">0</span>), InforGain(<span class="number">0.0</span>),</span><br><span class="line">    isLeaf(<span class="literal">true</span>), rowNum(<span class="number">0</span>), colNum(<span class="number">0</span>) &#123; &#125;</span><br><span class="line">    ~TreeNode() &#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">chooseIG</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">clearCol</span><span class="params">()</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**  </span></span><br><span class="line"><span class="comment"> * @Brief define the decision tree</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DecisionTree</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    DecisionTree() &#123; root = <span class="keyword">new</span> TreeNode; &#125;</span><br><span class="line">    ~DecisionTree() &#123; removeAll(root); &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">BuildTree</span><span class="params">()</span> </span>&#123; builder(root); &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">ReadTable</span><span class="params">(<span class="built_in">std</span>::ifstream &amp;)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">testTree</span><span class="params">()</span> </span>&#123; testTreeHelp(root); &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">printTree</span><span class="params">()</span> </span>&#123; printTreeHelp(root, <span class="string">&quot;NULL&quot;</span>); &#125;; </span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">removeAll</span><span class="params">(TreeNode *)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">printSample</span><span class="params">(TreeNode *)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">computeEntropyFir</span><span class="params">(TreeNode *)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">computeEntropySec</span><span class="params">(TreeNode *)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">builder</span><span class="params">(TreeNode *)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">processSample</span><span class="params">(TreeNode *)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">divideChild</span><span class="params">(TreeNode *)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">testTreeHelp</span><span class="params">(TreeNode *)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">printTreeHelp</span><span class="params">(TreeNode *, <span class="built_in">std</span>::<span class="built_in">string</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">    TreeNode *root;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h3 id="Analysis-and-discussion"><a href="#Analysis-and-discussion" class="headerlink" title="Analysis and discussion"></a>Analysis and discussion</h3><p>​    ID3 algorithm is a kind of greedy algorithm, when set a node’s attribute, alway choose the IG max one.</p>
-<p>​    this algorithm is easy to train data, but there are also same disadvantages. First, it only can process descrete data, if data is continuous, it does not work. Second, this algorithm is very reply on the training data, so it is easy to build a insufficient decision tree. And at most time, there may be some attribute won’t support any effective information, in this condition, the tree be built may be a bit unsuitable.</p>
-<p>   For me to implement this algorithm, I use a lot of $STL$ like $string$, $map$ and $vector$, may waste a lot of space and make the time efficiency lower.</p>
+        <h2 id="现状"><a href="#现状" class="headerlink" title="现状"></a>现状</h2><h3 id="课程方面"><a href="#课程方面" class="headerlink" title="课程方面"></a>课程方面</h3><p>这学期的课程量少，比上学期要轻松一些。但是学术论文研读的那个课程的考核也很让我头疼，第四周那个老师就要和每个学生谈话，根据谈话的内容现场打分。虽然我目前面试的效果都不错，但是我还是从内心里害怕和不了解的人交流，希望我能够体面的通过这门课。</p>
+<p>此外值得一提的是，这学期我选了一门生活急救训练的课，最后要有三次实战测试，我还是很期待的。</p>
+<h3 id="专业方面"><a href="#专业方面" class="headerlink" title="专业方面"></a>专业方面</h3><p>先从编程来说，我目前已经放弃打ACM的想法，但并不意味着放弃学习算法，只是方向上并不那么针对考核和比赛，更多的去学那些实用的算法。</p>
+<p>就语言来讲，C和C++的基础还算是比较扎实，这也是我最熟悉的语言，写一些精细的程序我还是会用C/C++，但是也得有意去用Python写一些程序，以后写Python可能比C/C++还多。而Java我目前可以说是一点都不会写，虽然我也没有兴趣去做开发的工作，但是可能还是学一点比较好。其他的脚本语言也在慢慢接触一些，目前还在看Ruby的一些编程规范。</p>
+<p>目前在写的是<a target="_blank" rel="noopener" href="https://github.com/Herixth/CNN-Frame-CPP">CNN手写体数字识别</a>，现在还没有完全完成所以没有进行文件整理。程序已经可以跑起来了，但是我总觉得有些小的细节我没注意到，这几天我会一行一行Debug去查。</p>
+<h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>因为很少和周围的同学做技术/学术交流，所以我也不太清楚我现在的水平，但是有一点肯定的是，我离自己的目标还差得很远。先慢慢把CNN吃透，再往前一步一步走。</p>
+<p>此外我还需要注意一下身体，要经常去跑步啊。</p>
 
       
 
@@ -372,11 +202,7 @@ IG(X,Y)=H(X)-H(X|Y)</script><h4 id="example"><a href="#example" class="headerlin
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">信息熵</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">决策树</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
         		</li>
       		
 		</ul>
@@ -451,7 +277,7 @@ IG(X,Y)=H(X)-H(X|Y)</script><h4 id="example"><a href="#example" class="headerlin
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://hx-w.github.io/2018/11/20/DecisionTree/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://hx-w.github.io/2019/03/09/%E6%97%A5%E5%B8%B8%E9%9A%8F%E7%AC%94-1/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -465,15 +291,20 @@ IG(X,Y)=H(X)-H(X|Y)</script><h4 id="example"><a href="#example" class="headerlin
   
 <nav id="article-nav">
   
-    <a href="/2018/12/04/HuffmanFilestructure/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/03/27/%E7%89%B5%E4%B8%9D%E5%82%80%E5%84%A1%E6%88%8F/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Huffman编码压缩文件时的文件储存结构
+          牵丝傀儡戏
         
       </div>
     </a>
   
+  
+    <a href="/2019/02/03/2017-2018%E4%B8%AA%E4%BA%BA%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">2017-2018个人年终总结</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 

@@ -57,7 +57,7 @@
 		</hgroup>
 		
         <nav class="header-subtitle">
-			总字数 <span class="post-count">20.9k</span>
+			总字数 <span class="post-count">26.5k</span>
 		</nav>
 		<nav class="header-menu">
 			<ul>
@@ -196,9 +196,7 @@
 <p>这n个人应该采取什么样的策略才能使$ R_n $最大呢，$ R_n $的数学期望是多少？</p>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">graph RL;</span><br><span class="line">A((n-1)) --&gt; B((n-2))</span><br><span class="line">B --&gt; C((...))</span><br><span class="line">C --&gt; D((1))</span><br><span class="line">D --&gt; E((0))</span><br></pre></td></tr></table></figure>
-
 <a id="more"></a>
-
 <h3 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h3><p>首先我们先来考虑，是否存在这样的一种策略，使得$R_n \equiv n$。</p>
 <p>只要我们稍作思考，就知道这样的策略是不存在的。</p>
 <p>我们以信息论中的比特作为信息量的单位，如果要使$R_n \equiv n$，则整个n个人的系统需要能表达关于不同人帽子颜色的n个比特的信息。然而，对于整个系统而言，$P_{n-1}$的帽子的颜色始终是无法被这n个人观测到的，所以$R_n \not \equiv n$。直观上，因为$P_{n -1}$是第一个报自己帽子颜色的，而根据其能观测到的信息，$P_{n-1}$是无法推测出自己帽子颜色的，故无论采用什么样的策略，至少$P_{n-1}$都无法保证一定能报对自己帽子的颜色。</p>
@@ -208,36 +206,40 @@
 <p>这样$P_{n - 1}$报完之后，$P_{n - 2}$可以根据其能看到的$n - 2$顶帽子颜色和$P_{n - 1}$所报的内容推理出自己帽子是什么颜色。</p>
 <p>以此类推，$P_0 \dots P_{n - 2}$都能准确报出自己帽子的颜色，$P_{n - 1}$根据这样的策略报出的颜色有可能恰好是自己帽子的颜色，故$R_n \geq n - 1$。</p>
 <p>期望：$\bar{R_n} = n - 0.5$。</p>
-<h2 id="问题B"><a href="#问题B" class="headerlink" title="问题B"></a>问题B</h2><h3 id="题目-1"><a href="#题目-1" class="headerlink" title="题目"></a>题目</h3><p>题目的内容与<a href="#%E9%97%AE%E9%A2%98A">问题A</a>几乎一致，只是现在帽子有$2^k$种不同颜色，$k \in \Bbb N ^ \ast$。</p>
+<h2 id="问题B"><a href="#问题B" class="headerlink" title="问题B"></a>问题B</h2><h3 id="题目-1"><a href="#题目-1" class="headerlink" title="题目"></a>题目</h3><p>题目的内容与<a href="#问题A">问题A</a>几乎一致，只是现在帽子有$2^k$种不同颜色，$k \in \Bbb N ^ \ast$。</p>
 <p>那么在这样的条件下，如何使得$R_n$最大，期望是多少？</p>
 <h3 id="思考-1"><a href="#思考-1" class="headerlink" title="思考"></a>思考</h3><p>其实这个问题和之前的问题没有本质区别，我们只要把题目中$\lceil $帽子的颜色$\rfloor$这个量做一些抽象处理就很容易解决。</p>
-<p>我们以问题A为例，帽子只有黑白两种颜色。我们可以定义<strong>黑帽子</strong>为<strong>0</strong>，<strong>白帽子</strong>为<strong>1</strong>，这样问题A的解决方案就可以解释成，前$n - 1$位上<strong>1(白帽子)**的个数为奇数，则$P_{n-1}$报</strong>1(白色)<strong>，如果是偶数则报</strong>0(黑色)**。</p>
+<p>我们以问题A为例，帽子只有黑白两种颜色。我们可以定义<strong>黑帽子</strong>为<strong>0</strong>，<strong>白帽子</strong>为<strong>1</strong>，这样问题A的解决方案就可以解释成，前$n - 1$位上<strong>1(白帽子)</strong>的个数为奇数，则$P_{n-1}$报<strong>1(白色)</strong>，如果是偶数则报<strong>0(黑色)</strong>。</p>
 <p>我们稍微缓一下就可以反应过来，这其实就是个<strong>奇偶校验</strong>中的<strong>奇校验</strong>问题。如果<strong>1</strong>的个数为偶数报<strong>1</strong>则是<strong>偶校验</strong>。</p>
 <p>所以根据这样的思路，奇数偶数只能反映两种状态，所以我们用二进制的形式表示帽子的颜色。如果有$2^k$种不同的颜色，我们就用$k$位二进制编码来表示。比如我们有四种颜色如下：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
-<th align="center">颜色</th>
-<th align="center">编码</th>
+<th style="text-align:center">颜色</th>
+<th style="text-align:center">编码</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">白色</td>
-<td align="center"><strong>00</strong></td>
+<tbody>
+<tr>
+<td style="text-align:center">白色</td>
+<td style="text-align:center"><strong>00</strong></td>
 </tr>
 <tr>
-<td align="center">黑色</td>
-<td align="center"><strong>01</strong></td>
+<td style="text-align:center">黑色</td>
+<td style="text-align:center"><strong>01</strong></td>
 </tr>
 <tr>
-<td align="center">红色</td>
-<td align="center"><strong>10</strong></td>
+<td style="text-align:center">红色</td>
+<td style="text-align:center"><strong>10</strong></td>
 </tr>
 <tr>
-<td align="center">绿色</td>
-<td align="center"><strong>11</strong></td>
+<td style="text-align:center">绿色</td>
+<td style="text-align:center"><strong>11</strong></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p>那么在$k$位每一位上都进行问题A那样的奇偶校验，就可以完成报颜色问题的解答。</p>
 <h3 id="解决方法-1"><a href="#解决方法-1" class="headerlink" title="解决方法"></a>解决方法</h3><p>我们现在有$n$个人，$2^k$种帽子，那么我们根据上面表格那种形式，可以对$2^k$种颜色进行长度为$k$的二进制编码。</p>
 <p>而$P_{n-1}$要做的就是计算前面$n-1$个人每个人帽子颜色编码的每一位的奇偶校验值，然后组成$k$位的编码作为自己要报的内容。前面$n-1$个人报颜色的方式和问题A相似。</p>
@@ -245,48 +247,52 @@
 <h2 id="问题延伸"><a href="#问题延伸" class="headerlink" title="问题延伸"></a>问题延伸</h2><p>以上两个问题都是用来描述奇偶校验的内容的，但是从奇偶校验出发，我们还能得到更多的信息。</p>
 <h3 id="异或运算"><a href="#异或运算" class="headerlink" title="异或运算"></a>异或运算</h3><p>异或运算：$\oplus$</p>
 <p>这是定义在布尔代数上的操作符，满足以下运算规则：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
-<th align="center">表达式</th>
-<th align="center">值</th>
+<th style="text-align:center">表达式</th>
+<th style="text-align:center">值</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">$0 \oplus 0$</td>
-<td align="center">$0$</td>
+<tbody>
+<tr>
+<td style="text-align:center">$0 \oplus 0$</td>
+<td style="text-align:center">$0$</td>
 </tr>
 <tr>
-<td align="center">$0 \oplus 1$</td>
-<td align="center">$1$</td>
+<td style="text-align:center">$0 \oplus 1$</td>
+<td style="text-align:center">$1$</td>
 </tr>
 <tr>
-<td align="center">$1 \oplus 0$</td>
-<td align="center">$1$</td>
+<td style="text-align:center">$1 \oplus 0$</td>
+<td style="text-align:center">$1$</td>
 </tr>
 <tr>
-<td align="center">$1 \oplus 1$</td>
-<td align="center">$0$</td>
+<td style="text-align:center">$1 \oplus 1$</td>
+<td style="text-align:center">$0$</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p>可以这么理解，只要两个运算数相同，那么结果就是0，如果两个运算数不同，结果就是1。</p>
 <h3 id="应用在奇偶校验"><a href="#应用在奇偶校验" class="headerlink" title="应用在奇偶校验"></a>应用在奇偶校验</h3><p>说道奇偶校验的时候我们可能会有疑惑，为什么非要关注编码中$1$的个数是奇数偶数呢，关注$0$的个数不也一样有同样的效果吗。</p>
 <p>这里其实是为了方便计算，因为一串编码中按位进行异或运算，结果是$1$就表示编码中$1$的个数是奇数。因为两个$1$做异或结果是$0$，而$0$在奇偶校验位中正好表示偶数个$1$，所以异或的运算性质正好可以帮助计算编码中$1$的个数的奇偶性。</p>
 <p>应用在我们上面的问题A中，经过把帽子颜色抽象成二进制编码$0$和$1$后，每一个人就代表了一个二进制编码，由于帽子颜色只有两种，所以每个人代表的编码只有一位。所以最后一个人他报的内容可以通过异或前$n - 1$个人的编码得到，即：</p>
-<p>$$<br>P_{n-1} = P_0 \oplus P_1 \oplus P_2 \oplus \dots \oplus P_{n-2} = \bigoplus_{i = 0} ^ {n-2} P_i<br>$$</p>
-<hr>
+<script type="math/tex; mode=display">
+P_{n-1} = P_0 \oplus P_1 \oplus P_2 \oplus \dots \oplus P_{n-2} = \bigoplus_{i = 0} ^ {n-2} P_i</script><hr>
 <p>而抛开问题A不谈，这里介绍异或运算的另一个性质：</p>
 <p>考虑一列数</p>
-<p>$$<br>a_1,a_2,\dots,a_n<br>$$</p>
-<p>令</p>
-<p>$$<br>p = a_1 \oplus a_2 \oplus \dots \oplus a_n = \bigoplus_{i = 1} ^n a_i<br>$$</p>
-<p>可知</p>
-<p>$$<br>a_k = p \oplus \bigoplus_{i = 1\dots n, i \not =k}a_i<br>$$</p>
-<p>这就意味着，在$p$与$a_1 \dots a_n$这$(n + 1)$个数中，任意$n$个数可以推得其余的一个。</p>
+<script type="math/tex; mode=display">
+a_1,a_2,\dots,a_n</script><p>令</p>
+<script type="math/tex; mode=display">
+p = a_1 \oplus a_2 \oplus \dots \oplus a_n = \bigoplus_{i = 1} ^n a_i</script><p>可知</p>
+<script type="math/tex; mode=display">
+a_k = p \oplus \bigoplus_{i = 1\dots n, i \not =k}a_i</script><p>这就意味着，在$p$与$a_1 \dots a_n$这$(n + 1)$个数中，任意$n$个数可以推得其余的一个。</p>
 <hr>
 <p>知道上面的性质之后，我们再回到问题A上，现在我们有了$P_{n-1}$，而前$n - 1$个人要做的事情也可以通过上面的结论表示，其中第$m$个人$(0 \leq m \leq n - 2 )$要做的运算可以表示为</p>
-<p>$$<br>P_m = P_{n - 1} \oplus \bigoplus_{i = 0 \dots n-2, i \not= m} P_i<br>$$</p>
-<p>而衍生的问题B就是对每一位都做同样的操作即可。</p>
+<script type="math/tex; mode=display">
+P_m = P_{n - 1} \oplus \bigoplus_{i = 0 \dots n-2, i \not= m} P_i</script><p>而衍生的问题B就是对每一位都做同样的操作即可。</p>
 <h3 id="另一种应用"><a href="#另一种应用" class="headerlink" title="另一种应用"></a>另一种应用</h3><p>其实前面讲的那个异或的性质就是一种硬盘储存结构$ \lceil $ 独立磁盘冗余阵列$ \rfloor $<strong>RAID5</strong>的基本算法。</p>
 <p>下面是关于RAID5的一部分介绍：</p>
 <p><img src="https://hx-w.github.io/img/odd_even/RAID5.png" alt="RAID5"></p>
@@ -402,8 +408,8 @@
     </a>
   
   
-    <a href="/2019/02/02/%E7%AE%80%E5%8D%95%E7%96%8F%E6%95%A3%E6%A8%A1%E5%9E%8B/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">简单疏散模型(2019美赛)</div>
+    <a href="/2019/03/27/%E7%89%B5%E4%B8%9D%E5%82%80%E5%84%A1%E6%88%8F/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">牵丝傀儡戏</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -433,7 +439,6 @@
   
 
   
-
   
 
   
@@ -585,7 +590,7 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+                <a href="javascript:void(0)" class="js-tag color2">Python - 算法</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -593,7 +598,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+                <a href="javascript:void(0)" class="js-tag color3">图论</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -609,7 +614,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">图论</a>
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -618,6 +623,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数学建模</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
             
             <div class="clearfix"></div>
