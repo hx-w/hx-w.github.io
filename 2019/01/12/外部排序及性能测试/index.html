@@ -219,7 +219,7 @@
 <blockquote>
 <p>For this task, you will implement an external sorting algorithm. The input data file will consist of 8N (N is a positive integer number) blocks of data, where a block is 4096 bytes. Each block will contain a series of records, where each record has 8 bytes. The first 4-byte field is a non-negative integer value for the record ID and the second 4-byte field is a float value for the key, which will be used for sorting. Thus each block contains 512 records.</p>
 <p>Your job is to sort the file (in ascending order of the key values), as follows: Using replacement selection, you will sort sections of the file in a working memory that is 8 blocks long. To be precise, the heap will be 8 blocks in size; in addition you will also have a one block input buffer, a one block output buffer and any additional working variables that you need. To process, read the first 8 blocks of the input file into memory and use replacement selection to create the longest possible run. As it is being created, the run is output to the one block output buffer. Whenever this output buffer becomes full, it is written to an output file called the run file. When the first run is complete, continue on to the next section of the input file, adding the second run to the end of the run file. When the process of creating runs is complete, the run file will contain some number of runs, each run being at least 8 blocks long, with the data sorted within each run. For convenience, you will probably want to begin each run in a new block. You will then use a multi-way merge to combine the runs into a single sorted file. You must also use 8 blocks of memory used for the heap in the run-building step to store working data from the runs during the merge step. Multi-way merging is done by reading the first block from each of the runs currently being merged into your working area, and merging these runs into the one block output buffer. When the output buffer fills up, it is written to another output file. Whenever one of the input blocks is exhausted, read in the next block for that particular run. This step requires random access (using seek) to the run file, and a sequential write of the output file. Depending on the size of all records, you may need multiple passes of multiway-merging to sort the whole record.<br>Your program will take the names of two files from the command line, like this:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">extsort &lt;record file name&gt; &lt;statistics file name&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">extsort &lt;<span class="built_in">record</span> <span class="built_in">file</span> <span class="built_in">name</span>&gt; &lt;statistics <span class="built_in">file</span> <span class="built_in">name</span>&gt;</span><br></pre></td></tr></table></figure>
 
 <p>The record file is the input data file to be sorted. At the end of your program, the record file (on disk) should be sorted. So your program does modify the input data file. Be careful to keep a copy of the original when you do your testing. In addition to sorting the data file, you must report some information about the execution of your program (e.g., the number of runs, and the time taken to sort the record file), which will be stored in the statistics file. If the specified record file does not exist, output a suitable error message and exit. Your program will create the statistics file if it does not already exist, or append to it if it does.</p>
 </blockquote>
@@ -561,8 +561,8 @@
     </a>
   
   
-    <a href="/2019/01/06/%E5%9F%BA%E7%A1%80%E7%A9%BA%E9%97%B4%E5%90%91%E9%87%8F%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E7%90%86%E8%AE%BA(%E8%AF%91)/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">基本空间向量搜索引擎理论(译)</div>
+    <a href="/2019/01/06/Tarjan%E7%AE%97%E6%B3%95/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">无向图求割点割边--Tarjan算法</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -725,10 +725,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">信息熵</a>
               </li>
              
@@ -737,11 +733,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">论文翻译</a>
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">图论</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">论文翻译</a>
               </li>
              
               <li class="article-tag-list-item">
