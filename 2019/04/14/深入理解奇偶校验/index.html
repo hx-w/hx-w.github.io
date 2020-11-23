@@ -8,6 +8,21 @@
   <link rel="dns-prefetch" href="http://hx-w.github.io">
   <title>深入理解奇偶校验 | 贺翔的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+  <link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+    <style>
+    .pace .pace-progress {
+        background: #6d6d6d; /*进度条颜色*/
+        height: 2px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #6d6d6d; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #6d6d6d;    /*上边框颜色*/
+        border-left-color: #6d6d6d;    /*左边框颜色*/
+    }
+  </style>
   <meta name="description" content="问题A题目考虑这样一个小问题：  我们现在一共有n个人，$n \in \Bbb N^\ast$。所有人排成一队站好后给每个人编号，从前向后依次为$P_0P_1\dots P_{n-1}$。 每个人的头上都戴有一顶帽子，帽子只有黑白两种颜色，且除颜色外无其他差别。每个人所戴帽子的颜色是完全随机的。 这时每个人只能看到在自己前面的所有人的帽子颜色，但是看不到自己的帽子是什么颜色。 例如，$P_1$能看">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深入理解奇偶校验">
