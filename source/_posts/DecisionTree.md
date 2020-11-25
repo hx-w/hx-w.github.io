@@ -1,9 +1,9 @@
 ---
-title:     Decision Tree with ID3 Algorithm
-date:      2018-11-20 
+title: Decision Tree with ID3 Algorithm
 tags:
-  - 信息熵
-  - 决策树
+  - 算法
+abbrlink: 47685
+date: 2018-11-20 00:00:00
 ---
 
 # Decision Tree

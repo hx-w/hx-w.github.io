@@ -1,10 +1,11 @@
 ---
 title: CYK算法介绍
-date: 2019-04-28 19:26:15
 tags:
-	- Python
-    - 算法
+  - Python
+  - 算法
 mathjax: true
+abbrlink: 61182
+date: 2019-04-28 19:26:15
 ---
 
 ## 概述
@@ -39,11 +40,11 @@ parse table的规模为$(n + 1) \times n$
 我们定义$PT[n + 1][n]$表示parse table，且$PT[n, :]$依次存储字符串w中的每一个符号($a_1, a_2, \dots, a_n$)。
 
 $$
-\begin{bmatrix}
+\begin{pmatrix}
 &   &\dots & \\
 & \vdots &  \ddots & \\
 a_1 & a_2 & \dots &a_n
-\end{bmatrix}
+\end{pmatrix}
 $$
 
 
@@ -75,14 +76,14 @@ $$
 
 
 $$
-\begin{bmatrix}
+\begin{pmatrix}
 x_{1,5}=\{S, A,C\} & & & & \\
 & x_{2,5}=\{S, A, C\} & & & \\
 & x_{2,4}=\{B\} & x_{3,5}=\{B\} & & \\
 x_{1,2} = \{S, A\} & x_{2,3}=\{B\} & x_{3,4}=\{S, C\} & x_{4,5}=\{S, A\} &\\
 x_{1,1} = \{B\} & x_{2,2} = \{A, C\} & x_{3,3} =\{A, C\} & x_{4,4}=\{B \} & x_{5,5}=\{A,C\} \\
 a_1 = b & a_2 = a & a_3 = a & a_4 = b & a_5 = a
-\end{bmatrix}
+\end{pmatrix}
 $$
 
 
