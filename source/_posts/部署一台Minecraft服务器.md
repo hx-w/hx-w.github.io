@@ -1,9 +1,10 @@
 ---
 title: 部署一台Minecraft服务器
-date: 2020-11-25 22:19:30
 tags:
-	- Minecraft
-	- 服务器
+  - Minecraft
+  - 服务器
+abbrlink: 4126
+date: 2020-11-25 22:19:30
 ---
 
 ## 以往经历
@@ -18,4 +19,6 @@ tags:
 
 Minecraft的服务器很吃性能(CPU，内存和带宽都很重要)，选购服务器时就要谨慎一些。
 
-我没打算组实体机(没钱+没精力)，
+我没打算组实体机(没钱+没精力)，所以还是选择大厂的学生服务器来部署。根据我查到的信息以及我部署CSGO和Minecraft服务器的一些经验：阿里云提供5M带宽但是只有1核2G，百度云之前也提到了，学生机标配是2核4G1M还需要自己去升配带宽，其他还看了美团云，滴滴云，华为云以及腾讯云的学生机规格，最后还是选择腾讯云的2核4G3M，点击可查看[购买页面](https://cloud.tencent.com/act/campus?utm_source=qcloud&utm_medium=head&utm_campaign=campus)：
+
+![示例1](/img/server_minecraft/1.png)
