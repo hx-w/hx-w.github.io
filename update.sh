@@ -1,6 +1,5 @@
 OP_BACKUP=false
 OP_DEPLOY=false
-
 if [ -n "$1" ]; then
 	while [ -n "$1" ]
 	do
@@ -21,6 +20,7 @@ if [ -n "$1" ]; then
 			;;
 		*)
 			echo "illegal option"
+			exit 1
 			;;
 		esac
 		shift
@@ -43,12 +43,14 @@ fi
 
 # run 
 if [ "$OP_BACKUP" = true ]; then
+	# 备份hexo项目
 	git checkout hexo
 	git add .
 	git commit -m "$MSG"
 	git push origin hexo
 fi
 if [ "$OP_DEPLOY" = true ]; then
+	# 部署博客内容
 	hexo clean
 	hexo d -g
 fi
