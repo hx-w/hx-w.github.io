@@ -13,7 +13,7 @@ date: 2020-11-25 22:19:30
 
 阿里云那台用作创造的实验服务器还是可以的，百度云那台配置高一点，但是用作正常地图的生存(使用MCDR和Carpet Mod)还是有点吃力，三个人时tps经常不满20，而且百度云的客服真的很烦人:(反正不想再用百度云了。
 
-这几天又有想法再部署一台 **空岛** 服务器，想用这篇博客把服务器的部署流程记录下来，希望能为别人提供一些帮助。
+这几天又有想法再部署一台空岛服务器，想用这篇博客把服务器的部署流程记录下来，希望能为别人提供一些帮助。
 
 <!--more-->
 
@@ -116,7 +116,7 @@ resource-pack=
 entity-broadcast-range-percentage=100
 player-idle-timeout=0
 rcon.password=
-force-gamemode=true
+force-gamemode=false
 rate-limit=0
 autoBackupMins=180
 hardcore=false
@@ -156,6 +156,10 @@ MCDR上装了这几个插件，其中`QuickAnswer.py`是我魔改之后的版本
 
    ![示例7](/img/server_mc/7.png)
 
+   空载时服务器负荷并不大
+
+   ![示例8](/img/server_mc/8.png)
+
 4. 改用`screen`后端挂载服务端：
 
    1. `screen -S mc` 创建mc窗口
@@ -167,4 +171,29 @@ MCDR上装了这几个插件，其中`QuickAnswer.py`是我魔改之后的版本
       > `screen -ls`可以查看窗口列表
       >
       > `screen -S <name> -X quit` 可以删除某个窗口
+
+## MCDR插件编写
+
+MCDR以python为开发语言，开发文档见：https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/plugin.md
+
+以切换玩家观察者/生存模式的插件为例：
+
+> CameraMode.py
+
+```python
+# -*- coding: utf-8 -*-
+import os
+
+def on_load(server, old):
+    server.add_help_message('!c', '切换观察者模式')
+    server.add_help_message('!s', '切换生存模式')
+
+def on_info(server, info):
+    if info.content.startswith("!c") and info.is_player == True:
+        server.execute("gamemode spectator " + info.player)
+    elif info.content.startswith("!s") and info.is_player == True:
+        server.execute("gamemode survival " + info.player)
+```
+
+使用`!c和!s`在观察者和生存模式间切换，很简洁。
 
