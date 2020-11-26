@@ -68,6 +68,8 @@ Minecraft的服务端有很多种，我选择用[MCDReforged](https://github.com
 
 选择之前hsds的[空岛地图](https://www.curseforge.com/minecraft/worlds/skyblock-4?__cf_chl_captcha_tk__=c09714b33f19723923aecc3313aa5507dfb1bed8-1606356067-0-AT5ZMtqpmH2R6d3sC-XFDeIUuncdodC0ivUPpBNmFMF7eICy76s5wuCrZaV-XL-vVfV4BxNw-7v3ZYlx47ofjxriKW_BARssUsfyuUiUrQX6Qo2dOBQqv0cr26s3bHhCUDDCvxUHZ_3rk1swTnBb71ctggqFA3bTXRBc1VfZGARNDZIfRZ-mANe4dt4PphO--viVwkO7YyVYIIS2ayxmAvPSgfMEeeps7LCB0DqlyjgQdbhhgGo3hKY3v8xvqWSiK0JwF4rC0Fg1gbWb9chTiTs5ohC-3edUe_WfYZd5Rsedqd-twXXFdEB1kiXpYMd9dJAH5VfNJacR9pWTBcnx5GdW_T7bHk5sCVOyUnpA0CKnzaPwwS6E11hq3oQW74azmWAA6sIdqUhYPxbBopvd6RB3BbLDRPdb4YKD8xYg9a1G1zjlozn8pEzSTLHNLPZPfxFnAw1CErHavmPBQBZchwwSHckrqblPJ6atEhsXtW2LjP1zAXN8SM7Cn9Vf4QCNfRyqX_o98caADc6tECngKlVdEr8DwtnBvcqbUbC-BJ-inTHH6PQIHLNWcMdYv2YtmkFxDyaUFv59rSeNcy3InrIwGaWj8gXbOV1zKUgX58Y9IBFgblwr1Y-73mcOKRk4Jw)，搭配我写的+我找的一些资源包，包括[连锁挖矿](/static/mc/连锁挖矿.zip)和[特殊合成](/static/mc/Ld_datapack.zip)。
 
+> 种子：244038804808138753
+
 **整合MCDR**
 
 下载最新的MCDR，将地图文件覆盖到`MCDReforged/server/world`。
@@ -140,6 +142,29 @@ MCDR上装了这几个插件，其中`QuickAnswer.py`是我魔改之后的版本
 
 1. 将`MCDReforged`文件夹上传至服务器上(时间有一点长)
 
-   
+2. 安装MCDR的依赖，在`MCDRefored/`下输入`pip3 install -r requirements `与`pip3 install psutil`
 
-未完待续...
+3. 执行`python3 MCDRefored.py`试运行服务端
+
+   ![示例5](/img/server_mc/5.png)
+
+   可以看到运行成功，服务器内情况正常：
+
+   ![示例6](/img/server_mc/6.png)
+
+   服务器资源占用也很低
+
+   ![示例7](/img/server_mc/7.png)
+
+4. 改用`screen`后端挂载服务端：
+
+   1. `screen -S mc` 创建mc窗口
+
+   2. `python3 MCDReforged.py`启动服务器
+
+   3. `Ctrl A D`将窗口挂载
+
+      > `screen -ls`可以查看窗口列表
+      >
+      > `screen -S <name> -X quit` 可以删除某个窗口
+
