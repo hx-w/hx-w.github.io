@@ -162,11 +162,11 @@ MCDR上装了这几个插件，其中`QuickAnswer.py`是我魔改之后的版本
 
 4. 改用`screen`后端挂载服务端：
 
-   1. `screen -S mc` 创建mc窗口
+   - `screen -S mc` 创建mc窗口
 
-   2. `python3 MCDReforged.py`启动服务器
+   - `python3 MCDReforged.py`启动服务器
 
-   3. `Ctrl A D`将窗口挂载
+   - `Ctrl A D`将窗口挂载
 
       > `screen -ls`可以查看窗口列表
       >
@@ -185,15 +185,15 @@ MCDR以python为开发语言，开发文档见：https://github.com/Fallen-Breat
 import os
 
 def on_load(server, old):
-    server.add_help_message('!c', '切换观察者模式')
-    server.add_help_message('!s', '切换生存模式')
+    server.add_help_message('.c', '切换观察者模式')
+    server.add_help_message('.s', '切换生存模式')
 
 def on_info(server, info):
-    if info.content.startswith("!c") and info.is_player == True:
+    if info.content.startswith(".c") and info.is_player == True:
         server.execute("gamemode spectator " + info.player)
-    elif info.content.startswith("!s") and info.is_player == True:
+    elif info.content.startswith(".s") and info.is_player == True:
         server.execute("gamemode survival " + info.player)
 ```
 
-使用`!c和!s`在观察者和生存模式间切换，很简洁。
+使用`.c和.s`在观察者和生存模式间切换，很简洁。
 
