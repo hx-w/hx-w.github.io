@@ -105,8 +105,8 @@ if [ -n "$1" ]; then
 		esac
 		shift
 	done	
-
 fi
+
 if [ "$OP_BACKUP" = false -a "$OP_DEPLOY" = false ] ; then
 	OP_BACKUP=true
 	OP_DEPLOY=true
