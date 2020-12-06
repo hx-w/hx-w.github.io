@@ -6,7 +6,7 @@
   <link href="http://hx-w.github.io/atom.xml" rel="self"/>
   
   <link href="http://hx-w.github.io/"/>
-  <updated>2020-12-06T06:33:16.901Z</updated>
+  <updated>2020-12-06T13:25:03.459Z</updated>
   <id>http://hx-w.github.io/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://hx-w.github.io/posts/6e4e29449935/"/>
     <id>http://hx-w.github.io/posts/6e4e29449935/</id>
     <published>2020-12-05T13:53:25.000Z</published>
-    <updated>2020-12-06T06:33:16.901Z</updated>
+    <updated>2020-12-06T13:25:03.459Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="介绍">介绍</h2><p>CSGO-RealTimeMap是一个致力于将CSGO服务器内的信息实时显示到网页上的一个无数据库项目，灵感来源自Minecraft的插件dynmap。</p><p>插件分为两部分：游戏服务器的sourcemod插件和服务器本地的网站。</p><p>项目开源地址：<a href="https://github.com/hx-w/CSGO-RealTimeMap">GitHub</a>。</p><p>开发日期：2020-12-3至今。</p><a id="more"></a><h3 id="技术栈">技术栈</h3><ul><li><p><strong>flask</strong> 做网页显示。</p></li><li><p><strong>websocket</strong> 实现前端与数据的同步。</p></li><li><p><strong>sourcemod</strong> 实现游戏内数据向网站的同步。</p></li></ul><p>最初版演示见<a href="https://www.bilibili.com/video/BV1mt4y1a7YG/">B站视频</a>。</p><h2 id="功能目标">功能目标</h2><ul><li>易于部署&amp;维护的插件/网站结构</li><li>网页上平滑的玩家移动</li><li>丰富的图标显示：玩家朝向、所持武器、所属阵营等</li><li>详细的服务器内信息：玩家在线时间、击杀情况等</li><li>在线聊天系统</li></ul><h2 id="开发记录">开发记录</h2><h4 id="2020-12-5">2020-12-5</h4><p><strong>feature</strong></p><ol><li><p>更新了道具效果的显示：</p><p><img src="/img/RTM/1.png" alt="示例1"></p></li><li><p>更多的关键帧，现在关键帧增加到了10，网页上人物移动的显示效果更加流畅</p></li></ol><p><strong>bug</strong></p><ol><li>内存不释放，怀疑是道具的记录引起的</li><li>程序运行日志未删除</li></ol><h4 id="2020-12-6">2020-12-6</h4><p><strong>bug fix</strong></p><ol><li>解决内存不释放的问题，采用garbage collector主动释放内存。</li></ol><blockquote><p>python中的dict删除某个元素之后并不会直接释放内存，需要用gc.collect()来主动释放</p></blockquote>]]></content>
+    <content type="html"><![CDATA[<h2 id="介绍">介绍</h2><p>CSGO-RealTimeMap是一个致力于将CSGO服务器内的信息实时显示到网页上的一个无数据库项目，灵感来源自Minecraft的插件dynmap。</p><p>插件分为两部分：游戏服务器的sourcemod插件和服务器本地的网站。</p><p>项目开源地址：<a href="https://github.com/hx-w/CSGO-RealTimeMap">GitHub</a>。</p><p>开发日期：2020-12-3至今。</p><a id="more"></a><h3 id="技术栈">技术栈</h3><ul><li><p><strong>flask</strong> 做网页显示。</p></li><li><p><strong>websocket</strong> 实现前端与数据的同步。</p></li><li><p><strong>sourcemod</strong> 实现游戏内数据向网站的同步。</p></li></ul><p>最初版演示见<a href="https://www.bilibili.com/video/BV1mt4y1a7YG/">B站视频</a>。</p><h2 id="功能目标">功能目标</h2><ul><li>易于部署&amp;维护的插件/网站结构</li><li>网页上平滑的玩家移动</li><li>丰富的图标显示：玩家朝向、所持武器、所属阵营等</li><li>详细的服务器内信息：玩家在线时间、击杀情况等</li><li>在线聊天系统</li></ul><h2 id="开发记录">开发记录</h2><h4 id="2020-12-5">2020-12-5</h4><p><strong>feature</strong></p><ol><li><p>更新了道具效果的显示：</p><p><img src="/img/RTM/1.jpg" alt="示例1"></p></li><li><p>更多的关键帧，现在关键帧增加到了10，网页上人物移动的显示效果更加流畅</p></li></ol><p><strong>bug</strong></p><ol><li>内存不释放，怀疑是道具的记录引起的</li><li>程序运行日志未删除</li></ol><h4 id="2020-12-6">2020-12-6</h4><p><strong>bug fix&amp; feature</strong></p><ol><li>解决内存不释放的问题，采用garbage collector主动释放内存。</li></ol><blockquote><p>python中的dict删除某个元素之后并不会直接释放内存，需要用gc.collect()来主动释放</p></blockquote><ol start="2"><li>实现服务器到网页的聊天信息显示(server2web)</li></ol><p><strong>bug</strong></p><ol><li>人物移动在网页上显示越来越滞后</li></ol>]]></content>
     
     
     <summary type="html">&lt;h2 id=&quot;介绍&quot;&gt;介绍&lt;/h2&gt;
@@ -233,9 +233,9 @@
     
     
     
-    <category term="算法" scheme="http://hx-w.github.io/tags/%E7%AE%97%E6%B3%95/"/>
-    
     <category term="Python" scheme="http://hx-w.github.io/tags/Python/"/>
+    
+    <category term="算法" scheme="http://hx-w.github.io/tags/%E7%AE%97%E6%B3%95/"/>
     
   </entry>
   
