@@ -44,7 +44,7 @@ CSGO-RealTimeMap是一个致力于将CSGO服务器内的信息实时显示到网
 
 1. 更新了道具效果的显示：
 
-   ![示例1](/img/RTM/1.png)
+   ![示例1](/img/RTM/1.jpg)
 
 2. 更多的关键帧，现在关键帧增加到了10，网页上人物移动的显示效果更加流畅
 
@@ -55,6 +55,10 @@ CSGO-RealTimeMap是一个致力于将CSGO服务器内的信息实时显示到网
 
 #### 2020-12-6
 
-**bug fix**
+**bug fix& feature**
 1. 解决内存不释放的问题，采用garbage collector主动释放内存。
   > python中的dict删除某个元素之后并不会直接释放内存，需要用gc.collect()来主动释放
+2. 实现服务器到网页的聊天信息显示(server2web)
+
+**bug**
+1. 人物移动在网页上显示越来越滞后
