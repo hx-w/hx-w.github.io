@@ -57,8 +57,75 @@ CSGO-RealTimeMap是一个致力于将CSGO服务器内的信息实时显示到网
 
 **bug fix& feature**
 1. 解决内存不释放的问题，采用garbage collector主动释放内存。
-  > python中的dict删除某个元素之后并不会直接释放内存，需要用gc.collect()来主动释放
+  > python中的dict删除某个元素之后并不会直接释放内存，需要用`gc.collect()`来主动释放
 2. 实现服务器到网页的聊天信息显示(server2web)
+3. 实现网页到服务器的聊天信息显示(web2server)
+  ![示例2](/img/RTM/2.jpg)
 
 **bug**
 1. 人物移动在网页上显示越来越滞后
+
+
+#### 2020-12-7
+
+**feature**
+1. 增加诱饵弹的道具显示效果
+2. 重构网站的消息机制，构造消息队列`MessageQueue`用于系统化的处理从服务器到网站的数据
+3. 关键帧减少为5，否则会有明显数据滞后问题
+
+> 游戏服务器向网站发消息
+
+![示例4](/img/RTM/4.png)
+
+> 网站向服务器发消息
+
+![示例3](/img/RTM/3.png)
+
+> `MessageQueue`结构
+
+```python
+import queue
+
+class MessageQueue():
+    def __init__(self, qMapSz=1, qPlayerMoveSz=100, qUtilitySz=10, q2ServerMsgSz=10, q2WebMsgSz=5):
+        '''
+        qMap: [mapname]
+        qPlayersMove: [[posX, posY, name, steam3id, clientid]]
+        qUtility: [utid, uttype, posX, posY]
+        q2WebMsg: [ip/name, msg]
+        q2ServerMsg: [ip, msg]
+        '''
+        self.qMsg = {
+            "qMap": queue.Queue(maxsize=qMapSz),
+            "qPlayersMove": queue.Queue(maxsize=qPlayerMoveSz),
+            "qUtility": queue.Queue(maxsize=qUtilitySz),
+            "q2WebMsg": queue.Queue(maxsize=q2WebMsgSz),
+            "q2ServerMsg": queue.Queue(maxsize=q2ServerMsgSz),
+        }
+    
+    def qPut(self, qName: str, value: list=[]):
+        try:
+            if self.qMsg[qName].full(): self.qMsg[qName].get_nowait()
+            self.qMsg[qName].put_nowait(value)
+        except:
+            raise Exception("Queue({}) Put Error!".format(qName))
+    
+    def qGetAllMsg_noWait(self, qExcept=[]):
+        allMsg = {}
+        for key, value in self.qMsg.items():
+            if key in qExcept: continue
+            allMsg[key] = [] if value.empty() else value.get_nowait()
+        return allMsg
+
+    def qGet_noWait(self, qName: str):
+        try:
+            # success, Msg
+            return (False, []) if self.qMsg[qName].empty() else (True, self.qMsg[qName].get_nowait())
+        except:
+            raise Exception("Queue({}) Get Error!".format(qName))
+
+    def qClearAll(self):
+        for key in self.qMsg.keys():
+            self.qMsg[key] = queue.Queue()
+
+```
