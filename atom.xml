@@ -6,7 +6,7 @@
   <link href="http://hx-w.github.io/atom.xml" rel="self"/>
   
   <link href="http://hx-w.github.io/"/>
-  <updated>2020-12-07T12:53:05.795Z</updated>
+  <updated>2020-12-16T06:27:57.098Z</updated>
   <id>http://hx-w.github.io/</id>
   
   <author>
@@ -15,6 +15,26 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>计算机图形学-纹理</title>
+    <link href="http://hx-w.github.io/posts/cbf6f6d55f6d/"/>
+    <id>http://hx-w.github.io/posts/cbf6f6d55f6d/</id>
+    <published>2020-12-16T06:21:54.000Z</published>
+    <updated>2020-12-16T06:27:57.098Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述">概述</h2><p>纹理映射是着色部分的内容，包括了抗混叠等技术。</p><a id="more"></a><h2 id="重心坐标-Barycentric-Coordinates">重心坐标 Barycentric Coordinates</h2><p>重心坐标是定义在三角形上的，表示为<img src="https://math.now.sh?inline=%28%5Calpha%2C%20%5Cbeta%2C%20%5Cgamma%29" style="display:inline-block;margin: 0;"></p>]]></content>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;概述&quot;&gt;概述&lt;/h2&gt;
+&lt;p&gt;纹理映射是着色部分的内容，包括了抗混叠等技术。&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="计算机图形学" scheme="http://hx-w.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
+    
+  </entry>
   
   <entry>
     <title>CSGO-RealTimeMap开发记录</title>
@@ -46,7 +66,7 @@
     <link href="http://hx-w.github.io/posts/c632dc391f0e/"/>
     <id>http://hx-w.github.io/posts/c632dc391f0e/</id>
     <published>2020-12-01T02:17:35.000Z</published>
-    <updated>2020-12-02T09:58:15.822Z</updated>
+    <updated>2020-12-08T09:05:56.019Z</updated>
     
     <content type="html"><![CDATA[<h2 id="概述">概述</h2><p>记录描述计算机图形学中 <strong>实时渲染管线</strong> (Real-time Rendering Pipeline)的内容。</p><a id="more"></a><h2 id="渲染流水线">渲染流水线</h2><p><img src="/img/CG-4/1.png" alt="示例1"></p><p>整个流程都是在硬件(显卡)中实现的。</p><p>整理流程可以认为包括三大部分：几何图形处理(顶点和三角形变换)，光栅化和Fragment处理。</p><blockquote><p>Fragments可以理解为像素，如果做了MSAA，那么多个Fragments会组成一个像素。</p></blockquote><p>将我们记录的计算机图形学中的渲染流程对应到流水线上：</p><h3 id="MVP变换">MVP变换</h3><p><img src="/img/CG-4/2.png" alt="示例2"></p><p>在<code>Vertex Processing</code>过程中完成。</p>]]></content>
     
@@ -93,7 +113,7 @@
     <link href="http://hx-w.github.io/posts/bfd68fcd1365/"/>
     <id>http://hx-w.github.io/posts/bfd68fcd1365/</id>
     <published>2020-11-27T10:55:06.000Z</published>
-    <updated>2020-12-05T13:09:40.163Z</updated>
+    <updated>2020-12-16T06:14:09.594Z</updated>
     
     <content type="html"><![CDATA[<p>列举了2020年购置阅读的书单</p><a id="more"></a><table><thead><tr><th>书名</th><th>作者</th><th>年份</th><th>状态</th><th>备注</th></tr></thead><tbody><tr><td>《罗杰疑案》</td><td>阿加莎·克里斯蒂</td><td>1926</td><td>11月</td><td>我完整读过的第一本侦探小说</td></tr><tr><td>《ABC谋杀案》</td><td>阿加莎·克里斯蒂</td><td>1936</td><td>11月</td><td>很优秀的连环谋杀案</td></tr><tr><td>《尼罗河上的惨案》</td><td>阿加莎·克里斯蒂</td><td>1937</td><td>11月</td><td>阅读过程很舒适，以后会再看一遍</td></tr><tr><td>《阳光下的罪恶》</td><td>阿加莎·克里斯蒂</td><td>1941</td><td>11-27</td><td>推理出了其中某些环节，不过关键部分没有想到</td></tr><tr><td>《动物农场》</td><td>乔治·奥威尔</td><td>1945</td><td>11-29</td><td>阅读过程中满腔悲愤，真实的不像寓言故事</td></tr><tr><td>《神们自己》</td><td>艾萨克·阿西莫夫</td><td>1972</td><td>12-1</td><td>比我想象的硬核，对平行世界的讲述具有跨时代的看法</td></tr><tr><td>《恶意》</td><td>东野圭吾</td><td></td><td>12-3</td><td>读完脊背发凉，对校园暴力的描述有共鸣</td></tr><tr><td>《嫌疑犯X的献身》</td><td>东野圭吾</td><td></td><td>12-5</td><td>学到了对P&amp;NP问题的新的描述</td></tr></tbody></table>]]></content>
     
