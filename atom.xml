@@ -6,7 +6,7 @@
   <link href="http://hx-w.github.io/atom.xml" rel="self"/>
   
   <link href="http://hx-w.github.io/"/>
-  <updated>2020-12-16T06:27:57.098Z</updated>
+  <updated>2020-12-16T08:15:12.726Z</updated>
   <id>http://hx-w.github.io/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://hx-w.github.io/posts/cbf6f6d55f6d/"/>
     <id>http://hx-w.github.io/posts/cbf6f6d55f6d/</id>
     <published>2020-12-16T06:21:54.000Z</published>
-    <updated>2020-12-16T06:27:57.098Z</updated>
+    <updated>2020-12-16T08:15:12.726Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="概述">概述</h2><p>纹理映射是着色部分的内容，包括了抗混叠等技术。</p><a id="more"></a><h2 id="重心坐标-Barycentric-Coordinates">重心坐标 Barycentric Coordinates</h2><p>重心坐标是定义在三角形上的，表示为<img src="https://math.now.sh?inline=%28%5Calpha%2C%20%5Cbeta%2C%20%5Cgamma%29" style="display:inline-block;margin: 0;"></p>]]></content>
+    <content type="html"><![CDATA[<h2 id="概述">概述</h2><p>纹理映射是着色部分的内容，包括了抗混叠等技术。</p><a id="more"></a><h2 id="重心坐标-Barycentric-Coordinates">重心坐标 Barycentric Coordinates</h2><p>重心坐标是定义在三角形上的，表示为<img src="https://math.now.sh?inline=%28%5Calpha%2C%20%5Cbeta%2C%20%5Cgamma%29" style="display:inline-block;margin: 0;">，满足：</p><p style=""><img src="https://math.now.sh?from=%28x%2C%20y%29%20%3D%20%5Calpha%20A%20%2B%20%5Cbeta%20B%20%2B%20%5Cgamma%20C%20%5C%5C%20%5Calpha%20%2B%20%5Cbeta%20%2B%20%5Cgamma%20%3D%201%0A"></p><p>当点在三角形内时，满足：</p><p style=""><img src="https://math.now.sh?from=%5Calpha%20%3E%200%20%5Cand%20%5Cbeta%20%3E%200%20%5Cand%20%5Cgamma%20%3E%200%0A"></p><p>重心坐标可以通过面积比求出，如图</p><p><img src="/img/CG-5/1.png" alt="示例1"></p><p>除了用面积算，还可以直接通过笛卡尔坐标系下的坐标进行计算</p><p><img src="/img/CG-5/2.png" alt="示例2"></p><h3 id="使用重心坐标进行插值">使用重心坐标进行插值</h3><p>对需要插值的对象也用重心坐标的形式表示</p><p>重心坐标不能保证投影变换后坐标不变，所以对于深度信息等需要现在三维空间中插值，再投影到屏幕空间。</p>]]></content>
     
     
     <summary type="html">&lt;h2 id=&quot;概述&quot;&gt;概述&lt;/h2&gt;
