@@ -1,9 +1,10 @@
 ---
 title: SCU教务处爬虫记录
-date: 2021-01-06 17:50:14
 tags:
-    - 爬虫
-    - Python
+  - 爬虫
+  - Python
+abbrlink: 5271
+date: 2021-01-06 17:50:14
 ---
 
 ## 概述
