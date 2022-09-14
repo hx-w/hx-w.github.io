@@ -9,7 +9,9 @@ banner_img: https://ibed.csgowiki.top/image/_MG_3214.jpg
 
 ~~目前川大计科大四在读，未来三年继续留在成都深造。~~
 
-研一狗罢了。
+~~研一狗罢了。~~
+
+研二狗罢了
 
 
 {% note info %}
