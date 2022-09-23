@@ -22,7 +22,7 @@ date: 2021-01-06 17:50:14
 
 前往登录界面，F12打开network，输入错误的登录信息可以查看网络请求记录。
 
-![](https://ibed.csgowiki.top/scu_spider-1.png)
+![](https://imgbed.scubot.com/scu_spider-1.png)
 
 真正有用的登录请求信息已经标出。
 

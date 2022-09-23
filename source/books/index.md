@@ -1,7 +1,7 @@
 ---
 title: 这是一些需要说明的内容
 date: 2021-04-04 16:50:17
-banner_img: https://ibed.csgowiki.top/book.jpg
+banner_img: https://imgbed.scubot.com/book.jpg
 comment: waline
 ---
 

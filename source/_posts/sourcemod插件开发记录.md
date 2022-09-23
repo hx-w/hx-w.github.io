@@ -4,7 +4,7 @@ tags:
   - CSGO
   - sourcemod
 category: 教程
-index_img: 'https://ibed.csgowiki.top/sourcemod.jpg'
+index_img: 'https://imgbed.scubot.com/sourcemod.jpg'
 abbrlink: 14fd
 date: 2020-11-23 23:04:29
 ---

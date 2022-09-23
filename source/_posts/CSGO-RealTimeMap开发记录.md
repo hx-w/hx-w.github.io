@@ -46,7 +46,7 @@ CSGO-RealTimeMap是一个致力于将CSGO服务器内的信息实时显示到网
 
 1. 更新了道具效果的显示：
 
-   ![道具效果](https://ibed.csgowiki.top/RTM-1.jpg)
+   ![道具效果](https://imgbed.scubot.com/RTM-1.jpg)
 
 2. 更多的关键帧，现在关键帧增加到了10，网页上人物移动的显示效果更加流畅
 
@@ -62,7 +62,7 @@ CSGO-RealTimeMap是一个致力于将CSGO服务器内的信息实时显示到网
   > python中的dict删除某个元素之后并不会直接释放内存，需要用`gc.collect()`来主动释放
 2. 实现服务器到网页的聊天信息显示(server2web)
 3. 实现网页到服务器的聊天信息显示(web2server)
-    ![聊天信息](https://ibed.csgowiki.top/RTM-2.jpg)
+    ![聊天信息](https://imgbed.scubot.com/RTM-2.jpg)
 
 **bug**
 1. 人物移动在网页上显示越来越滞后
@@ -77,11 +77,11 @@ CSGO-RealTimeMap是一个致力于将CSGO服务器内的信息实时显示到网
 
 > 游戏服务器向网站发消息
 
-![server2web](https://ibed.csgowiki.top/RTM-4.png)
+![server2web](https://imgbed.scubot.com/RTM-4.png)
 
 > 网站向服务器发消息
 
-![web2server](https://ibed.csgowiki.top/RTM-3.png)
+![web2server](https://imgbed.scubot.com/RTM-3.png)
 
 > `MessageQueue`结构
 

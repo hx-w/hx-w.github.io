@@ -72,8 +72,8 @@ async def AntiFlashImage(event):
 
 > 群聊发送闪图
 
-![](https://ibed.csgowiki.top/1617721464951.png)
+![](https://imgbed.scubot.com/1617721464951.png)
 
 > Bot私聊转发原图
 
-![](https://ibed.csgowiki.top/1617721489042.png)
+![](https://imgbed.scubot.com/1617721489042.png)

@@ -28,15 +28,15 @@ Minecraft的服务器很吃性能(CPU，内存和带宽都很重要)，选购服
 
 >点击可查看[购买页面](https://cloud.tencent.com/act/campus?utm_source=qcloud&utm_medium=head&utm_campaign=campus)：
 
-![](https://ibed.csgowiki.top/server_mc-1.png)
+![](https://imgbed.scubot.com/server_mc-1.png)
 
 选了上海地区的服务器，还是用Ubuntu做系统
 
-![](https://ibed.csgowiki.top/server_mc-2.png)
+![](https://imgbed.scubot.com/server_mc-2.png)
 
 购买服务器后第一件事应该是重置密码，这里默认的用户名为`ubuntu`
 
-![](https://ibed.csgowiki.top/server_mc-3.png)
+![](https://imgbed.scubot.com/server_mc-3.png)
 
 ## 服务器环境搭建
 
@@ -137,7 +137,7 @@ max-world-size=29999984
 
 MCDR上装了这几个插件，其中`QuickAnswer.py`是我魔改之后的版本。
 
-![](https://ibed.csgowiki.top/server_mc-4.png)
+![](https://imgbed.scubot.com/server_mc-4.png)
 
 ## 部署服务器
 
@@ -147,19 +147,19 @@ MCDR上装了这几个插件，其中`QuickAnswer.py`是我魔改之后的版本
 
 3. 执行`python3 MCDRefored.py`试运行服务端
 
-   ![](https://ibed.csgowiki.top/server_mc-5.png)
+   ![](https://imgbed.scubot.com/server_mc-5.png)
 
    可以看到运行成功，服务器内情况正常：
 
-   ![](https://ibed.csgowiki.top/server_mc-6.png)
+   ![](https://imgbed.scubot.com/server_mc-6.png)
 
    服务器资源占用也很低
 
-   ![](https://ibed.csgowiki.top/server_mc-7.png)
+   ![](https://imgbed.scubot.com/server_mc-7.png)
 
    空载时服务器负荷并不大
 
-   ![](https://ibed.csgowiki.top/server_mc-8.png)
+   ![](https://imgbed.scubot.com/server_mc-8.png)
 
 4. 改用`screen`后端挂载服务端：
 

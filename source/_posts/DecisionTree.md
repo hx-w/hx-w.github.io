@@ -2,7 +2,7 @@
 title: 基于ID3算法的决策树实现
 tags:
   - 算法
-index_img: 'https://ibed.csgowiki.top/ai.jpg'
+index_img: 'https://imgbed.scubot.com/ai.jpg'
 abbrlink: 36aa
 math: true
 date: 2018-11-20 00:00:00

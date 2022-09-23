@@ -234,6 +234,6 @@ if __name__ == '__main__':
 
 实验效果：
 
-![commandline](https://ibed.csgowiki.top/CYK-CYK_1.png)
+![commandline](https://imgbed.scubot.com/CYK-CYK_1.png)
 
-![GUI](https://ibed.csgowiki.top/CYK-CYK_2.png)
+![GUI](https://imgbed.scubot.com/CYK-CYK_2.png)

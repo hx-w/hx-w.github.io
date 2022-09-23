@@ -4,7 +4,7 @@ tags:
   - C++
 abbrlink: 808a
 date: 2021-04-14 22:29:58
-index_img: https://ibed.csgowiki.top/image/lambda_expression.png
+index_img: https://imgbed.scubot.com/image/lambda_expression.png
 ---
 
 由于最近项目中用到了C++ Lambda表达式的相关内容，在这里记录一下。

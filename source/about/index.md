@@ -2,7 +2,7 @@
 title: about
 date: 2021-04-02 13:11:17
 layout: about
-banner_img: https://ibed.csgowiki.top/image/_MG_3214.jpg
+banner_img: https://imgbed.scubot.com/image/_MG_3214.jpg
 ---
 
 ## 关于我自己

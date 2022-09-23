@@ -24,7 +24,7 @@ hexo会将本地编译好的`public/`等文件内容传到对应的github库上�
 
 1. 在github上的`<username>.github.io`仓库内新建`hexo`分支
 
-   ![](https://ibed.csgowiki.top/hexo_backup-1.png)
+   ![](https://imgbed.scubot.com/hexo_backup-1.png)
 
    > 如果你使用了`hexo-blog-encrypt`等博文加密插件，可能不希望某些文章内容被公开，那么你可以选择新建一个私有的github库用来备份hexo项目
 

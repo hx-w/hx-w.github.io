@@ -3,7 +3,7 @@ title: ubuntu记录
 tags:
   - 服务器
 category: 教程
-index_img: 'https://ibed.csgowiki.top/ubuntu.png'
+index_img: 'https://imgbed.scubot.com/ubuntu.png'
 abbrlink: 7b14
 date: 2021-02-05 15:48:32
 ---

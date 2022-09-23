@@ -1,7 +1,7 @@
 ---
 title: 推理小说简谈
 date: 2021-04-04 16:50:17
-banner_img: https://ibed.csgowiki.top/image/east_train.jpg
+banner_img: https://imgbed.scubot.com/image/east_train.jpg
 comment: waline
 ---
 
