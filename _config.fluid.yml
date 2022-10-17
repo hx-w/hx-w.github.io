@@ -406,6 +406,9 @@ footer:
       <span id="times">载入时分秒...</span>
       <script src="/js/duration.js"></script>
     </div>
+    <div>
+    <a href="https://beian.miit.gov.cn" target="_blank" rel="nofollow noopener"><span>蜀ICP备2022022819号-1</span></a>
+    </div>
   '
 
   # 展示网站的 PV、UV 统计数
