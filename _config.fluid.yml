@@ -946,6 +946,12 @@ links:
       link: "https://www.mycsgolab.com",
       avatar: "https://static.csgowiki.top/oss/img/csgowiki.e8edf511d076.ico"
     }
+    - {
+      title: "TSthinker",
+      intro: "自动驾驶/计算机视觉",
+      link: "https://blog.csdn.net/TSthinker",
+      avatar: "https://q1.qlogo.cn/g?b=qq&nk=1051428581&s=640"
+    }
 
   # 当成员头像加载失败时，替换为指定图片
   # When the member avatar fails to load, replace the specified image
@@ -955,7 +961,7 @@ links:
   # Custom content at the bottom of the links
   custom:
     enable: true
-    content: '<hr><p>在下方留言申请加入我的友链，按如下格式提供信息：</p><ul><li>博客名：CarOL的小站</li><li>简介：CarOL的博客</li><li>链接：https://hx-w.top</li><li>图片：https://imgbed.scubot.com/new_avatar</li></ul>'
+    content: '<hr><p>在下方留言申请加入我的友链，按如下格式提供信息：</p><ul><li>博客名：CarOL的小站</li><li>简介：CarOL的博客</li><li>链接：https://blog.scubot.com</li><li>图片：https://imgbed.scubot.com/new_avatar</li></ul>'
 
   # 评论插件
   # Comment plugin

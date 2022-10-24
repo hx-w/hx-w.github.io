@@ -324,8 +324,6 @@ $$
 
 
 
-**Reference**
-
 [^1]: https://eeweb.engineering.nyu.edu/iselesni/lecture_notes/least_squares/least_squares_SP.pdf
 [^2]: https://zhuanlan.zhihu.com/p/479913328
 [^3]: https://zhuanlan.zhihu.com/p/112091443
