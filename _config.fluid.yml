@@ -661,7 +661,7 @@ post:
     # 指定的插件，需要同时设置对应插件的必要参数
     # The specified plugin needs to set the necessary parameters at the same time
     # Options: utterances | disqus | gitalk | valine | waline | changyan | livere | remark42 | twikoo
-    type: waline
+    type: twikoo
 
   # 文章图片标题支持开关
   image_caption:
@@ -811,7 +811,7 @@ remark42:
 # Based on Tencent CloudBase
 # See: https://twikoo.js.org
 twikoo:
-  envId:
+  envId: cloudbase-baas-8gmhg0ao883a3a52
   region: ap-shanghai
   path: window.location.pathname
 
@@ -970,7 +970,7 @@ links:
     # 指定的插件，需要同时设置对应插件的必要参数
     # The specified plugin needs to set the necessary parameters at the same time
     # Options: utterances | disqus | gitalk | valine | waline | changyan | livere | remark42 | twikoo
-    type: waline
+    type: twikoo
 
 
 #---------------------------
