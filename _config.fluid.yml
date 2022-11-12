@@ -1028,6 +1028,6 @@ static_prefix:
 
   disqusjs: https://cdn.jsdelivr.net/npm/disqusjs@1.0/dist/
 
-  twikoo: https://cdn.jsdelivr.net/npm/twikoo@1.3.0/dist/
+  twikoo: https://cdn.jsdelivr.net/npm/twikoo@1.6.7/dist/
 
   hint: /lib/hint/
