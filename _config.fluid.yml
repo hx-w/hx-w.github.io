@@ -447,8 +447,8 @@ footer:
 index:
   # 首页 Banner 头图，可以是相对路径或绝对路径，以下相同
   # Path of Banner image, can be a relative path or an absolute path, the same on other pages
-  # banner_img: https://blog-1256946954.cos.ap-chengdu.myqcloud.com/image/grc.jpg
-  banner_img: https://bing.ioliu.cn/v1/rand
+  banner_img: https://imgbed.scubot.com/image/2153816032202981376.heic
+  # banner_img: https://bing.ioliu.cn/v1/rand
 
   # 头图高度，屏幕百分比
   # Height ratio of banner image
