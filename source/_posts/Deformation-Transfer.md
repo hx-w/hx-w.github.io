@@ -1,5 +1,5 @@
 ---
-title: Deformation-Transfer
+title: Mesh Deformation Transfer
 tags:
   - CG
 abbrlink: '4581'
