@@ -657,11 +657,11 @@ post:
   # 评论插件
   # Comment plugin
   comments:
-    enable: false
+    enable: true
     # 指定的插件，需要同时设置对应插件的必要参数
     # The specified plugin needs to set the necessary parameters at the same time
     # Options: utterances | disqus | gitalk | valine | waline | changyan | livere | remark42 | twikoo
-    type: twikoo
+    type: cusdis
 
   # 文章图片标题支持开关
   image_caption:
@@ -721,6 +721,15 @@ gitalk:
   # https://github.com/gitalk/gitalk/issues/429
   # https://github.com/Zibri/cloudflare-cors-anywhere
   proxy: <your own proxy>/https://github.com/login/oauth/access_token
+
+# Cusdis
+# 基于第三方服务或自托管服务
+# Based on third-party or self-hosted service
+# See https://cusdis.com
+cusdis:
+  host: https://cusdis.com
+  app_id: 280bc35a-0483-4140-964a-ea45d33e7643
+  lang: zh-cn
 
 # Valine
 # 基于 LeanCloud
@@ -976,7 +985,7 @@ links:
     # 指定的插件，需要同时设置对应插件的必要参数
     # The specified plugin needs to set the necessary parameters at the same time
     # Options: utterances | disqus | gitalk | valine | waline | changyan | livere | remark42 | twikoo
-    type: twikoo
+    type: cusdis
 
 
 #---------------------------

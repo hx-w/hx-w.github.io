@@ -30,7 +30,7 @@
     "hexo-renderer-pandoc": "^0.3.0",
     "hexo-renderer-stylus": "^2.0.0",
     "hexo-server": "^2.0.0",
-    "hexo-theme-fluid": "^1.9.3",
+    "hexo-theme-fluid": "^1.9.4",
     "request": "^2.88.2"
   }
 }
