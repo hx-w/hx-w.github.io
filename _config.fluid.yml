@@ -407,7 +407,7 @@ footer:
       <script src="/js/duration.js"></script>
     </div>
     <div>
-    <a href="https://beian.miit.gov.cn" target="_blank" rel="nofollow noopener"><span>蜀ICP备2022022819号-1</span></a>
+    <a href="https://beian.miit.gov.cn" target="_blank" rel="nofollow noopener"><span>蜀ICP备2022022819号</span></a>
     </div>
   '
 
@@ -431,7 +431,7 @@ footer:
   beian:
     enable: false
     # ICP证号
-    icp_text: 蜀ICP备2022022819号-1
+    icp_text: 蜀ICP备2022022819号
     # 公安备案号，不填则只显示ICP
     police_text: 京公网安备12345678号
     # 公安备案的编号，用于URL跳转查询
