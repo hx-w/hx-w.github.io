@@ -964,8 +964,8 @@ links:
     - {
       title: "停云馆",
       intro: "停云馆",
-      link: "https://blog.yizhou.info",
-      avatar: "https://blog.yizhou.info/img/avatar.jpg"
+      link: "https://blog.yizhou.ac.cn",
+      avatar: "https://blog.yizhou.ac.cn/img/avatar.jpg"
     }
 
   # 当成员头像加载失败时，替换为指定图片
