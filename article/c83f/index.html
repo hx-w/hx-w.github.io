@@ -373,7 +373,7 @@
                 
                   
                     <!-- compatible with older versions-->
-                    本文最后更新于：9 分钟前
+                    本文最后更新于：3 个月前
                   
                 
               </p>
@@ -460,11 +460,9 @@ bytes。</p></li>
 <h3 id="huff"><span class="math inline">\(Huff\)</span></h3>
 <p>对于长度为<span class="math inline">\(HLen\)</span>的二进制编码，每8位为一个字节以unsigned
 char类型储存进文件，对于最后不足8位的编码，长度满足 $ HLen 8 = (8 - loc)
-8 <span class="math inline">\(。 由\)</span>K_N[7]<span class="math inline">\(可得\)</span>loc<span class="math inline">\(得两种状态，\)</span>loc=0<span class="math inline">\(时\)</span>HuffLast<span class="math inline">\(全是编码不用特殊处理；\)</span>loc=1<span class="math inline">\(时对补位\)</span>HuffLast[loc-1,
-0]$进行处理，使以下关系成立: <span class="math display">\[
-((loc&gt;1 \wedge \forall x\in[0,loc-2])\to HuffLast[x]=1) \wedge
-((loc\geq1)\to HuffLast[loc-1]=0)
-\]</span></p>
+8 <span class="math inline">\(。
+由\)</span>K_N[7]<span class="math inline">\(可得\)</span>loc<span class="math inline">\(得两种状态，\)</span>loc=0<span class="math inline">\(时\)</span>HuffLast<span class="math inline">\(全是编码不用特殊处理；\)</span>loc=1<span class="math inline">\(时对补位\)</span>HuffLast[loc-1, 0]<span class="math inline">\(进行处理，使以下关系成立:\)</span>$ ((loc&gt;1
+x)HuffLast[x]=1) ((loc)HuffLast[loc-1]=0) $$</p>
 <p>即</p>
 <p><span class="math display">\[
 HuffLast[x]=\begin{cases} 1 &amp;&amp; loc &gt; 1 \text{ and }
