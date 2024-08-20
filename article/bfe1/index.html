@@ -1,0 +1,1270 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="https://blog-1256946954.cos.ap-chengdu.myqcloud.com/image/logo.png">
+  <link rel="icon" href="https://blog-1256946954.cos.ap-chengdu.myqcloud.com/image/logo.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="贺翔/CarOL">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="概述 用来记录计算机图形学中关于变换的相关知识，内容并不详尽，只记录了我认为比较重要的内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机图形学-变换">
+<meta property="og:url" content="https://blog.scubot.com/article/bfe1/index.html">
+<meta property="og:site_name" content="CarOL的小站">
+<meta property="og:description" content="概述 用来记录计算机图形学中关于变换的相关知识，内容并不详尽，只记录了我认为比较重要的内容。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://imgbed.scubot.com/CG-1-1.png">
+<meta property="og:image" content="https://imgbed.scubot.com/CG-1-2.png">
+<meta property="og:image" content="https://imgbed.scubot.com/CG-1-3.png">
+<meta property="og:image" content="https://imgbed.scubot.com/CG-1-4.png">
+<meta property="og:image" content="https://imgbed.scubot.com/CG-1-5.png">
+<meta property="og:image" content="https://imgbed.scubot.com/CG-1-6.png">
+<meta property="og:image" content="https://imgbed.scubot.com/CG-1-7.png">
+<meta property="og:image" content="https://imgbed.scubot.com/CG-1-8.png">
+<meta property="og:image" content="https://imgbed.scubot.com/CG-1-9.png">
+<meta property="og:image" content="https://imgbed.scubot.com/CG-1-10.png">
+<meta property="og:image" content="https://imgbed.scubot.com/CG-1-11.png">
+<meta property="article:published_time" content="2020-11-24T02:50:57.000Z">
+<meta property="article:modified_time" content="2024-08-20T00:57:09.095Z">
+<meta property="article:author" content="贺翔&#x2F;CarOL">
+<meta property="article:tag" content="Computer Graphics">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://imgbed.scubot.com/CG-1-1.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>计算机图形学-变换 - CarOL的小站</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.scubot.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":true,"trickleSpeed":100}},"code_language":{"enable":true,"default":"txt"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="CarOL的小站" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>CarOL的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/atom.xml/" target="_self">
+                <i class="iconfont icon-rss"></i>
+                <span>rss</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于我</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/about/" target="_self">
+                    
+                    <span>我自己</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="https://running-page-blond.vercel.app/" target="_self">
+                    
+                    <span>跑步记录</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-book"></i>
+                <span>图书</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/" target="_self">
+                    
+                    <span>导读</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/detective/" target="_self">
+                    
+                    <span>推理小说</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://imgbed.scubot.com/ru') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="计算机图形学-变换"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        贺翔/CarOL
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-11-24 10:50" pubdate>
+          2020年11月24日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          26 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">计算机图形学-变换</h1>
+            
+              <p id="updated-time" class="note note-info" style="display: none">
+                
+                  
+                    <!-- compatible with older versions-->
+                    本文最后更新于：2024-08-20T08:57:09+08:00
+                  
+                  
+
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="概述">概述</h2>
+<p>用来记录计算机图形学中关于变换的相关知识，内容并不详尽，只记录了我认为比较重要的内容。</p>
+<span id="more"></span>
+<h2 id="齐次坐标与仿射变换">齐次坐标与仿射变换</h2>
+<p>对二维空间中的向量<span class="math inline">\((x, y)\)</span>
+加入第三维的值 <span class="math inline">\(w\)</span>，即可表示齐次坐标(需要归一化，同除以<span class="math inline">\(w\)</span>)：</p>
+<ul>
+<li>二维空间中的点 = <span class="math inline">\((x, y,
+1)^\top\)</span></li>
+<li>二维空间中的向量 = <span class="math inline">\((x, y,
+0)^\top\)</span></li>
+</ul>
+<p>可以满足以下的操作：</p>
+<ul>
+<li>向量 + 向量 = 向量</li>
+<li>点 - 点 = 向量</li>
+<li>点 + 向量 = 点</li>
+<li>点 + 点 = 两点的中点</li>
+</ul>
+<p><strong>用齐次坐标表示二维仿射变换</strong></p>
+<blockquote>
+<p>仿射变换 = 线性变换(缩放/镜像/旋转等) + 平移(非线性变换) <span class="math display">\[
+\begin{pmatrix}
+x^\prime \\ y^\prime \\ 1
+\end{pmatrix}
+=
+\begin{pmatrix}
+a &amp; b &amp; t_x \\ c &amp; d &amp; t_y \\ 0 &amp; 0 &amp; 1
+\end{pmatrix}
+\cdot
+\begin{pmatrix}
+x \\ y \\ 1
+\end{pmatrix}
+\]</span></p>
+</blockquote>
+<p><strong>表示先进行线性变换，再平移</strong></p>
+<p>其中三种重要的变换为：</p>
+<ul>
+<li><p>缩放 <span class="math display">\[
+S(s_x, s_y) =
+\begin{pmatrix}
+s_x &amp; 0 &amp; 0 \\ 0 &amp; s_y &amp; 0 \\ 0 &amp; 0 &amp; 1
+\end{pmatrix}
+\]</span></p></li>
+<li><p>旋转(以原点为旋转中心逆时针) <span class="math display">\[
+R(\alpha) =
+\begin{pmatrix}
+\cos \alpha &amp; -\sin \alpha &amp; 0 \\ \sin \alpha &amp; \cos \alpha
+&amp; 0 \\ 0 &amp; 0 &amp; 1
+\end{pmatrix}
+\]</span> <strong>其中<span class="math inline">\(R(\alpha) ^ \top =
+R(\alpha)^{-1}\)</span>是正交矩阵</strong></p>
+<blockquote>
+<p>可以这样理解：</p>
+<p><span class="math inline">\(R(\alpha)^{-1}\)</span>表示旋转<span class="math inline">\(\alpha\)</span>的逆变换，即旋转<span class="math inline">\(-\alpha\)</span>角度，可以表示为 <span class="math display">\[
+R(\alpha)^{-1} = R(-\alpha) =
+\begin{pmatrix}
+\cos (-\alpha) &amp; -\sin (-\alpha) \\
+\sin (-\alpha) &amp; \cos (-\alpha)
+\end{pmatrix} =
+\begin{pmatrix}
+\cos \alpha &amp; \sin \alpha \\
+-\sin \alpha &amp; \cos \alpha
+\end{pmatrix} =
+R(\alpha) ^ \top
+\]</span></p>
+</blockquote></li>
+<li><p>平移</p>
+<p><span class="math display">\[
+T(t_x, t_y) =
+\begin{pmatrix}
+1 &amp; 0 &amp; t_x \\ 0 &amp; 1 &amp; t_y \\ 0 &amp; 0 &amp; 1
+\end{pmatrix}
+\]</span></p></li>
+</ul>
+<h2 id="变换的组合">变换的组合</h2>
+<p>先平移后旋转：</p>
+<p><img src="https://imgbed.scubot.com/CG-1-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>先旋转后平移：</p>
+<p><img src="https://imgbed.scubot.com/CG-1-2.png" srcset="/img/loading.gif" lazyload></p>
+<p>因为矩阵乘法不满足交换律，多种变换组合起来时<strong>从右向左运算</strong></p>
+<p><img src="https://imgbed.scubot.com/CG-1-3.png" srcset="/img/loading.gif" lazyload></p>
+<p>因为矩阵满足结合律，n个变换矩阵可以先做乘法，最后组合起来时维数不变。</p>
+<h2 id="变换的分解">变换的分解</h2>
+<p>因为旋转矩阵默认绕原点旋转，如果我们需要表示一个绕任意点旋转的变换，则需要用到矩阵的分解。</p>
+<p><img src="https://imgbed.scubot.com/CG-1-4.png" srcset="/img/loading.gif" lazyload></p>
+<p>表示为： <span class="math display">\[
+T(c) \cdot R(\alpha) \cdot T(-c)
+\]</span></p>
+<h2 id="三维变换中的旋转">三维变换中的旋转</h2>
+<p>沿三个坐标轴旋转：</p>
+<p><img src="https://imgbed.scubot.com/CG-1-5.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>需要注意的是<span class="math inline">\(R_y(\alpha)\)</span>中<span class="math inline">\(\sin
+\alpha\)</span>的正负比较特殊，是因为在右手坐标系下，Z轴 <span class="math inline">\(\times\)</span> X轴 = Y轴，而不是X轴 <span class="math inline">\(\times\)</span> Z轴。</p>
+</blockquote>
+<p>对于任意三维旋转，使用欧拉角来表示： <span class="math display">\[
+R_{xyz}(\alpha, \beta, \gamma) = R_x(\alpha)R_y(\beta)R_z(\gamma)
+\]</span> 对应的角度分别叫做：roll，pitch，yaw</p>
+<p><strong>沿着任意方向轴旋转(过原点)</strong></p>
+<p>方向向量为<span class="math inline">\(\vec n\)</span>，单位矩阵<span class="math inline">\(I\)</span> <span class="math display">\[
+R(\vec n, \alpha) = \cos(\alpha)I + (1 - \cos(\alpha))\vec n \vec n^\top
++ \sin(\alpha)
+\begin{pmatrix}
+0 &amp; -\vec n_z &amp; \vec n_y \\ \vec n_z &amp; 0 &amp; -\vec n_x \\
+-\vec n_y &amp; \vec n_x &amp; 0
+\end{pmatrix}
+\]</span> <strong>四元数</strong></p>
+<p>用于解决万向节死锁，有利于旋转与旋转之间的角度差值。</p>
+<h2 id="观测变换-viewing-trans">观测变换 Viewing trans</h2>
+<p>包括<strong>模型变换</strong>、<strong>视图/相机变换</strong>以及<strong>投影变换</strong>。</p>
+<blockquote>
+<p>也称作MVP(Model-View-Projection)变换</p>
+</blockquote>
+<h3 id="模型变换-model-trans">模型变换 Model trans</h3>
+<p>用于定义物体与物体之间的位置关系。</p>
+<h3 id="视图相机变换-viewcamera-trans">视图/相机变换 View/Camera
+trans</h3>
+<p>定义相机的位置：</p>
+<ul>
+<li>相机的位置(Position)：<span class="math inline">\(\vec
+e\)</span></li>
+<li>相机朝向(Look-at/gaze direction)：<span class="math inline">\(\vec
+g\)</span></li>
+<li>相机向上方向(Up direction)：<span class="math inline">\(\vec
+t\)</span></li>
+</ul>
+<blockquote>
+<p>下面为了表示方便，用 <span class="math inline">\(x_g\)</span> 来表示
+<span class="math inline">\(\vec g\)</span> 在X轴的分量，其他同理。</p>
+</blockquote>
+<p>将相机的位置固定(标准位置)：<strong>相机放在原点，朝Z轴负方向看，上方为Y轴</strong></p>
+<p><span class="math inline">\(M_{view}\)</span>计算：</p>
+<ol type="1">
+<li><p>将<span class="math inline">\(\vec e\)</span>平移到原点 <span class="math display">\[
+T_{view} =
+\begin{pmatrix}
+1 &amp; 0 &amp; 0 &amp; -x_e \\
+0 &amp; 1 &amp; 0 &amp; -y_e \\
+0 &amp; 0 &amp; 1 &amp; -z_e \\
+0 &amp; 0 &amp; 0 &amp; 1
+\end{pmatrix}
+\]</span></p></li>
+<li><p>将<span class="math inline">\(\vec g\)</span>旋转到-Z，将<span class="math inline">\(\vec t\)</span>旋转到Y，将<span class="math inline">\(\vec g \times \vec t\)</span>旋转到X</p>
+<p>该旋转矩阵定义为 <span class="math inline">\(R_{view}\)</span> ，
+<span class="math inline">\(R_{view}\)</span>
+不好直接求值，可以利用旋转的正交矩阵特性： <span class="math inline">\(R_{view}^{-1} = R_{view}^\top\)</span></p>
+<p>求得： <span class="math display">\[
+R_{view}^{-1} =
+\begin{pmatrix}
+x_{\hat g \times \hat t} &amp; x_t &amp; x_{-g} \\
+y_{\hat g \times \hat t} &amp; y_t &amp; y_{-g} \\
+z_{\hat g \times \hat t} &amp; z_t &amp; z_{-g}
+\end{pmatrix}
+\]</span></p>
+<p>可以验证: <span class="math display">\[
+R_{view}^{-1} \cdot \begin{pmatrix}1\\0\\0\end{pmatrix} =
+\begin{pmatrix}x_{\hat g \times \hat t} \\ y_{\hat g \times \hat t} \\
+z_{\hat g \times \hat t} \end{pmatrix}
+\]</span> 即可将X轴的单位向量变换成 <span class="math inline">\(\hat g
+\times \hat t\)</span>的方向。</p>
+<p>也可以理解成 <span class="math inline">\(R_{view}^{- 1}\)</span>
+的三个列向量分别是在就坐标系下表示的新坐标系的基向量。</p>
+<p>由于正交矩阵的性质： <span class="math display">\[
+R_{view} = (R_{view}^{-1})^\top =
+\begin{pmatrix}
+x_{\hat g \times \hat t} &amp; y_{\hat g \times \hat t} &amp; z_{\hat g
+\times \hat t} &amp; 0 \\
+x_t &amp; y_t &amp; z_t &amp; 0 \\
+x_g &amp; y_g &amp; z_g &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 1
+\end{pmatrix}
+\]</span> 所以视图变换的矩阵可以表示为：</p></li>
+</ol>
+<p><span class="math display">\[
+M_{view}=R_{view}T_{view}
+\]</span></p>
+<blockquote>
+<p>注意是先平移再旋转。</p>
+</blockquote>
+<h3 id="投影变换-projection-trans">投影变换 Projection trans</h3>
+<p>在计算机图形学中，投影是从三维空间向二维空间的变换(不可逆，因为缺失了一个维度的信息)</p>
+<p>一般认为投影变换有两种：<strong>正交投影(Orthographic
+projection)</strong>和<strong>透视投影(Perspective
+projection)</strong></p>
+<p>有以下性质：</p>
+<ul>
+<li>正交投影不会改变三维空间中的平行关系，透视投影有可能改变平行关系。</li>
+<li>正交投影可以认为是相机离成像平面无限远时的透视投影。</li>
+</ul>
+<p><img src="https://imgbed.scubot.com/CG-1-6.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="正交投影-orthographic-projection">正交投影 Orthographic
+projection</h4>
+<p>简单可以理解为将Z轴去除掉，就可以得到一个二维的平面</p>
+<p><img src="https://imgbed.scubot.com/CG-1-7.png" srcset="/img/loading.gif" lazyload></p>
+<p>在计算机图形学中，更标准的做法是将物体的 <strong>轴对齐包围盒(Axis
+Align Bounding Box，简称AABB)</strong> 变换到
+<strong>标准立方体(Canonical Cube，即<span class="math inline">\([-1,
+1]^3\)</span>)</strong>，具体经过两步：</p>
+<p><img src="https://imgbed.scubot.com/CG-1-8.png" srcset="/img/loading.gif" lazyload> &gt;
+AABB变量定义： &gt; - X轴的最小值<span class="math inline">\(l\)</span>(left)，X轴的最大值<span class="math inline">\(r\)</span>(right) &gt; - Y轴的最小值<span class="math inline">\(b\)</span>(bottom)，Y轴的最大值<span class="math inline">\(t\)</span>(top) &gt; - Z轴的最小值<span class="math inline">\(f\)</span>(far)，Z轴的最大值<span class="math inline">\(n\)</span>(near) 1. 将AABB的中心平移至原点 2.
+将AABB缩放至标准立方体(边长为2)</p>
+<p>即可得出： <span class="math display">\[
+M_{ortho} =
+\begin{pmatrix}
+\frac{2}{r - l} &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; \frac{2}{t - b} &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; \frac{2}{n - f} &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 1
+\end{pmatrix}
+\begin{pmatrix}
+1 &amp; 0 &amp; 0 &amp; -\frac{r + l}{2} \\
+0 &amp; 1 &amp; 0 &amp; -\frac{t + b}{2} \\
+0 &amp; 0 &amp; 1 &amp; -\frac{n + f}{2} \\
+0 &amp; 0 &amp; 0 &amp; 1
+\end{pmatrix}
+\]</span></p>
+<p>暂时不考虑旋转，且映射到标准立方体的过程中会导致物体被拉伸或缩放，后续还会进行视口变换。</p>
+<h4 id="透视投影-perspective-projection">透视投影 Perspective
+projection</h4>
+<p>透视投影的成像空间是一个 <strong>视锥(Frustum)</strong>
+我习惯叫六面台体，而正交投影的成像空间是长方体。</p>
+<p>而正交投影我们已经能理解并推导出变换矩阵，那就可以将透视投影的成像空间(六面台体)变化成正交投影的成像空间(长方体)，再进行正交投影，这样不就是一次透视投影吗。</p>
+<blockquote>
+<p>考虑人在远处可以看到更多的物体，但最后成像必然都是与近处物体在同一二维平面(视网膜)上，且远处物体会变小(被压缩了)，相当于人眼进行透视投影的时候也是将远处的空间压缩到与近处相同，即长方体成像空间。所以将透视投影分成两步：压缩成像空间和正交投影是合理的。</p>
+</blockquote>
+<p><img src="https://imgbed.scubot.com/CG-1-9.png" srcset="/img/loading.gif" lazyload></p>
+<p>现在关注如何
+<strong>压缩/变换成像空间</strong>，在计算机图形学中可以做以下假设：</p>
+<ol type="1">
+<li>最近平面(成像平面)上的所有点经过透视投影
+<strong>不变</strong>。</li>
+<li>最远平面上的所有点的Z值在变换成像空间后 <strong>不变</strong>。</li>
+<li>最远平面上的中心点的坐标在变换成像空间后
+<strong>不变</strong>。</li>
+</ol>
+<p>可以将变换成像空间定义为矩阵：<span class="math inline">\(M_{p\to
+o}\)</span></p>
+<p>从X轴负方向看Y-Z平面：</p>
+<p><img src="https://imgbed.scubot.com/CG-1-10.png" srcset="/img/loading.gif" lazyload></p>
+<p>从原点(相机)出发，近平面的点 <span class="math inline">\((x^\prime,
+y^\prime, z^\prime)\)</span> 与成像空间内任意一点 <span class="math inline">\((x, y, z)\)</span> 在同一直线上，在经过<span class="math inline">\(M_{p\to
+o}\)</span>变换后这两个点应该x和y都相同。即 <span class="math inline">\(M_{p\to o}\)</span> 应该使： <span class="math display">\[
+\begin{cases}
+y^\prime = \frac{n}{z} y \\[2ex]
+x^\prime = \frac{n}{z} x
+\end{cases}
+\]</span>
+因为只假设了远近两平面的点的Z坐标不变，而成像空间内其他的点(即上述的坐标
+<span class="math inline">\((x, y, z)\)</span>
+)的Z坐标不知道应该怎么变化，所以对以上的变化规则可写成表达式： <span class="math display">\[
+M_{p \to o}^{(4\times 4)}\begin{pmatrix} x\\y\\z\\1\end{pmatrix}
+=\begin{pmatrix}
+nx/z \\ ny/z \\ \rm{unknown} \\ 1
+\end{pmatrix}
+\overset {\times z}{=}
+\begin{pmatrix}
+nx \\ ny \\ \rm{unknown} \\ z
+\end{pmatrix}
+\]</span></p>
+<blockquote>
+<p>这里利用了齐次坐标的性质，齐次坐标使用时需要归一化，最后一项永远会是1</p>
+</blockquote>
+<p>可以分析得：</p>
+<p><span class="math display">\[
+M_{p \to o} = \begin{pmatrix} n &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; n &amp; 0 &amp; 0 \\ ? &amp; ? &amp; ? &amp; ? \\ 0 &amp; 0
+&amp; 1 &amp; 0\end{pmatrix}
+\]</span></p>
+<p>同时，根据我们之前的假设，最近平面上的点 <span class="math inline">\((x, y, n, 1)\)</span> 变化前后是不变的，可得：</p>
+<p><span class="math display">\[
+M_{p\to o}^{(4\times 4)} \begin{pmatrix} x \\ y \\ n \\ 1 \end{pmatrix}
+=
+\begin{pmatrix} n &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; n &amp; 0 &amp; 0 \\ A &amp; B &amp; C &amp; D \\ 0 &amp; 0
+&amp; 1 &amp; 0\end{pmatrix}
+\begin{pmatrix} x \\ y \\ n \\ 1 \end{pmatrix}
+==
+\begin{pmatrix} nx \\ ny \\ n^2 \\ n \end{pmatrix}
+\]</span></p>
+<blockquote>
+<p>其中ABCD为未知量</p>
+</blockquote>
+<p>针对<span class="math inline">\(M_{p\to o}^{(4\times
+4)}\)</span>的第三个行向量 <span class="math inline">\((A, B, C,
+D)\)</span> 可以列出： <span class="math display">\[
+(A, B, C, D)\begin{pmatrix} x \\ y \\ n \\ 1 \end{pmatrix} == n^2
+\]</span> 分析可得，<span class="math inline">\(n^2\)</span>是一个常量，与AABB有关，与取的任意点
+<span class="math inline">\((x, y, z, 1)\)</span> 无关，所以 <span class="math inline">\(A = 0\)</span> 且 <span class="math inline">\(B =
+0\)</span> ， <span class="math inline">\(C\)</span> 和 <span class="math inline">\(D\)</span> 不好判断，即可列出等式： <span class="math display">\[
+Cn + B = n^2
+\]</span> 同理，最远平面上的所有点<span class="math inline">\((x, y, f,
+1)\)</span>变化前后Z轴上的值不变，即可列出： <span class="math display">\[
+Cf+B=f^2
+\]</span></p>
+<blockquote>
+<p>省略了过程：</p>
+<p><span class="math display">\[
+M_{p\to o}^{(4\times 4)} \begin{pmatrix} x \\ y \\ f \\ 1 \end{pmatrix}
+=
+\begin{pmatrix} n &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; n &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; C &amp; D \\ 0 &amp; 0
+&amp; 1 &amp; 0\end{pmatrix}
+\begin{pmatrix} x \\ y \\ f \\ 1 \end{pmatrix}
+==
+\begin{pmatrix} nx \\ ny \\ f^2 \\ f \end{pmatrix}
+\]</span></p>
+</blockquote>
+<p>列方程可解： <span class="math display">\[
+\begin{cases}
+Cn + B = n^2 \\[2ex]
+Cf + B = f^2
+\end{cases} \Longrightarrow
+\begin{cases}
+C = n + f \\[2ex]
+D = -nf
+\end{cases}
+\]</span></p>
+<p>可得： <span class="math display">\[
+M_{p\to o} = \begin{pmatrix} n &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; n &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; n + f &amp;  -nf \\ 0 &amp;
+0 &amp; 1 &amp; 0\end{pmatrix}
+\]</span> 综上可得，投影变换可以写为：</p>
+<p><span class="math display">\[
+M_{persp} = M_{ortho}M_{p \to o} = \begin{pmatrix}
+\frac{2}{r - l} &amp; 0 &amp; 0 &amp; -\frac{r + l}{2} \\
+0 &amp; \frac{2}{t - b} &amp; 0 &amp; -\frac{t + b}{2} \\
+0 &amp; 0 &amp; \frac{2}{n - f} &amp; -\frac{n + f}{2} \\
+0 &amp; 0 &amp; 0 &amp; 1
+\end{pmatrix}
+\begin{pmatrix}
+n &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; n &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; n + f &amp;  -nf
+\\ 0 &amp; 0 &amp; 1 &amp; 0
+\end{pmatrix}
+\]</span></p>
+<p><strong>思考</strong>：成像空间中的任意一点经过 <span class="math inline">\(M_{p \to o}\)</span> 变换后Z轴的分量如何变化？</p>
+<p>对于任意一点 <span class="math inline">\((x,y ,z,1)\)</span>
+，经过变换：</p>
+<p><span class="math display">\[
+\begin{pmatrix} n &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; n &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; n + f &amp;  -nf \\ 0 &amp;
+0 &amp; 1 &amp; 0\end{pmatrix}
+\begin{pmatrix}
+x \\ y \\ z \\ 1
+\end{pmatrix}
+=
+\begin{pmatrix}
+nx \\ ny\\ (n + f)z - nf \\ z
+\end{pmatrix}
+=
+\begin{pmatrix}
+nx /z \\ ny/z \\ n + f - nf/z \\ 1
+\end{pmatrix}
+\]</span></p>
+<blockquote>
+<p>关于n和f的意义是Z轴上的坐标，此时 <span class="math inline">\(f &lt;
+n\)</span> ，下面的函数中可以看做是近远平面到相机的距离，此时 <span class="math inline">\(n &lt; f\)</span>
+，此种改变并不会影响上述推导。</p>
+</blockquote>
+<p>设 <span class="math inline">\(f(z) = -nf /z  +n + f\)</span>
+是变换前后Z轴分量的映射关系，可以看出是关于z的反比例函数的变形，可以验证
+<span class="math inline">\(f(n)=n\)</span> ， <span class="math inline">\(f(f)=f\)</span> ，故可以画出函数图像：</p>
+<p><img src="https://imgbed.scubot.com/CG-1-11.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以看出当 <span class="math inline">\(n &lt; z &lt; f\)</span>
+时，<span class="math inline">\(f(z) &lt; g(z)\)</span>
+，故<strong>在进行压缩成像空间时，六面台体内的点被挤向了远处</strong>。</p>
+<blockquote>
+<p>我个人对这种现象的看法是：在六面台体的成像空间中，单位空间的信息量是相同的，在经过
+<span class="math inline">\(M_{p \to o}\)</span>
+变换后六面台体的后部被挤压导致形成的长方体成像空间中的单位空间信息密度更大，所以整体上空间中的点更靠后集中。</p>
+</blockquote>
+<h2 id="总结">总结</h2>
+<p>本篇记录了计算机图形学中关于坐标变换的部分内容，主要参考了<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1X7411F744">GAMES101</a></p>
+<p>我文章里的内容并不全面，可能后续会补充内容。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/" class="category-chain-item">学习记录</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Computer-Graphics/" class="print-no-link">#Computer Graphics</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>计算机图形学-变换</div>
+      <div>https://blog.scubot.com/article/bfe1/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>贺翔/CarOL</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2020年11月24日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/article/d553/" title="脚本化备份hexo项目&amp;部署博客">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">脚本化备份hexo项目&amp;部署博客</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/article/14fd/" title="sourcemod插件开发记录">
+                        <span class="hidden-mobile">sourcemod插件开发记录</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="cusdis" style="width:100%">
+    <div id="cusdis_thread"
+      data-host="https://cusdis.com"
+      data-app-id="280bc35a-0483-4140-964a-ea45d33e7643"
+      data-page-id="27f51fb19ef76ac3860242ba0bfc2742"
+      data-page-url="article/bfe1/"
+      data-page-title="计算机图形学-变换"
+      data-theme="auto"
+    >
+    </div>
+  </div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#cusdis_thread', function() {
+      Fluid.utils.createScript('https://cusdis.com/js/widget/lang/zh-cn.js');
+      Fluid.utils.createScript('https://cusdis.com/js/cusdis.es.js');
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema) {
+        document.querySelector('#cusdis_thread').dataset.theme = schema
+      }
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> <div> <a href="https://beian.miit.gov.cn" target="_blank" rel="nofollow noopener"><span>蜀ICP备2022022819号</span></a> </div> 站点访问量 <span id="qexo-site-pv">Loading...</span> |  站点访客数 <span id="qexo-site-uv">Loading...</span> |  页面访问量 <span id="qexo-page-pv">Loading...</span> <script src="https://cdn.jsdelivr.net/npm/qexo-static@1.6.0/hexo/statistic.js"></script> <script> loadStatistic("https://qexo.scubot.com") </script> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":true,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  var relativeDate = function() {
+    var updatedTime = document.getElementById('updated-time');
+    if (updatedTime) {
+      var text = updatedTime.textContent;
+      var reg = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})/;
+      var matchs = text.match(reg);
+      if (matchs) {
+        var relativeTime = moment(matchs[0]).fromNow();
+        updatedTime.textContent = text.replace(reg, relativeTime);
+      }
+      updatedTime.style.display = '';
+    }
+  };
+  Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/moment.min.js', function() {
+    if (!'zh-cn'.startsWith('en')) {
+      Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/locale/zh-cn.min.js', function() {
+        relativeDate();
+      });
+    } else {
+      relativeDate();
+    }
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

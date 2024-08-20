@@ -1,0 +1,1086 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="https://blog-1256946954.cos.ap-chengdu.myqcloud.com/image/logo.png">
+  <link rel="icon" href="https://blog-1256946954.cos.ap-chengdu.myqcloud.com/image/logo.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="贺翔/CarOL">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Decision Tree  name: He Xiang (贺翔) date: 2018-11-10 Experimental enviroment  OS: Windows 10 IDE: Visual Studio 2017 &amp; vim 8.1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于ID3算法的决策树实现">
+<meta property="og:url" content="https://blog.scubot.com/article/36aa/index.html">
+<meta property="og:site_name" content="CarOL的小站">
+<meta property="og:description" content="Decision Tree  name: He Xiang (贺翔) date: 2018-11-10 Experimental enviroment  OS: Windows 10 IDE: Visual Studio 2017 &amp; vim 8.1">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://imgbed.scubot.com/ai.jpg">
+<meta property="article:published_time" content="2018-11-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-08-20T00:57:09.091Z">
+<meta property="article:author" content="贺翔&#x2F;CarOL">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://imgbed.scubot.com/ai.jpg">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>基于ID3算法的决策树实现 - CarOL的小站</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.scubot.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":true,"trickleSpeed":100}},"code_language":{"enable":true,"default":"txt"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="CarOL的小站" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>CarOL的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/atom.xml/" target="_self">
+                <i class="iconfont icon-rss"></i>
+                <span>rss</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于我</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/about/" target="_self">
+                    
+                    <span>我自己</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="https://running-page-blond.vercel.app/" target="_self">
+                    
+                    <span>跑步记录</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-book"></i>
+                <span>图书</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/" target="_self">
+                    
+                    <span>导读</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/detective/" target="_self">
+                    
+                    <span>推理小说</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://imgbed.scubot.com/ru') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="基于ID3算法的决策树实现"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        贺翔/CarOL
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-11-20 00:00" pubdate>
+          2018年11月20日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          467 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          4 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">基于ID3算法的决策树实现</h1>
+            
+              <p id="updated-time" class="note note-info" style="display: none">
+                
+                  
+                    <!-- compatible with older versions-->
+                    本文最后更新于：2024-08-20T08:57:09+08:00
+                  
+                  
+
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="decision-tree">Decision Tree</h1>
+<ul>
+<li><p>name: He Xiang (贺翔)</p></li>
+<li><p>date: 2018-11-10</p></li>
+<li><p>Experimental enviroment</p>
+<blockquote>
+<p>OS: Windows 10</p>
+<p>IDE: Visual Studio 2017 &amp; vim 8.1</p>
+</blockquote></li>
+</ul>
+<hr>
+<span id="more"></span>
+<h3 id="requirement">Requirement</h3>
+<p>​ A decision tree is a flowchart-like structure in which each internal
+node represents a "test" on an attribute (e.g whether a coin flip comes
+up heads or tails), each branch represents the outcome of the test, and
+each leaf node represents a class label (decision taken after computing
+all attributes). The paths from root to leaf represent classification
+rules.</p>
+<p>​ In Decision Tree the major challenge is the identification of the
+attribute for the root node in each level. This processis known as
+attribute selection. We have a popular attribute selection measure,
+Information Gain, which is defined based on entropy. Entropy is the
+measure of uncertainty of a random variable; it characterizes the
+impurity of an arbitrary collection of examples. As we use a node in
+decision tree to partition the training instances into smaller subsets,
+the entropy changes. Information gain is a measure of this change in
+entropy. The best attribute should maximize the information gain given a
+set of training instances.</p>
+<p>​ The table below specifies the conditions for whether to play
+badmintion or not. You are required to construct a decision tree based
+on the information in the table.</p>
+<table>
+<thead>
+<tr>
+<th>No.</th>
+<th>Outlook</th>
+<th>Temperature</th>
+<th>Humidity</th>
+<th>Windy</th>
+<th>Play?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Sunny</td>
+<td>Hot</td>
+<td>High</td>
+<td>False</td>
+<td>No</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Sunny</td>
+<td>Hot</td>
+<td>High</td>
+<td>True</td>
+<td>No</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Overcast</td>
+<td>Hot</td>
+<td>High</td>
+<td>False</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Rain</td>
+<td>Mild</td>
+<td>High</td>
+<td>False</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Rain</td>
+<td>Cool</td>
+<td>Normal</td>
+<td>False</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Rain</td>
+<td>Cool</td>
+<td>Normal</td>
+<td>True</td>
+<td>No</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Overcast</td>
+<td>Cool</td>
+<td>Normal</td>
+<td>True</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Sunny</td>
+<td>Mild</td>
+<td>High</td>
+<td>False</td>
+<td>No</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Sunny</td>
+<td>Cool</td>
+<td>Normal</td>
+<td>False</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Rain</td>
+<td>Mild</td>
+<td>Normal</td>
+<td>False</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Sunny</td>
+<td>Mild</td>
+<td>Normal</td>
+<td>True</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Overcast</td>
+<td>Mild</td>
+<td>High</td>
+<td>True</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Overcast</td>
+<td>Hot</td>
+<td>Normal</td>
+<td>False</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Rain</td>
+<td>Mild</td>
+<td>High</td>
+<td>True</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<h3 id="algorithm">Algorithm</h3>
+<p>The decision tree build is ruled by the ID3 algorithm(Iterative
+Dichotomiser 3). And its main theory is Information theory.</p>
+<h4 id="description">description</h4>
+<p>If <span class="math inline">\(X\)</span> is a discrete random
+variable and its probability distribution is <span class="math inline">\(p(x)=P(X=x), x\in X\)</span>, then the information
+entropy of <span class="math inline">\(X\)</span> is <span class="math inline">\(H(X)\)</span> <span class="math display">\[
+  H(X) = -\sum_{i}^{}{p(x_i)\log_2p(x_i)}
+\]</span> ​ <span class="math inline">\(H(X)\)</span> is also called
+Prior Entropy of X.</p>
+<p>​ Support that condition that an event <span class="math inline">\(y_j\)</span> happens, the conditional probability
+of the random event <span class="math inline">\(x_i\)</span> occurring
+is <span class="math inline">\(p(x_i\mid y_j)\)</span>. Under the
+condition of <span class="math inline">\(y_j\)</span>, the uncertainty
+about <span class="math inline">\(X\)</span> is defined as the posterior
+entropy <span class="math inline">\(H(X\mid y_j)\)</span>. <span class="math display">\[
+  H(X|y_j)=-\sum_{i}^{}p(x_i|y_j)\log_2(p(x_i|y_j))
+\]</span> ​ For attribute <span class="math inline">\(Y\)</span> (the set
+of each <span class="math inline">\(y_j\)</span>), the conditional
+entropy of set <span class="math inline">\(X\)</span> is <span class="math inline">\(H(X\mid Y)\)</span> <span class="math display">\[
+  H(X|Y)=\sum_{j}{p(y_j)H(X|y_j)}=-\sum_{j}{p(y_j)\sum_{i}{p(x_i|y_j)\log_2p(x_i|y_j)}}
+\]</span> ​ With prior entropy <span class="math inline">\(H(X)\)</span>
+and conditional entropy <span class="math inline">\(H(X \mid
+Y)\)</span>, We can define the information gain <span class="math inline">\(IG(X,Y)\)</span>, means that how much information
+gain can variable <span class="math inline">\(X\)</span> get from
+attribute <span class="math inline">\(Y\)</span> <span class="math display">\[
+IG(X,Y)=H(X)-H(X|Y)
+\]</span></p>
+<h4 id="example">example</h4>
+<p>For the training table. Consider attribute <span class="math inline">\(Outlook=\{Sunny, Overcast,Rainy\}\)</span>.</p>
+<ul>
+<li><span class="math inline">\(H(Play\mid
+Sunny)=-\frac{2}{5}\cdot\log_2\frac{2}{5}-\frac{3}{5}\cdot\log_2\frac{3}{5}=0.970951\)</span></li>
+<li><span class="math inline">\(H(Play \mid
+Overcast)=-\frac{4}{4}\cdot\log_2\frac{4}{4}-0\cdot\log_20=0\)</span></li>
+<li><span class="math inline">\(H(Play\mid
+Rainy)=-\frac{3}{5}\cdot\log_2\frac{3}{5}-\frac{2}{3}\cdot\log_2\frac{2}{3}=0.970951\)</span></li>
+</ul>
+<p>So the conditional entropy of <span class="math inline">\(Outlook\)</span> is <span class="math inline">\(H(Play\mid
+Outlook)=\frac{5}{14}\cdot0.970951+\frac{4}{14}\cdot0+\frac{5}{14}\cdot0.970951=0.693536\)</span>.
+and then the information gain from <span class="math inline">\(Outlook\)</span> to <span class="math inline">\(Play\)</span> is <span class="math inline">\(IG(Play,Outlook)=H(Play)-H(Play\mid
+Outlook)=0.24675\)</span>.</p>
+<p>​ For all attributes are the same:</p>
+<ul>
+<li><p><span class="math inline">\(IG(Play,Outlook)=0.24675\)</span></p></li>
+<li><p><span class="math inline">\(IG(Play,Temperature)=0.0292226\)</span></p></li>
+<li><p><span class="math inline">\(IG(Play,
+Humidity)=0.151836\)</span></p></li>
+<li><p><span class="math inline">\(IG(Play, Windy)=0.048127\)</span></p>
+<p>​ Alfter get all attributes' IG, then choose the maximum IG. Here is
+<span class="math inline">\(IG(Play, Outlook)\)</span>, For the decision
+tree current node, make <span class="math inline">\(Outlook\)</span> as
+the node's attribute and make all its value be the node's child nodes'
+index.</p>
+<p>​ Divide the from when process the child node, and recursively build
+the tree.</p></li>
+</ul>
+<h6 id="class-definition">class definition</h6>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">/**   </span><br><span class="hljs-comment"> * @Brief store the attribute(col) in the sample  </span><br><span class="hljs-comment"> */</span>  <br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Attr</span> {<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">// which col  </span><br>    <span class="hljs-type">int</span> colIndex;  <br>    <span class="hljs-comment">// how many types of the attr</span><br>    <span class="hljs-type">int</span> typeNum;  <br>    <span class="hljs-type">double</span> conEntroy, InforGain;<br>    std::string attribute; <br>    std::vector&lt;std::string&gt; attriValue;<br>    <span class="hljs-comment">// init 0.0</span><br>    std::map&lt;std::string, <span class="hljs-type">double</span>&gt; typeEntropy;<br>    <span class="hljs-comment">// start from 1</span><br>    std::map&lt;std::string, <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>&gt; typeCnt;<br>    std::map&lt;std::string, std::map&lt;std::string, <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>&gt; &gt; attriValue_to_result;<br><br>    <span class="hljs-built_in">Attr</span>(<span class="hljs-type">int</span> col = <span class="hljs-number">0</span>, std::string str = <span class="hljs-string">""</span>):<br>        <span class="hljs-built_in">colIndex</span>(col), <span class="hljs-built_in">typeNum</span>(<span class="hljs-number">0</span>), <span class="hljs-built_in">conEntroy</span>(<span class="hljs-number">0</span>), <span class="hljs-built_in">InforGain</span>(<span class="hljs-number">0</span>), <span class="hljs-built_in">attribute</span>(str) { }<br>    ~<span class="hljs-built_in">Attr</span>() { }<br>};<br><br><span class="hljs-comment">/**  </span><br><span class="hljs-comment"> * @Brief define the node infor</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">TreeNode</span> {<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">// current attribute Infor</span><br>    std::string attri; <br>    std::map&lt;std::string, TreeNode *&gt; attri_To_Children;<br>    std::vector&lt;Attr&gt; Table;<br>    <span class="hljs-type">int</span> rowNum, colNum;<br>    <span class="hljs-type">double</span> InforGain;<br>    <span class="hljs-type">int</span> biggestIGidx;<br>    <span class="hljs-type">bool</span> isLeaf;<br><br>    <span class="hljs-built_in">TreeNode</span>(): <span class="hljs-built_in">biggestIGidx</span>(<span class="hljs-number">0</span>), <span class="hljs-built_in">InforGain</span>(<span class="hljs-number">0.0</span>),<br>    <span class="hljs-built_in">isLeaf</span>(<span class="hljs-literal">true</span>), <span class="hljs-built_in">rowNum</span>(<span class="hljs-number">0</span>), <span class="hljs-built_in">colNum</span>(<span class="hljs-number">0</span>) { }<br>    ~<span class="hljs-built_in">TreeNode</span>() { }<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">chooseIG</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clearCol</span><span class="hljs-params">()</span></span>;<br>};<br><br><span class="hljs-comment">/**  </span><br><span class="hljs-comment"> * @Brief define the decision tree</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">DecisionTree</span> {<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">DecisionTree</span>() { root = <span class="hljs-keyword">new</span> TreeNode; }<br>    ~<span class="hljs-built_in">DecisionTree</span>() { <span class="hljs-built_in">removeAll</span>(root); }<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">BuildTree</span><span class="hljs-params">()</span> </span>{ <span class="hljs-built_in">builder</span>(root); }<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ReadTable</span><span class="hljs-params">(std::ifstream &amp;)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">testTree</span><span class="hljs-params">()</span> </span>{ <span class="hljs-built_in">testTreeHelp</span>(root); }<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">printTree</span><span class="hljs-params">()</span> </span>{ <span class="hljs-built_in">printTreeHelp</span>(root, <span class="hljs-string">"NULL"</span>); }; <br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">removeAll</span><span class="hljs-params">(TreeNode *)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">printSample</span><span class="hljs-params">(TreeNode *)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">computeEntropyFir</span><span class="hljs-params">(TreeNode *)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">computeEntropySec</span><span class="hljs-params">(TreeNode *)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">builder</span><span class="hljs-params">(TreeNode *)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">processSample</span><span class="hljs-params">(TreeNode *)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">divideChild</span><span class="hljs-params">(TreeNode *)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">testTreeHelp</span><span class="hljs-params">(TreeNode *)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">printTreeHelp</span><span class="hljs-params">(TreeNode *, std::string)</span></span>;<br><br>    TreeNode *root;<br>};<br></code></pre></td></tr></tbody></table></figure>
+<h3 id="analysis-and-discussion">Analysis and discussion</h3>
+<p>​ ID3 algorithm is a kind of greedy algorithm, when set a node's
+attribute, alway choose the IG max one.</p>
+<p>​ this algorithm is easy to train data, but there are also same
+disadvantages. First, it only can process descrete data, if data is
+continuous, it does not work. Second, this algorithm is very reply on
+the training data, so it is easy to build a insufficient decision tree.
+And at most time, there may be some attribute won't support any
+effective information, in this condition, the tree be built may be a bit
+unsuitable.</p>
+<p>For me to implement this algorithm, I use a lot of <span class="math inline">\(STL\)</span> like <span class="math inline">\(string\)</span>, <span class="math inline">\(map\)</span> and <span class="math inline">\(vector\)</span>, may waste a lot of space and make
+the time efficiency lower.</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AE%97%E6%B3%95/" class="print-no-link">#算法</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>基于ID3算法的决策树实现</div>
+      <div>https://blog.scubot.com/article/36aa/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>贺翔/CarOL</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2018年11月20日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/article/c83f/" title="Huffman编码压缩文件时的文件储存结构">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Huffman编码压缩文件时的文件储存结构</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="cusdis" style="width:100%">
+    <div id="cusdis_thread"
+      data-host="https://cusdis.com"
+      data-app-id="280bc35a-0483-4140-964a-ea45d33e7643"
+      data-page-id="6efbdc9e1cc35d4e6380aa8e7ce6cba8"
+      data-page-url="article/36aa/"
+      data-page-title="基于ID3算法的决策树实现"
+      data-theme="auto"
+    >
+    </div>
+  </div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#cusdis_thread', function() {
+      Fluid.utils.createScript('https://cusdis.com/js/widget/lang/zh-cn.js');
+      Fluid.utils.createScript('https://cusdis.com/js/cusdis.es.js');
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema) {
+        document.querySelector('#cusdis_thread').dataset.theme = schema
+      }
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> <div> <a href="https://beian.miit.gov.cn" target="_blank" rel="nofollow noopener"><span>蜀ICP备2022022819号</span></a> </div> 站点访问量 <span id="qexo-site-pv">Loading...</span> |  站点访客数 <span id="qexo-site-uv">Loading...</span> |  页面访问量 <span id="qexo-page-pv">Loading...</span> <script src="https://cdn.jsdelivr.net/npm/qexo-static@1.6.0/hexo/statistic.js"></script> <script> loadStatistic("https://qexo.scubot.com") </script> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":true,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  var relativeDate = function() {
+    var updatedTime = document.getElementById('updated-time');
+    if (updatedTime) {
+      var text = updatedTime.textContent;
+      var reg = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})/;
+      var matchs = text.match(reg);
+      if (matchs) {
+        var relativeTime = moment(matchs[0]).fromNow();
+        updatedTime.textContent = text.replace(reg, relativeTime);
+      }
+      updatedTime.style.display = '';
+    }
+  };
+  Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/moment.min.js', function() {
+    if (!'zh-cn'.startsWith('en')) {
+      Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/locale/zh-cn.min.js', function() {
+        relativeDate();
+      });
+    } else {
+      relativeDate();
+    }
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

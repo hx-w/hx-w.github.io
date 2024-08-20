@@ -1,0 +1,918 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="https://blog-1256946954.cos.ap-chengdu.myqcloud.com/image/logo.png">
+  <link rel="icon" href="https://blog-1256946954.cos.ap-chengdu.myqcloud.com/image/logo.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="贺翔/CarOL">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="以往经历 我之前搭过两台Minecraft的服务器，一台是阿里云的1核2G内存5M带宽(9.5元&#x2F;月)，一台是百度云的2核4G3M(30+元&#x2F;月)，都是学生机比较便宜，百度云那台的基础价格是18元&#x2F;月只有1M带宽，我是升了配置，记不清一共多少钱了。 阿里云那台用作创造的实验服务器还是可以的，百度云那台配置高一点，但是用作正常地图的生存(使用MCDR和Carpet Mod)还是有点吃力，三个人时tp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="部署一台Minecraft服务器">
+<meta property="og:url" content="https://blog.scubot.com/article/101e/index.html">
+<meta property="og:site_name" content="CarOL的小站">
+<meta property="og:description" content="以往经历 我之前搭过两台Minecraft的服务器，一台是阿里云的1核2G内存5M带宽(9.5元&#x2F;月)，一台是百度云的2核4G3M(30+元&#x2F;月)，都是学生机比较便宜，百度云那台的基础价格是18元&#x2F;月只有1M带宽，我是升了配置，记不清一共多少钱了。 阿里云那台用作创造的实验服务器还是可以的，百度云那台配置高一点，但是用作正常地图的生存(使用MCDR和Carpet Mod)还是有点吃力，三个人时tp">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://imgbed.scubot.com/server_mc-1.png">
+<meta property="og:image" content="https://imgbed.scubot.com/server_mc-2.png">
+<meta property="og:image" content="https://imgbed.scubot.com/server_mc-3.png">
+<meta property="og:image" content="https://imgbed.scubot.com/server_mc-4.png">
+<meta property="og:image" content="https://imgbed.scubot.com/server_mc-5.png">
+<meta property="og:image" content="https://imgbed.scubot.com/server_mc-6.png">
+<meta property="og:image" content="https://imgbed.scubot.com/server_mc-7.png">
+<meta property="og:image" content="https://imgbed.scubot.com/server_mc-8.png">
+<meta property="article:published_time" content="2020-11-25T14:19:30.000Z">
+<meta property="article:modified_time" content="2024-08-20T00:57:09.095Z">
+<meta property="article:author" content="贺翔&#x2F;CarOL">
+<meta property="article:tag" content="服务器">
+<meta property="article:tag" content="Minecraft">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://imgbed.scubot.com/server_mc-1.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>部署一台Minecraft服务器 - CarOL的小站</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.scubot.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":true,"trickleSpeed":100}},"code_language":{"enable":true,"default":"txt"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="CarOL的小站" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>CarOL的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/atom.xml/" target="_self">
+                <i class="iconfont icon-rss"></i>
+                <span>rss</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于我</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/about/" target="_self">
+                    
+                    <span>我自己</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="https://running-page-blond.vercel.app/" target="_self">
+                    
+                    <span>跑步记录</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-book"></i>
+                <span>图书</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/" target="_self">
+                    
+                    <span>导读</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/detective/" target="_self">
+                    
+                    <span>推理小说</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://imgbed.scubot.com/ru') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="部署一台Minecraft服务器"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        贺翔/CarOL
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-11-25 22:19" pubdate>
+          2020年11月25日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          1.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          10 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">部署一台Minecraft服务器</h1>
+            
+              <p id="updated-time" class="note note-info" style="display: none">
+                
+                  
+                    <!-- compatible with older versions-->
+                    本文最后更新于：2024-08-20T08:57:09+08:00
+                  
+                  
+
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="以往经历">以往经历</h2>
+<p>我之前搭过两台Minecraft的服务器，一台是阿里云的1核2G内存5M带宽(9.5元/月)，一台是百度云的2核4G3M(30+元/月)，都是学生机比较便宜，百度云那台的基础价格是18元/月只有1M带宽，我是升了配置，记不清一共多少钱了。</p>
+<p>阿里云那台用作创造的实验服务器还是可以的，百度云那台配置高一点，但是用作正常地图的生存(使用MCDR和Carpet
+Mod)还是有点吃力，三个人时tps经常不满20，而且百度云的客服真的很烦人:(反正不想再用百度云了。</p>
+<p>这几天又有想法再部署一台空岛服务器，想用这篇博客把服务器的部署流程记录下来，希望能为别人提供一些帮助。</p>
+<span id="more"></span>
+<blockquote>
+<p>空岛对服务器性能要求不高，且有一定趣味性。如果想要其他类型的玩法直接更改存档和对应插件即可。</p>
+</blockquote>
+<h2 id="服务器选购">服务器选购</h2>
+<p>Minecraft的服务器很吃性能(CPU，内存和带宽都很重要)，选购服务器时就要谨慎一些。</p>
+<p>我没打算组实体机(没钱+没精力)，所以还是选择大厂的学生服务器来部署。根据我查到的信息以及我部署CSGO和Minecraft服务器的一些经验：阿里云提供5M带宽但是只有1核2G，百度云之前也提到了，学生机标配是2核4G1M还需要自己去升配带宽，其他还看了美团云，滴滴云，华为云以及腾讯云的学生机规格，最后还是选择腾讯云的2核4G3M。</p>
+<blockquote>
+<p>点击可查看<a target="_blank" rel="noopener" href="https://cloud.tencent.com/act/campus?utm_source=qcloud&amp;utm_medium=head&amp;utm_campaign=campus">购买页面</a>：</p>
+</blockquote>
+<p><img src="https://imgbed.scubot.com/server_mc-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>选了上海地区的服务器，还是用Ubuntu做系统</p>
+<p><img src="https://imgbed.scubot.com/server_mc-2.png" srcset="/img/loading.gif" lazyload></p>
+<p>购买服务器后第一件事应该是重置密码，这里默认的用户名为<code>ubuntu</code></p>
+<p><img src="https://imgbed.scubot.com/server_mc-3.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="服务器环境搭建">服务器环境搭建</h2>
+<p>有了服务器之后需要登录到上去，我选择使用Finalshell的ssh连接到服务器。</p>
+<blockquote>
+<p>Finalshell可以实时监控服务器性能，但是页面上的操作有时会有卡顿，看自己取舍，可以选择xshell等ssh工具</p>
+</blockquote>
+<p>接下来就是要安装需求和依赖：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 升级apt-get</span><br><span class="hljs-built_in">sudo</span> apt-get update<br><span class="hljs-built_in">sudo</span> apt-get upgrade<br><br><span class="hljs-comment"># 安装python3的pip功能</span><br><span class="hljs-built_in">sudo</span> apt-get install python3-pip<br><br><span class="hljs-comment"># 安装java环境</span><br><span class="hljs-built_in">sudo</span> apt-get install default-jre<br><br><span class="hljs-comment"># 安装后台管理软件</span><br><span class="hljs-built_in">sudo</span> apt-get install screen<br></code></pre></td></tr></tbody></table></figure>
+<h2 id="整理游戏服务器文件包">整理游戏服务器文件包</h2>
+<p>Minecraft的服务端有很多种，我选择用<a target="_blank" rel="noopener" href="https://github.com/Fallen-Breath/MCDReforged">MCDReforged</a>搭配<a target="_blank" rel="noopener" href="https://github.com/gnembon/fabric-carpet">Fabric
+Carpet</a>来使用，服务器版本选择1.16.3。</p>
+<p><strong>地图文件</strong></p>
+<p>选择之前hsds的<a target="_blank" rel="noopener" href="https://www.curseforge.com/minecraft/worlds/skyblock-4?__cf_chl_captcha_tk__=c09714b33f19723923aecc3313aa5507dfb1bed8-1606356067-0-AT5ZMtqpmH2R6d3sC-XFDeIUuncdodC0ivUPpBNmFMF7eICy76s5wuCrZaV-XL-vVfV4BxNw-7v3ZYlx47ofjxriKW_BARssUsfyuUiUrQX6Qo2dOBQqv0cr26s3bHhCUDDCvxUHZ_3rk1swTnBb71ctggqFA3bTXRBc1VfZGARNDZIfRZ-mANe4dt4PphO--viVwkO7YyVYIIS2ayxmAvPSgfMEeeps7LCB0DqlyjgQdbhhgGo3hKY3v8xvqWSiK0JwF4rC0Fg1gbWb9chTiTs5ohC-3edUe_WfYZd5Rsedqd-twXXFdEB1kiXpYMd9dJAH5VfNJacR9pWTBcnx5GdW_T7bHk5sCVOyUnpA0CKnzaPwwS6E11hq3oQW74azmWAA6sIdqUhYPxbBopvd6RB3BbLDRPdb4YKD8xYg9a1G1zjlozn8pEzSTLHNLPZPfxFnAw1CErHavmPBQBZchwwSHckrqblPJ6atEhsXtW2LjP1zAXN8SM7Cn9Vf4QCNfRyqX_o98caADc6tECngKlVdEr8DwtnBvcqbUbC-BJ-inTHH6PQIHLNWcMdYv2YtmkFxDyaUFv59rSeNcy3InrIwGaWj8gXbOV1zKUgX58Y9IBFgblwr1Y-73mcOKRk4Jw">空岛地图</a>，搭配我写的+我找的一些资源包，包括<a href="/static/mc/连锁挖矿.zip">连锁挖矿</a>和<a href="/static/mc/Ld_datapack.zip">特殊合成</a>。</p>
+<blockquote>
+<p>种子：244038804808138753</p>
+</blockquote>
+<p><strong>整合MCDR</strong></p>
+<p>下载最新的MCDR，将地图文件覆盖到<code>MCDReforged/server/world</code>。</p>
+<p>然后更改<code>MCDReforged/server/server.properties</code>文件，用来更改服务器的设置。我将人数上限设为10，设离线模式，非正版玩家也可以连接。</p>
+<p>参考：</p>
+<figure class="highlight properties"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-comment">#Minecraft server properties</span><br><span class="hljs-attr">enable-jmx-monitoring</span>=<span class="hljs-string">false</span><br><span class="hljs-attr">rcon.port</span>=<span class="hljs-string">25575</span><br><span class="hljs-attr">level-seed</span>=<span class="hljs-string"></span><br><span class="hljs-attr">enable-command-block</span>=<span class="hljs-string">true</span><br><span class="hljs-attr">gamemode</span>=<span class="hljs-string">survival</span><br><span class="hljs-attr">enable-query</span>=<span class="hljs-string">false</span><br><span class="hljs-attr">generator-settings</span>=<span class="hljs-string"></span><br><span class="hljs-attr">level-name</span>=<span class="hljs-string">JC-Farm</span><br><span class="hljs-attr">motd</span>=<span class="hljs-string">JC Oldman Group</span><br><span class="hljs-attr">query.port</span>=<span class="hljs-string">25565</span><br><span class="hljs-attr">keepBackupHours</span>=<span class="hljs-string">10</span><br><span class="hljs-attr">pvp</span>=<span class="hljs-string">true</span><br><span class="hljs-attr">generate-structures</span>=<span class="hljs-string">true</span><br><span class="hljs-attr">difficulty</span>=<span class="hljs-string">hard</span><br><span class="hljs-attr">network-compression-threshold</span>=<span class="hljs-string">256</span><br><span class="hljs-attr">max-tick-time</span>=<span class="hljs-string">100000</span><br><span class="hljs-attr">max-players</span>=<span class="hljs-string">10</span><br><span class="hljs-attr">use-native-transport</span>=<span class="hljs-string">true</span><br><span class="hljs-attr">enable-status</span>=<span class="hljs-string">true</span><br><span class="hljs-attr">online-mode</span>=<span class="hljs-string">false</span><br><span class="hljs-attr">allow-flight</span>=<span class="hljs-string">true</span><br><span class="hljs-attr">broadcast-rcon-to-ops</span>=<span class="hljs-string">true</span><br><span class="hljs-attr">view-distance</span>=<span class="hljs-string">10</span><br><span class="hljs-attr">max-build-height</span>=<span class="hljs-string">256</span><br><span class="hljs-attr">server-ip</span>=<span class="hljs-string"></span><br><span class="hljs-attr">allow-nether</span>=<span class="hljs-string">true</span><br><span class="hljs-attr">server-port</span>=<span class="hljs-string">25565</span><br><span class="hljs-attr">autoBackup</span>=<span class="hljs-string">true</span><br><span class="hljs-attr">sync-chunk-writes</span>=<span class="hljs-string">true</span><br><span class="hljs-attr">enable-rcon</span>=<span class="hljs-string">false</span><br><span class="hljs-attr">op-permission-level</span>=<span class="hljs-string">4</span><br><span class="hljs-attr">prevent-proxy-connections</span>=<span class="hljs-string">false</span><br><span class="hljs-attr">resource-pack</span>=<span class="hljs-string"></span><br><span class="hljs-attr">entity-broadcast-range-percentage</span>=<span class="hljs-string">100</span><br><span class="hljs-attr">player-idle-timeout</span>=<span class="hljs-string">0</span><br><span class="hljs-attr">rcon.password</span>=<span class="hljs-string"></span><br><span class="hljs-attr">force-gamemode</span>=<span class="hljs-string">false</span><br><span class="hljs-attr">rate-limit</span>=<span class="hljs-string">0</span><br><span class="hljs-attr">autoBackupMins</span>=<span class="hljs-string">180</span><br><span class="hljs-attr">hardcore</span>=<span class="hljs-string">false</span><br><span class="hljs-attr">white-list</span>=<span class="hljs-string">false</span><br><span class="hljs-attr">broadcast-console-to-ops</span>=<span class="hljs-string">true</span><br><span class="hljs-attr">spawn-npcs</span>=<span class="hljs-string">true</span><br><span class="hljs-attr">spawn-animals</span>=<span class="hljs-string">true</span><br><span class="hljs-attr">snooper-enabled</span>=<span class="hljs-string">true</span><br><span class="hljs-attr">function-permission-level</span>=<span class="hljs-string">2</span><br><span class="hljs-attr">level-type</span>=<span class="hljs-string">default</span><br><span class="hljs-attr">spawn-monsters</span>=<span class="hljs-string">true</span><br><span class="hljs-attr">enforce-whitelist</span>=<span class="hljs-string">false</span><br><span class="hljs-attr">spawn-protection</span>=<span class="hljs-string">0</span><br><span class="hljs-attr">resource-pack-sha1</span>=<span class="hljs-string"></span><br><span class="hljs-attr">max-world-size</span>=<span class="hljs-string">29999984</span><br></code></pre></td></tr></tbody></table></figure>
+<p>MCDR上装了这几个插件，其中<code>QuickAnswer.py</code>是我魔改之后的版本。</p>
+<p><img src="https://imgbed.scubot.com/server_mc-4.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="部署服务器">部署服务器</h2>
+<ol type="1">
+<li><p>将<code>MCDReforged</code>文件夹上传至服务器上(时间有一点长)</p></li>
+<li><p>安装MCDR的依赖，在<code>MCDRefored/</code>下输入<code>pip3 install -r requirements</code>与<code>pip3 install psutil</code></p></li>
+<li><p>执行<code>python3 MCDRefored.py</code>试运行服务端</p>
+<p><img src="https://imgbed.scubot.com/server_mc-5.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以看到运行成功，服务器内情况正常：</p>
+<p><img src="https://imgbed.scubot.com/server_mc-6.png" srcset="/img/loading.gif" lazyload></p>
+<p>服务器资源占用也很低</p>
+<p><img src="https://imgbed.scubot.com/server_mc-7.png" srcset="/img/loading.gif" lazyload></p>
+<p>空载时服务器负荷并不大</p>
+<p><img src="https://imgbed.scubot.com/server_mc-8.png" srcset="/img/loading.gif" lazyload></p></li>
+<li><p>改用<code>screen</code>后端挂载服务端：</p>
+<ul>
+<li><p><code>screen -S mc</code> 创建mc窗口</p></li>
+<li><p><code>python3 MCDReforged.py</code>启动服务器</p></li>
+<li><p><code>Ctrl A D</code>将窗口挂载</p>
+<blockquote>
+<p><code>screen -ls</code>可以查看窗口列表</p>
+<p><code>screen -S &lt;name&gt; -X quit</code> 可以删除某个窗口</p>
+</blockquote></li>
+</ul></li>
+</ol>
+<h2 id="mcdr插件编写">MCDR插件编写</h2>
+<p>MCDR以python为开发语言，开发文档见：https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/plugin.md</p>
+<p>以切换玩家观察者/生存模式的插件为例：</p>
+<blockquote>
+<p>CameraMode.py</p>
+</blockquote>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># -*- coding: utf-8 -*-</span><br><span class="hljs-keyword">import</span> os<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">on_load</span>(<span class="hljs-params">server, old</span>):<br>    server.add_help_message(<span class="hljs-string">'.c'</span>, <span class="hljs-string">'切换观察者模式'</span>)<br>    server.add_help_message(<span class="hljs-string">'.s'</span>, <span class="hljs-string">'切换生存模式'</span>)<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">on_info</span>(<span class="hljs-params">server, info</span>):<br>    <span class="hljs-keyword">if</span> info.content.startswith(<span class="hljs-string">".c"</span>) <span class="hljs-keyword">and</span> info.is_player == <span class="hljs-literal">True</span>:<br>        server.execute(<span class="hljs-string">"gamemode spectator "</span> + info.player)<br>    <span class="hljs-keyword">elif</span> info.content.startswith(<span class="hljs-string">".s"</span>) <span class="hljs-keyword">and</span> info.is_player == <span class="hljs-literal">True</span>:<br>        server.execute(<span class="hljs-string">"gamemode survival "</span> + info.player)<br></code></pre></td></tr></tbody></table></figure>
+<p>使用<code>.c和.s</code>在观察者和生存模式间切换，很简洁。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%99%E7%A8%8B/" class="category-chain-item">教程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="print-no-link">#服务器</a>
+      
+        <a href="/tags/Minecraft/" class="print-no-link">#Minecraft</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>部署一台Minecraft服务器</div>
+      <div>https://blog.scubot.com/article/101e/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>贺翔/CarOL</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2020年11月25日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/article/313c/" title="计算机图形学-着色">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">计算机图形学-着色</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/article/7fa2/" title="计算机图形学-抗混叠">
+                        <span class="hidden-mobile">计算机图形学-抗混叠</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="cusdis" style="width:100%">
+    <div id="cusdis_thread"
+      data-host="https://cusdis.com"
+      data-app-id="280bc35a-0483-4140-964a-ea45d33e7643"
+      data-page-id="f2bc0fa38ae2b2b508ad3734bb0bf9bc"
+      data-page-url="article/101e/"
+      data-page-title="部署一台Minecraft服务器"
+      data-theme="auto"
+    >
+    </div>
+  </div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#cusdis_thread', function() {
+      Fluid.utils.createScript('https://cusdis.com/js/widget/lang/zh-cn.js');
+      Fluid.utils.createScript('https://cusdis.com/js/cusdis.es.js');
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema) {
+        document.querySelector('#cusdis_thread').dataset.theme = schema
+      }
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> <div> <a href="https://beian.miit.gov.cn" target="_blank" rel="nofollow noopener"><span>蜀ICP备2022022819号</span></a> </div> 站点访问量 <span id="qexo-site-pv">Loading...</span> |  站点访客数 <span id="qexo-site-uv">Loading...</span> |  页面访问量 <span id="qexo-page-pv">Loading...</span> <script src="https://cdn.jsdelivr.net/npm/qexo-static@1.6.0/hexo/statistic.js"></script> <script> loadStatistic("https://qexo.scubot.com") </script> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":true,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  var relativeDate = function() {
+    var updatedTime = document.getElementById('updated-time');
+    if (updatedTime) {
+      var text = updatedTime.textContent;
+      var reg = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})/;
+      var matchs = text.match(reg);
+      if (matchs) {
+        var relativeTime = moment(matchs[0]).fromNow();
+        updatedTime.textContent = text.replace(reg, relativeTime);
+      }
+      updatedTime.style.display = '';
+    }
+  };
+  Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/moment.min.js', function() {
+    if (!'zh-cn'.startsWith('en')) {
+      Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/locale/zh-cn.min.js', function() {
+        relativeDate();
+      });
+    } else {
+      relativeDate();
+    }
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

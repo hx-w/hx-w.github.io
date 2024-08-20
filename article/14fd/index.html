@@ -1,0 +1,889 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="https://blog-1256946954.cos.ap-chengdu.myqcloud.com/image/logo.png">
+  <link rel="icon" href="https://blog-1256946954.cos.ap-chengdu.myqcloud.com/image/logo.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="贺翔/CarOL">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="概述 sourcemod是基于source引擎的插件系统，广泛用于l4d2，csgo等使用source引擎的游戏中，可以用来处理游戏事件和玩家的行为等。 sourcemod采用sourcepawn编写，sourcepawn是一种轻量级编译语言，编译器由sourcemod官方下载页面给出，包含linux&#x2F;windows&#x2F;macos全平台版本。 sourcepawn的语法类似于c&#x2F;c++与java的融">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sourcemod插件开发记录">
+<meta property="og:url" content="https://blog.scubot.com/article/14fd/index.html">
+<meta property="og:site_name" content="CarOL的小站">
+<meta property="og:description" content="概述 sourcemod是基于source引擎的插件系统，广泛用于l4d2，csgo等使用source引擎的游戏中，可以用来处理游戏事件和玩家的行为等。 sourcemod采用sourcepawn编写，sourcepawn是一种轻量级编译语言，编译器由sourcemod官方下载页面给出，包含linux&#x2F;windows&#x2F;macos全平台版本。 sourcepawn的语法类似于c&#x2F;c++与java的融">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://imgbed.scubot.com/sourcemod.jpg">
+<meta property="article:published_time" content="2020-11-23T15:04:29.000Z">
+<meta property="article:modified_time" content="2024-08-20T00:57:09.092Z">
+<meta property="article:author" content="贺翔&#x2F;CarOL">
+<meta property="article:tag" content="CSGO">
+<meta property="article:tag" content="sourcemod">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://imgbed.scubot.com/sourcemod.jpg">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>sourcemod插件开发记录 - CarOL的小站</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.scubot.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":true,"trickleSpeed":100}},"code_language":{"enable":true,"default":"txt"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="CarOL的小站" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>CarOL的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/atom.xml/" target="_self">
+                <i class="iconfont icon-rss"></i>
+                <span>rss</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于我</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/about/" target="_self">
+                    
+                    <span>我自己</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="https://running-page-blond.vercel.app/" target="_self">
+                    
+                    <span>跑步记录</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-book"></i>
+                <span>图书</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/" target="_self">
+                    
+                    <span>导读</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/detective/" target="_self">
+                    
+                    <span>推理小说</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://imgbed.scubot.com/ru') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="sourcemod插件开发记录"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        贺翔/CarOL
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-11-23 23:04" pubdate>
+          2020年11月23日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          1.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          12 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">sourcemod插件开发记录</h1>
+            
+              <p id="updated-time" class="note note-info" style="display: none">
+                
+                  
+                    <!-- compatible with older versions-->
+                    本文最后更新于：2024-08-20T08:57:09+08:00
+                  
+                  
+
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="概述">概述</h2>
+<p>sourcemod是基于source引擎的插件系统，广泛用于l4d2，csgo等使用source引擎的游戏中，可以用来处理游戏事件和玩家的行为等。</p>
+<p>sourcemod采用sourcepawn编写，sourcepawn是一种轻量级编译语言，编译器由<a target="_blank" rel="noopener" href="https://www.sourcemod.net/downloads.php?branch=stable">sourcemod官方下载页面</a>给出，包含linux/windows/macos全平台版本。</p>
+<p>sourcepawn的语法类似于c/c++与java的融合，也有部分独特的关键字，不过需要注意的是sourcepawn是一种标准的面向过程的语言，对结构体的支持并不完善，sourcemod提供了source引擎的多种事件和api用于方便插件的编写。</p>
+<span id="more"></span>
+<h2 id="技巧总结">技巧总结</h2>
+<p>关于更详细的插件编写教程可以参考<a target="_blank" rel="noopener" href="https://www.sourcemod.net/">sourcemod官网</a>或<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Pb411E7W6">b站教学</a>，这里只总结一些我在开发过程中用到的一些技巧以及值得注意的事情。</p>
+<h3 id="热插拔">热插拔</h3>
+<p>理论上，sourcemod的<code>sm plugins load &lt;plugin&gt;</code>和<code>sm plugins unload &lt;plugin&gt;</code>指令可以在游戏内(控制台)加载/卸载某个插件，但我在实践中并不能有效果，大部分情况下需要<strong>重启服务器</strong>或<strong>更换地图</strong>才能刷新插件列表，可能是sourcemod的bug也可能是我有些地方没有配置好。</p>
+<h3 id="menu菜单逻辑">menu菜单逻辑</h3>
+<p>sourcemod可以实现在游戏中加载菜单，玩家可以通过数字键去选中菜单中的某一项进入下一步操作。<strong>menu本身就是一个FSM有限状态机</strong>，插件中menu对每个玩家的状态都有记录并保持其逻辑的正确性，接下来我简要说明编写menu需要注意的地方。</p>
+<h4 id="创建menu">创建menu</h4>
+<p>menu的创建需要一个handle用来保存菜单实例，通过sourcemod提供的<code>CreateMenu(MenuCallBack)</code>进行创建，返回值即为handle，<code>MenuCallBack</code>为回调函数，用来处理玩家选中菜单中某项需要执行的逻辑。</p>
+<p>需要注意的是menu所列的选项大部分可以通过<code>AddMenuItem(handle, &lt;id&gt;, &lt;message&gt;)</code>来被开发者自定义，还有三种选项是menu自带的，可以通过这样来设置：</p>
+<ol type="1">
+<li><code>SetMenuPagination(handle, &lt;int&gt;)</code>设置菜单中翻页按钮的位置</li>
+<li><code>SetMenuExitButton(handle, &lt;bool&gt;)</code>设置是否开启菜单的退出按钮</li>
+<li><code>SetMenuExitBackButton(handle, &lt;bool&gt;)</code>设置是否开启菜单的返回上一级父菜单按钮(需要再回调函数中额外处理)</li>
+</ol>
+<p>最后设置完可以使用<code>DisplayMenu(handle, client, MENU_TIME_FOREVER)</code>将菜单显示(永久)。</p>
+<h4 id="回调函数menucallback">回调函数MenuCallBack</h4>
+<p>menu回调函数定义为<code>public MenuCallBack(Handle:menuhandle, MenuAction:action, client, Position)</code>，其中函数名字可以自定义，与创建menu时注册的回调函数保持一致即可。其中四个参数：</p>
+<ol type="1">
+<li><code>Handle:menuhandle</code>为创建menu时的handle，可以理解为menu的实例</li>
+<li><code>MenuAction:action</code>中action是枚举类的实例，记录了玩家触发菜单回调函数所执行的操作种类</li>
+<li><code>client</code>玩家索引</li>
+<li><code>Position</code>玩家触发菜单中的选项位置</li>
+</ol>
+<p>需要注意的是，如果设置了返回上一级父菜单的按钮，需要在回调函数中判断<code>Position</code>是否为<code>-6</code>，如果是，则表示选中了返回父菜单，即可执行重建父菜单的逻辑。</p>
+<p>默认情况下用户选中某个菜单按钮之后菜单执行完任务就会消失，就算设置了<code>MENU_TIME_FOREVER</code>也是这样，如果需要用户选择完菜单仍保持显示，则需要在<code>action==MenuAction_Select</code>条件下设置<code>DisplayMenuAtItem(menuhandle, client, GetMenuSelectionPosition(), MENU_TIME_FOREVER)</code>来实现。</p>
+<p>例：(hltv.sp中的某个菜单回调函数)</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-title function_">ResultMenuCallBack</span><span class="hljs-params">(Handle:menuhandle, MenuAction:action, client, Position)</span> {<br>    <span class="hljs-keyword">if</span> (action == MenuAction_Select) {<br>        decl String:Item[STRLENGTH];<br>        GetMenuItem(menuhandle, Position, Item, sizeof(Item));<br>        <span class="hljs-type">int</span> <span class="hljs-variable">idx</span> <span class="hljs-operator">=</span> StringToInt(Item);<br>        queryProRecord(client, idx);<br><br>        DisplayMenuAtItem(menuhandle, client, GetMenuSelectionPosition(), MENU_TIME_FOREVER);<br>    }<br>    <span class="hljs-keyword">if</span> (Position == -<span class="hljs-number">6</span>) {<br>        setMainMenu(client);<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+<h3 id="httphttps请求实现">Http/Https请求实现</h3>
+<p>sourcemod社区里有对应的扩展：<a target="_blank" rel="noopener" href="https://forums.alliedmods.net/showthread.php?t=146019">System2</a>，按要求配置好环境即可在sourcemod中使用网络请求的功能。</p>
+<p>我比较常用的是http的GET和POST方法，GET一半用于获取网络api的数据到插件本地，POST一般用于将插件本地的数据发送到网站api，不过本质上两种方法没有严格的区分，习惯而已。</p>
+<h4 id="get">GET</h4>
+<p>按照教程通过<code>new System2HTTPRequest(HttpCallBack, &lt;str: url&gt;, &lt;param1&gt;, &lt;param2&gt; ...)</code>，因为GET请求中可以将请求的内容直接体现在url里，所以可以直接在url里使用占位符，在其后补上对应的变量，数量不固定。</p>
+<h4 id="post">POST</h4>
+<p>与GET相同，只不过在新建请求实例的时候只有两个参数，url是固定的值不带变量，需要额外通过<code>httpRequest.SetData("param1=%s&amp;param2=%s", param1, param2)</code>来设置变量，参数用<strong>&amp;</strong>分隔。</p>
+<h4 id="额外数据">额外数据</h4>
+<p>通常情况下，插件发送网络请求都与某个玩家的操作有关，所以需要在新建请求的时候记录玩家的id，可以通过<code>httpRequest.Any = client</code>记录到请求中，在回调函数里通过<code>int client = request.Any</code>即可获取之前保存的内容。</p>
+<h4 id="json数据解析">Json数据解析</h4>
+<p>sourcemod有一个很好用的json解析库，需要手动添加：<a target="_blank" rel="noopener" href="https://github.com/clugg/sm-json">sm-json</a>，文档里很详细的说明了sourcemod里json的用法，很适合解析和保存网络请求拿到的数据。</p>
+<h2 id="我的开发">我的开发</h2>
+<p>前段时间在为<a href="www.csgowiki.top">CSGOWiki</a>开发一些服务器插件，其中大部分我已经公开到<a target="_blank" rel="noopener" href="https://github.com/hx-w/CSGOWiki-Plugins">我的仓库</a>中了，欢迎指教。</p>
+<h2 id="一些有用的链接">一些有用的链接</h2>
+<ul>
+<li>sourcemod社区：https://forums.alliedmods.net/index.php</li>
+<li>sourcemod官网：https://www.sourcemod.net/</li>
+<li>sourcemod Api文档：https://sm.alliedmods.net/new-api/</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%99%E7%A8%8B/" class="category-chain-item">教程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CSGO/" class="print-no-link">#CSGO</a>
+      
+        <a href="/tags/sourcemod/" class="print-no-link">#sourcemod</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>sourcemod插件开发记录</div>
+      <div>https://blog.scubot.com/article/14fd/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>贺翔/CarOL</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2020年11月23日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/article/bfe1/" title="计算机图形学-变换">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">计算机图形学-变换</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/article/7120/" title="CYK算法实现">
+                        <span class="hidden-mobile">CYK算法实现</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="cusdis" style="width:100%">
+    <div id="cusdis_thread"
+      data-host="https://cusdis.com"
+      data-app-id="280bc35a-0483-4140-964a-ea45d33e7643"
+      data-page-id="30dffad7591daf193df22b2678181f2e"
+      data-page-url="article/14fd/"
+      data-page-title="sourcemod插件开发记录"
+      data-theme="auto"
+    >
+    </div>
+  </div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#cusdis_thread', function() {
+      Fluid.utils.createScript('https://cusdis.com/js/widget/lang/zh-cn.js');
+      Fluid.utils.createScript('https://cusdis.com/js/cusdis.es.js');
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema) {
+        document.querySelector('#cusdis_thread').dataset.theme = schema
+      }
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> <div> <a href="https://beian.miit.gov.cn" target="_blank" rel="nofollow noopener"><span>蜀ICP备2022022819号</span></a> </div> 站点访问量 <span id="qexo-site-pv">Loading...</span> |  站点访客数 <span id="qexo-site-uv">Loading...</span> |  页面访问量 <span id="qexo-page-pv">Loading...</span> <script src="https://cdn.jsdelivr.net/npm/qexo-static@1.6.0/hexo/statistic.js"></script> <script> loadStatistic("https://qexo.scubot.com") </script> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":true,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  var relativeDate = function() {
+    var updatedTime = document.getElementById('updated-time');
+    if (updatedTime) {
+      var text = updatedTime.textContent;
+      var reg = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})/;
+      var matchs = text.match(reg);
+      if (matchs) {
+        var relativeTime = moment(matchs[0]).fromNow();
+        updatedTime.textContent = text.replace(reg, relativeTime);
+      }
+      updatedTime.style.display = '';
+    }
+  };
+  Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/moment.min.js', function() {
+    if (!'zh-cn'.startsWith('en')) {
+      Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/locale/zh-cn.min.js', function() {
+        relativeDate();
+      });
+    } else {
+      relativeDate();
+    }
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

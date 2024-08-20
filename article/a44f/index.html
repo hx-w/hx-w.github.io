@@ -1,0 +1,1172 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="https://blog-1256946954.cos.ap-chengdu.myqcloud.com/image/logo.png">
+  <link rel="icon" href="https://blog-1256946954.cos.ap-chengdu.myqcloud.com/image/logo.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="贺翔/CarOL">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="对【川大疫情防控每日报系统】的探索 前言 本文中的数据皆由合理&#x2F;合法途径获取，旨在课业之余找点乐趣，别无其他。 API 百度地图API  这里指百度地图的逆地理编码服务，下文中的ak为scu提供的  URL [GET] https:&#x2F;&#x2F;api.map.baidu.com&#x2F;reverse_geocoding&#x2F;v3&#x2F; Query Params     键 值 释义     output json 响应">
+<meta property="og:type" content="article">
+<meta property="og:title" content="对SCU网络服务安全性的第一次探索">
+<meta property="og:url" content="https://blog.scubot.com/article/a44f/index.html">
+<meta property="og:site_name" content="CarOL的小站">
+<meta property="og:description" content="对【川大疫情防控每日报系统】的探索 前言 本文中的数据皆由合理&#x2F;合法途径获取，旨在课业之余找点乐趣，别无其他。 API 百度地图API  这里指百度地图的逆地理编码服务，下文中的ak为scu提供的  URL [GET] https:&#x2F;&#x2F;api.map.baidu.com&#x2F;reverse_geocoding&#x2F;v3&#x2F; Query Params     键 值 释义     output json 响应">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-10-12T13:39:09.000Z">
+<meta property="article:modified_time" content="2024-08-20T00:57:09.093Z">
+<meta property="article:author" content="贺翔&#x2F;CarOL">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>对SCU网络服务安全性的第一次探索 - CarOL的小站</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.scubot.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":true,"trickleSpeed":100}},"code_language":{"enable":true,"default":"txt"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="CarOL的小站" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>CarOL的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/atom.xml/" target="_self">
+                <i class="iconfont icon-rss"></i>
+                <span>rss</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于我</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/about/" target="_self">
+                    
+                    <span>我自己</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="https://running-page-blond.vercel.app/" target="_self">
+                    
+                    <span>跑步记录</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-book"></i>
+                <span>图书</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/" target="_self">
+                    
+                    <span>导读</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/detective/" target="_self">
+                    
+                    <span>推理小说</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://imgbed.scubot.com/ru') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="对SCU网络服务安全性的第一次探索"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        贺翔/CarOL
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-10-12 21:39" pubdate>
+          2021年10月12日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          1.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          14 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">对SCU网络服务安全性的第一次探索</h1>
+            
+              <p id="updated-time" class="note note-info" style="display: none">
+                
+                  
+                    <!-- compatible with older versions-->
+                    本文最后更新于：2024-08-20T08:57:09+08:00
+                  
+                  
+
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="对川大疫情防控每日报系统的探索">对【川大疫情防控每日报系统】的探索</h1>
+<h2 id="前言">前言</h2>
+<p>本文中的数据皆由合理/合法途径获取，旨在课业之余找点乐趣，别无其他。</p>
+<h2 id="api">API</h2>
+<h3 id="百度地图api">百度地图API</h3>
+<blockquote>
+<p>这里指百度地图的逆地理编码服务，下文中的<code>ak</code>为scu提供的</p>
+</blockquote>
+<h4 id="url">URL</h4>
+<p>[<strong>GET</strong>]
+https://api.map.baidu.com/reverse_geocoding/v3/</p>
+<h4 id="query-params">Query Params</h4>
+<table>
+
+<thead>
+<tr>
+<th>键</th>
+<th>值</th>
+<th>释义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>output</td>
+<td>json</td>
+<td>响应数据格式</td>
+</tr>
+<tr>
+<td>coordtype</td>
+<td>wgs84ll</td>
+<td>坐标系统</td>
+</tr>
+<tr>
+<td>ak</td>
+<td>0hYGiH3Ob5ZhV0eWzrGVXCD3bEdBCi6L</td>
+<td>access_key，使用scu自带的</td>
+</tr>
+<tr>
+<td>location</td>
+<td>&lt;经度&gt;,&lt;纬度&gt;</td>
+<td>经纬度（float）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="response-example">Response / Example</h4>
+<figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">{</span><br>    <span class="hljs-attr">"status"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"result"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span><br>        <span class="hljs-attr">"location"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span><br>            <span class="hljs-attr">"lng"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">104.0790496319792</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">"lat"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">30.641844458412959</span><br>        <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"formatted_address"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"四川省成都市武侯区一环路南2段-11号-附25号"</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"business"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"跳伞塔,磨子桥,科华北路"</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"addressComponent"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span><br>            <span class="hljs-attr">"country"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"中国"</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">"country_code"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">"country_code_iso"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"CHN"</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">"country_code_iso2"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"CN"</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">"province"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"四川省"</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">"city"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"成都市"</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">"city_level"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">2</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">"district"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"武侯区"</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">"town"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">"town_code"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">"adcode"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"510107"</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">"street"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"一环路"</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">"street_number"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"南2段-11号-附25号"</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">"direction"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"附近"</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">"distance"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"21"</span><br>        <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"pois"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"roads"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"poiRegions"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"sematic_description"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"cityCode"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">75</span><br>    <span class="hljs-punctuation">}</span><br><span class="hljs-punctuation">}</span><br></code></pre></td></tr></tbody></table></figure>
+<h3 id="疫情填报数据提交">疫情填报数据提交</h3>
+<h4 id="url-1">URL</h4>
+<p>[<strong>POST</strong>]
+https://wfw.scu.edu.cn/ncov/wap/default/save</p>
+<h4 id="data-form">Data Form</h4>
+<blockquote>
+<p>以下表单内容仅由我个人信息得到，不一定囊括全部内容，且仅在2021-10-12与未来的一段时间内有效</p>
+</blockquote>
+<table>
+
+<thead>
+<tr>
+<th>键</th>
+<th>类型</th>
+<th>默认值</th>
+<th>释义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>zgfxdq</td>
+<td>int</td>
+<td>"0"</td>
+<td>是否在中高风险地区</td>
+</tr>
+<tr>
+<td>mjry</td>
+<td>int</td>
+<td>"0"</td>
+<td>是否接触密接人员</td>
+</tr>
+<tr>
+<td>csmjry</td>
+<td>Int</td>
+<td>"0"</td>
+<td>近14日内本人/共同居住者是否去过疫情发生场所</td>
+</tr>
+<tr>
+<td>szxqmc</td>
+<td>string</td>
+<td>""</td>
+<td>所在校区名称，从"江安校区"、"望江校区"与"华西校区"中选择</td>
+</tr>
+<tr>
+<td>sfjzxgym</td>
+<td>int</td>
+<td>"0"</td>
+<td>是否接种新冠疫苗，"0"或"1"</td>
+</tr>
+<tr>
+<td>jzxgymrq</td>
+<td>string</td>
+<td>""</td>
+<td>接种第一剂新冠疫苗日期，日期格式：%Y-%m-%d</td>
+</tr>
+<tr>
+<td>sfjzdezxgym</td>
+<td>int</td>
+<td>"0"</td>
+<td>是否接种第二剂新冠疫苗，"0"或"1"</td>
+</tr>
+<tr>
+<td>jzdezxgymrq</td>
+<td>string</td>
+<td>""</td>
+<td>接种第二剂新冠疫苗日期，日期格式：%Y-%m-%d</td>
+</tr>
+<tr>
+<td>tw</td>
+<td>int</td>
+<td>"1"</td>
+<td>体温范围（实际表单上的选项编号），"2"和"3"为正常</td>
+</tr>
+<tr>
+<td>sfcxtz</td>
+<td>int</td>
+<td>"0"</td>
+<td>是否出现发热等症状，"0"或"1"</td>
+</tr>
+<tr>
+<td>sfyyjc</td>
+<td>int</td>
+<td>"0"</td>
+<td>是否前往医院做过检查，如果sfcxtz为"1"需填写</td>
+</tr>
+<tr>
+<td>jcjgqr</td>
+<td>int</td>
+<td>"0"</td>
+<td>检查结果，如果sfyyjc为"1"需填写。"1" =&gt; 疑似感染; "2" =&gt;
+确认感染; "3" =&gt; 其他</td>
+</tr>
+<tr>
+<td>jcjg</td>
+<td>string</td>
+<td>""</td>
+<td>检查结果详细描述</td>
+</tr>
+<tr>
+<td>sfjcbh</td>
+<td>int</td>
+<td>"0"</td>
+<td>是否接触无症状感染或疑似感染人群，"0"或"1"</td>
+</tr>
+<tr>
+<td>jcbhlx</td>
+<td>int</td>
+<td>"0"</td>
+<td>接触人群类型，如果sfjcbh为"1"需填写，"1" =&gt; 疑似; "2" =&gt;
+确诊</td>
+</tr>
+<tr>
+<td>jcbhrq</td>
+<td>string</td>
+<td>""</td>
+<td>接触时间，如果sfjcbh为"1"需填写，日期格式：%Y-%m-%d</td>
+</tr>
+<tr>
+<td>sfcxzysx</td>
+<td>int</td>
+<td>"0"</td>
+<td>是否有疫情相关的情况，"0"或"1"</td>
+</tr>
+<tr>
+<td>qksm</td>
+<td>string</td>
+<td>""</td>
+<td>情况说明，如果sfcxzysx为"1"需填写</td>
+</tr>
+<tr>
+<td>remark</td>
+<td>string</td>
+<td>""</td>
+<td>其他信息</td>
+</tr>
+<tr>
+<td>sfzx</td>
+<td>int</td>
+<td>"1"</td>
+<td>是否在校</td>
+</tr>
+<tr>
+<td>fxyy</td>
+<td>string</td>
+<td>""</td>
+<td>返校原因，sfxz为"1"时填写</td>
+</tr>
+<tr>
+<td>bzxyy</td>
+<td>string</td>
+<td>""</td>
+<td>不在校原因，sfzx为"0"时填写</td>
+</tr>
+<tr>
+<td>sfjcwhry</td>
+<td>int</td>
+<td>"0"</td>
+<td>是否接触武汉人员</td>
+</tr>
+<tr>
+<td>sfjchbry</td>
+<td>int</td>
+<td>"0"</td>
+<td>是否接触河北人员</td>
+</tr>
+<tr>
+<td>sfcyglq</td>
+<td>int</td>
+<td>"0"</td>
+<td>是否处于观察期</td>
+</tr>
+<tr>
+<td>gllx</td>
+<td>int</td>
+<td>"0"</td>
+<td>观察场所（实际表单上的选项编号），如果sfcyglq为"1"需填写</td>
+</tr>
+<tr>
+<td>glksrq</td>
+<td>string</td>
+<td>"0"</td>
+<td>观察开始时间，日期格式：%Y-%m-%d</td>
+</tr>
+<tr>
+<td>ismoved</td>
+<td>int</td>
+<td>"0"</td>
+<td>所在区域是否变化</td>
+</tr>
+<tr>
+<td>bztcyy</td>
+<td>int</td>
+<td>"0"</td>
+<td>不在同一城市的原因（实际表单上的选项编号），ismoved为"1"时需填写</td>
+</tr>
+<tr>
+<td>sftjhb</td>
+<td>int</td>
+<td>"0"</td>
+<td>是否途径河北</td>
+</tr>
+<tr>
+<td>sftjwh</td>
+<td>int</td>
+<td>"0"</td>
+<td>是否途径武汉</td>
+</tr>
+<tr>
+<td>szcs</td>
+<td>string</td>
+<td>""</td>
+<td>所在城市，例："成都市"</td>
+</tr>
+<tr>
+<td>szgj</td>
+<td>string</td>
+<td>""</td>
+<td>所在国家，例："中国"</td>
+</tr>
+<tr>
+<td>city</td>
+<td>string</td>
+<td>""</td>
+<td>所在城市，例："成都市"</td>
+</tr>
+<tr>
+<td>province</td>
+<td>string</td>
+<td>""</td>
+<td>所在省，例："四川省"</td>
+</tr>
+<tr>
+<td>area</td>
+<td>string</td>
+<td>""</td>
+<td>所在地区，例："四川省 成都市 武侯区"</td>
+</tr>
+<tr>
+<td>address</td>
+<td>string</td>
+<td>""</td>
+<td>具体所在地点，例："四川省成都市武侯区望江路街道四川大学四川大学望江校区研究生院"</td>
+</tr>
+<tr>
+<td>date</td>
+<td>string</td>
+<td>""</td>
+<td>今日日期，日期格式：%Y%m%d</td>
+</tr>
+<tr>
+<td>created</td>
+<td>int</td>
+<td>0</td>
+<td>表单创建的时间戳</td>
+</tr>
+<tr>
+<td>uid</td>
+<td>int</td>
+<td>0</td>
+<td>用户唯一标识</td>
+</tr>
+<tr>
+<td>id</td>
+<td>int</td>
+<td>0</td>
+<td>当前表单的标识</td>
+</tr>
+<tr>
+<td>geo_api_info</td>
+<td>json/string</td>
+<td>""</td>
+<td>地理位置的详细信息，通过百度地图API获取</td>
+</tr>
+</tbody>
+</table>
+<h4 id="response-example-1">Response / Example</h4>
+<figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">{</span><br>    <span class="hljs-attr">"zgfxdq"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"0"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"mjry"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"0"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"csmjry"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"0"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"szxqmc"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"望江校区"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"sfjzxgym"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"1"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"jzxgymrq"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"2021-xx-xx"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"sfjzdezxgym"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"1"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"jzdezxgymrq"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"2021-xx-xx"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"tw"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"2"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"sfcxtz"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"0"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"sfjcbh"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"0"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"sfcxzysx"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"0"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"qksm"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"sfyyjc"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"0"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"jcjgqr"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"0"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"remark"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"address"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"四川省成都市武侯区望江路街道四川大学四川大学望江校区研究生院"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"geo_api_info"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"{...}"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"area"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"四川省 成都市 武侯区"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"province"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"四川省"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"city"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"成都市"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"sfzx"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"1"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"sfjcwhry"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"0"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"sfjchbry"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"0"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"sfcyglq"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"0"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"gllx"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"glksrq"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"jcbhlx"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"jcbhrq"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"bztcyy"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"1"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"sftjhb"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"0"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"sftjwh"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"0"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"szcs"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"szgj"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"bzxyy"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"jcjg"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"hsjcrq"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"hsjcdd"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"hsjcjg"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"0"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"date"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"20211011"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"uid"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"2134xxx"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"created"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1633881623</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"jcqzrq"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"sfjcqz"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"szsqsfybl"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"sfsqhzjkk"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"sqhzjkkys"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"sfygtjzzfj"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"gtjzzfjsj"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"fxyy"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"开学返校"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"id"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">4365</span>xxxx<span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"gwszdd"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"sfyqjzgc"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"jrsfqzys"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"jrsfqzfy"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><br><span class="hljs-punctuation">}</span><br></code></pre></td></tr></tbody></table></figure>
+<h2 id="uid与id的获取"><code>uid</code>与<code>id</code>的获取</h2>
+<p>从以上表单数据可以看出，<code>uid</code>为用户的唯一标识，我已测试过多次，对于同一用户的不同次提交，该字段未有变化。</p>
+<p>而<code>id</code>根据我的猜测，可能是指表单创建的序号，从1开始自增的编号。</p>
+<p>该猜测还在测试中。</p>
+<h2 id="一份可用的geo_api_info">一份可用的<code>geo_api_info</code></h2>
+<p>对于川大望江校区的学生，这里有一份整理好可用的<code>geo_api_info</code></p>
+<figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">{</span><br>    <span class="hljs-attr">"type"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"complete"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"position"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span><br>        <span class="hljs-attr">"Q"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">30.630839301216</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"R"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">104.079966362848</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"lng"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">104.07997</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"lat"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">30.630839</span><br>    <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"location_type"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"ip"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"message"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"Get ipLocation success.Get address success."</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"accuracy"</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">null</span></span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"isConverted"</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"status"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"addressComponent"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span><br>        <span class="hljs-attr">"citycode"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"028"</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"adcode"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"510107"</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"businessAreas"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>            <span class="hljs-punctuation">{</span><br>                <span class="hljs-attr">"name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"跳伞塔"</span><span class="hljs-punctuation">,</span><br>                <span class="hljs-attr">"id"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"510107"</span><span class="hljs-punctuation">,</span><br>                <span class="hljs-attr">"location"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span><br>                    <span class="hljs-attr">"Q"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">30.636149</span><span class="hljs-punctuation">,</span><br>                    <span class="hljs-attr">"R"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">104.071224</span><span class="hljs-punctuation">,</span><br>                    <span class="hljs-attr">"lng"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">104.071224</span><span class="hljs-punctuation">,</span><br>                    <span class="hljs-attr">"lat"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">30.636149</span><br>                <span class="hljs-punctuation">}</span><br>            <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-punctuation">{</span><br>                <span class="hljs-attr">"name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"小天竺"</span><span class="hljs-punctuation">,</span><br>                <span class="hljs-attr">"id"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"510107"</span><span class="hljs-punctuation">,</span><br>                <span class="hljs-attr">"location"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span><br>                    <span class="hljs-attr">"Q"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">30.639354</span><span class="hljs-punctuation">,</span><br>                    <span class="hljs-attr">"R"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">104.068942</span><span class="hljs-punctuation">,</span><br>                    <span class="hljs-attr">"lng"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">104.068942</span><span class="hljs-punctuation">,</span><br>                    <span class="hljs-attr">"lat"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">30.639354</span><br>                <span class="hljs-punctuation">}</span><br>            <span class="hljs-punctuation">}</span><br>        <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"neighborhoodType"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"科教文化服务;学校;高等院校"</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"neighborhood"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"四川大学"</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"building"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"buildingType"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">""</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"street"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"科华北路"</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"streetNumber"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"194号"</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"country"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"中国"</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"province"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"四川省"</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"city"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"成都市"</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"district"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"武侯区"</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">"township"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"望江路街道"</span><br>    <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"formattedAddress"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"四川省成都市武侯区望江路街道四川大学四川大学望江校区研究生院"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"roads"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"crosses"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"pois"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"info"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"SUCCESS"</span><br><span class="hljs-punctuation">}</span><br></code></pre></td></tr></tbody></table></figure>
+<p>需要注意的是：</p>
+<ul>
+<li><code>province</code> =
+<code>geo_api_info.addressComponent.province</code></li>
+<li><code>city</code>=<code>geo_api_info.addressComponent.city</code></li>
+<li><code>address</code>=<code>geo_api_info.province</code>+ ' ' +
+<code>geo_api_info.city</code>+ ' ' +
+<code>geo_api_info.addressComponent.district</code></li>
+</ul>
+<h2 id="一个猜想">一个猜想</h2>
+<p>对于现有的表单设计，只用了<code>uid</code>一项字段来唯一标识一名用户，而且根据我的<code>uid</code>内容，可以认为所有<code>uid</code>的内容都为较小的整形数。也就是说，也许可以暴力的遍历所有小整数，从而获取有效的<code>uid</code>。</p>
+<h2 id="自动打卡脚本示例">自动打卡脚本示例</h2>
+<p><code>cookies_str</code>从https://wfw.scu.edu.cn/ncov/wap/default/index获取</p>
+<blockquote>
+<p>以下内容仅作参考</p>
+</blockquote>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># -*- coding: utf-8 -*-</span><br><span class="hljs-keyword">import</span> re<br><span class="hljs-keyword">import</span> json<br><span class="hljs-keyword">import</span> time<br><span class="hljs-keyword">import</span> datetime<br><span class="hljs-keyword">import</span> requests<br><br><br><span class="hljs-comment"># handle cookies and init session</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">init_session</span>(<span class="hljs-params">cookies_str: <span class="hljs-built_in">str</span></span>) -&gt; requests.Session():<br>    cookies_dict = {}<br>    <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> cookies_str.split(<span class="hljs-string">';'</span>):<br>        key, value = line.split(<span class="hljs-string">'='</span>, <span class="hljs-number">1</span>)<br>        cookies_dict[key] = value<br><br>    session = requests.session()<br>    cookiesJar = requests.utils.cookiejar_from_dict(<br>        cookies_dict,<br>        cookiejar=<span class="hljs-literal">None</span>, <br>        overwrite=<span class="hljs-literal">True</span><br>    )<br>    session.cookies = cookiesJar<br>    <span class="hljs-keyword">return</span> session<br><br><br><span class="hljs-comment"># get default json with uid and id</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">get_default_json</span>(<span class="hljs-params">session: requests.Session</span>) -&gt; <span class="hljs-built_in">tuple</span>:<br>    url = <span class="hljs-string">'https://wfw.scu.edu.cn/ncov/wap/default/index'</span><br><br>    resp = session.get(url=url)<br><br>    <span class="hljs-keyword">if</span> resp.status_code != <span class="hljs-number">200</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">'[ERROR]'</span>, resp.status_code)<br>        exit()<br><br>    html = resp.content.decode(<span class="hljs-string">'utf-8'</span>)<br><br>    pattern = re.<span class="hljs-built_in">compile</span>(<span class="hljs-string">'var def =(.*);!?'</span>)<br><br>    res = re.findall(pattern, html)<br>    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(res) == <span class="hljs-number">0</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">'[ERROR] not found'</span>)<br>        exit()<br><br>    res_json = json.loads(res[<span class="hljs-number">0</span>])<br>    <span class="hljs-keyword">return</span> session, res_json<br><br><br><span class="hljs-comment"># load default geo_api_info</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">modify_json</span>(<span class="hljs-params">res_json: <span class="hljs-built_in">dict</span></span>) -&gt; <span class="hljs-built_in">dict</span>:<br>    <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">'geo_api_info.json'</span>, <span class="hljs-string">'r'</span>) <span class="hljs-keyword">as</span> ifile:<br>        res_json[<span class="hljs-string">'geo_api_info'</span>] = json.load(ifile)<br><br>    res_json[<span class="hljs-string">'province'</span>] = res_json[<span class="hljs-string">'geo_api_info'</span>][<span class="hljs-string">'addressComponent'</span>][<span class="hljs-string">'province'</span>]<br>    res_json[<span class="hljs-string">'city'</span>] = res_json[<span class="hljs-string">'geo_api_info'</span>][<span class="hljs-string">'addressComponent'</span>][<span class="hljs-string">'city'</span>]<br>    res_json[<span class="hljs-string">'address'</span>] = res_json[<span class="hljs-string">'geo_api_info'</span>][<span class="hljs-string">'formattedAddress'</span>]<br>    res_json[<span class="hljs-string">'area'</span>] = <span class="hljs-string">' '</span>.join([<br>        res_json[<span class="hljs-string">'province'</span>],<br>        res_json[<span class="hljs-string">'city'</span>],<br>        res_json[<span class="hljs-string">'geo_api_info'</span>][<span class="hljs-string">'addressComponent'</span>][<span class="hljs-string">'district'</span>]<br>    ])<br>    res_json[<span class="hljs-string">'date'</span>] = datetime.datetime.now().strftime(<span class="hljs-string">"%Y%m%d"</span>)<br>    res_json[<span class="hljs-string">'created'</span>] = <span class="hljs-built_in">int</span>(time.time())<br>    res_json[<span class="hljs-string">'ismoved'</span>] = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">return</span> res_json<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">post_json</span>(<span class="hljs-params">session: requests.Session, res_json: <span class="hljs-built_in">dict</span></span>):<br>    url = <span class="hljs-string">'https://wfw.scu.edu.cn/ncov/wap/default/save'</span><br>    resp = session.post(url=url, data=res_json)<br>    <span class="hljs-built_in">print</span>(resp.status_code, resp.content.decode(<span class="hljs-string">'utf-8'</span>))<br><br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:<br>    cookies_str = <span class="hljs-string">'eai-sess=xxx; UUkey=xxx'</span><br>    session = init_session(cookies_str)<br>    session, res_json = get_default_json(session)<br>    res_json = modify_json(res_json)<br>    post_json(session, res_json)<br></code></pre></td></tr></tbody></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/SCU%E7%9B%B8%E5%85%B3/" class="category-chain-item">SCU相关</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>对SCU网络服务安全性的第一次探索</div>
+      <div>https://blog.scubot.com/article/a44f/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>贺翔/CarOL</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年10月12日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/article/9102/" title="贪心的猴子">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">贪心的猴子</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/article/39b0/" title="快速反平方根算法">
+                        <span class="hidden-mobile">快速反平方根算法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="cusdis" style="width:100%">
+    <div id="cusdis_thread"
+      data-host="https://cusdis.com"
+      data-app-id="280bc35a-0483-4140-964a-ea45d33e7643"
+      data-page-id="2166b58544f8563166dc37d098669e75"
+      data-page-url="article/a44f/"
+      data-page-title="对SCU网络服务安全性的第一次探索"
+      data-theme="auto"
+    >
+    </div>
+  </div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#cusdis_thread', function() {
+      Fluid.utils.createScript('https://cusdis.com/js/widget/lang/zh-cn.js');
+      Fluid.utils.createScript('https://cusdis.com/js/cusdis.es.js');
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema) {
+        document.querySelector('#cusdis_thread').dataset.theme = schema
+      }
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> <div> <a href="https://beian.miit.gov.cn" target="_blank" rel="nofollow noopener"><span>蜀ICP备2022022819号</span></a> </div> 站点访问量 <span id="qexo-site-pv">Loading...</span> |  站点访客数 <span id="qexo-site-uv">Loading...</span> |  页面访问量 <span id="qexo-page-pv">Loading...</span> <script src="https://cdn.jsdelivr.net/npm/qexo-static@1.6.0/hexo/statistic.js"></script> <script> loadStatistic("https://qexo.scubot.com") </script> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":true,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  var relativeDate = function() {
+    var updatedTime = document.getElementById('updated-time');
+    if (updatedTime) {
+      var text = updatedTime.textContent;
+      var reg = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})/;
+      var matchs = text.match(reg);
+      if (matchs) {
+        var relativeTime = moment(matchs[0]).fromNow();
+        updatedTime.textContent = text.replace(reg, relativeTime);
+      }
+      updatedTime.style.display = '';
+    }
+  };
+  Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/moment.min.js', function() {
+    if (!'zh-cn'.startsWith('en')) {
+      Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/locale/zh-cn.min.js', function() {
+        relativeDate();
+      });
+    } else {
+      relativeDate();
+    }
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

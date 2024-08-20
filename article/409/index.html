@@ -1,0 +1,1238 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="https://blog-1256946954.cos.ap-chengdu.myqcloud.com/image/logo.png">
+  <link rel="icon" href="https://blog-1256946954.cos.ap-chengdu.myqcloud.com/image/logo.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="贺翔/CarOL">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="外部排序及性能测试 概述 文章以DSAA课程中的一个实验题目为例，展示:  具体算法细节(外部排序算法) 数据结构实现(数据结构) 程序性能测试(性能测试)  最后对实验的结果做分析与总结(程序分析)，再写一些感想(结语)。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="外部排序及性能测试">
+<meta property="og:url" content="https://blog.scubot.com/article/409/index.html">
+<meta property="og:site_name" content="CarOL的小站">
+<meta property="og:description" content="外部排序及性能测试 概述 文章以DSAA课程中的一个实验题目为例，展示:  具体算法细节(外部排序算法) 数据结构实现(数据结构) 程序性能测试(性能测试)  最后对实验的结果做分析与总结(程序分析)，再写一些感想(结语)。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://imgbed.scubot.com/extsort-post-inf-random.jpg">
+<meta property="og:image" content="https://imgbed.scubot.com/extsort-post-inf-random-check.jpg">
+<meta property="og:image" content="https://imgbed.scubot.com/extsort-post-inf-check.png">
+<meta property="og:image" content="https://imgbed.scubot.com/extsort-post-inf-path.jpg">
+<meta property="og:image" content="https://imgbed.scubot.com/extsort-post-inf-rs.jpg">
+<meta property="og:image" content="https://imgbed.scubot.com/extsort-post-inf-init.png">
+<meta property="og:image" content="https://imgbed.scubot.com/extsort-post-inf-test.png">
+<meta property="og:image" content="https://imgbed.scubot.com/extsort-post-inf-result.png">
+<meta property="og:image" content="https://imgbed.scubot.com/extsort-post-inf-res.png">
+<meta property="og:image" content="https://imgbed.scubot.com/extsort-1_1859_run.png">
+<meta property="og:image" content="https://imgbed.scubot.com/extsort-1_1859_cost.png">
+<meta property="og:image" content="https://imgbed.scubot.com/extsort-1_1859_var.png">
+<meta property="og:image" content="https://imgbed.scubot.com/extsort-1_547_cost.png">
+<meta property="og:image" content="https://imgbed.scubot.com/extsort-1_547_var.png">
+<meta property="article:published_time" content="2019-01-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-08-20T00:57:09.093Z">
+<meta property="article:author" content="贺翔&#x2F;CarOL">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://imgbed.scubot.com/extsort-post-inf-random.jpg">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>外部排序及性能测试 - CarOL的小站</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.scubot.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":true,"trickleSpeed":100}},"code_language":{"enable":true,"default":"txt"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="CarOL的小站" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>CarOL的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/atom.xml/" target="_self">
+                <i class="iconfont icon-rss"></i>
+                <span>rss</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于我</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/about/" target="_self">
+                    
+                    <span>我自己</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="https://running-page-blond.vercel.app/" target="_self">
+                    
+                    <span>跑步记录</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-book"></i>
+                <span>图书</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/" target="_self">
+                    
+                    <span>导读</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/detective/" target="_self">
+                    
+                    <span>推理小说</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://imgbed.scubot.com/ru') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="外部排序及性能测试"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        贺翔/CarOL
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-01-12 00:00" pubdate>
+          2019年1月12日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          6.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          55 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">外部排序及性能测试</h1>
+            
+              <p id="updated-time" class="note note-info" style="display: none">
+                
+                  
+                    <!-- compatible with older versions-->
+                    本文最后更新于：2024-08-20T08:57:09+08:00
+                  
+                  
+
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="外部排序及性能测试">外部排序及性能测试</h1>
+<h2 id="概述">概述</h2>
+<p>文章以DSAA课程中的一个实验题目为例，展示:</p>
+<ul>
+<li>具体算法细节(<a href="#外部排序算法">外部排序算法</a>)</li>
+<li>数据结构实现(<a href="#**数据结构**">数据结构</a>)</li>
+<li>程序性能测试(<a href="#性能测试">性能测试</a>)</li>
+</ul>
+<p>最后对实验的结果做分析与总结(<a href="#程序分析">程序分析</a>)，再写一些感想(<a href="#结语">结语</a>)。</p>
+<span id="more"></span>
+<hr>
+<p>这个实验课题的程序我连续肝了两天，其中最后一天在Wakatime上的记录coding时长突破了我一天写代码时长的记录达到10h。</p>
+<p>最后一节DSAA课的时候(半个月前)也上台展示了自己的程序，不过现在想想有很多遗憾的地方，具体的在最后一部分总结时说。</p>
+<p>写程序是一方面，测程序是另一方面。为了测试程序的性能，我在最后期末考试的复习阶段几乎把每科的复习时间压缩到了一天时间内，也写了一部分脚本花了很多时间进行反复测试。</p>
+<p>所以</p>
+<p>如果读者不太清楚外排的细节以及其性能的规律，不妨耐心看完，看到最后一定会有所收获；</p>
+<p>如果读者已经对这部分内容了如指掌，也请多多指出文章内容的不合理之处以便我改正。</p>
+<h2 id="题目要求">题目要求</h2>
+<p><strong>下面是题目的具体要求:</strong></p>
+<blockquote>
+<p>For this task, you will implement an external sorting algorithm. The
+input data file will consist of 8N (N is a positive integer number)
+blocks of data, where a block is 4096 bytes. Each block will contain a
+series of records, where each record has 8 bytes. The first 4-byte field
+is a non-negative integer value for the record ID and the second 4-byte
+field is a float value for the key, which will be used for sorting. Thus
+each block contains 512 records.</p>
+<p>Your job is to sort the file (in ascending order of the key values),
+as follows: Using replacement selection, you will sort sections of the
+file in a working memory that is 8 blocks long. To be precise, the heap
+will be 8 blocks in size; in addition you will also have a one block
+input buffer, a one block output buffer and any additional working
+variables that you need. To process, read the first 8 blocks of the
+input file into memory and use replacement selection to create the
+longest possible run. As it is being created, the run is output to the
+one block output buffer. Whenever this output buffer becomes full, it is
+written to an output file called the run file. When the first run is
+complete, continue on to the next section of the input file, adding the
+second run to the end of the run file. When the process of creating runs
+is complete, the run file will contain some number of runs, each run
+being at least 8 blocks long, with the data sorted within each run. For
+convenience, you will probably want to begin each run in a new block.
+You will then use a multi-way merge to combine the runs into a single
+sorted file. You must also use 8 blocks of memory used for the heap in
+the run-building step to store working data from the runs during the
+merge step. Multi-way merging is done by reading the first block from
+each of the runs currently being merged into your working area, and
+merging these runs into the one block output buffer. When the output
+buffer fills up, it is written to another output file. Whenever one of
+the input blocks is exhausted, read in the next block for that
+particular run. This step requires random access (using seek) to the run
+file, and a sequential write of the output file. Depending on the size
+of all records, you may need multiple passes of multiway-merging to sort
+the whole record. Your program will take the names of two files from the
+command line, like this:</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">extsort &lt;record file name&gt; &lt;statistics file name&gt;<br></code></pre></td></tr></tbody></table></figure>
+<p>The record file is the input data file to be sorted. At the end of
+your program, the record file (on disk) should be sorted. So your
+program does modify the input data file. Be careful to keep a copy of
+the original when you do your testing. In addition to sorting the data
+file, you must report some information about the execution of your
+program (e.g., the number of runs, and the time taken to sort the record
+file), which will be stored in the statistics file. If the specified
+record file does not exist, output a suitable error message and exit.
+Your program will create the statistics file if it does not already
+exist, or append to it if it does.</p>
+</blockquote>
+<p><strong>翻译成中文，简而言之：</strong></p>
+<ol type="1">
+<li><p>定义内存中每个<strong>块</strong>的大小为4096 bytes(4
+kb)。</p></li>
+<li><p>待排序文件(为了简便下面统称为<code>REC.dat</code>)中只包含记录，且文件占8N个块大小(即32N
+kb)。</p></li>
+<li><p>每条记录包含一个<strong>键</strong>(<code>float</code>类型, 4
+bytes)和一个<strong>值</strong>(<code>unsigned int</code>类型, 4
+bytes)，每条记录占8
+bytes，以二进制方式存储，即每个块中正好能存下512条记录。</p></li>
+<li><p><strong>主存</strong>(main memory)允许10个块大小，其中：</p>
+<ul>
+<li>1个块实现输入缓冲区</li>
+<li>1个块实现输出缓冲区</li>
+<li>8个块实现数据处理</li>
+</ul></li>
+<li><p>用<strong>置换选择</strong>的办法按键的升序产生顺串，每一个顺串补全整数个块大小，所有的顺串首尾相接存储在一个顺串文件(统称<code>RUNFILE.tmp</code>)中。</p></li>
+<li><p>用<strong>八路归并</strong>的方法归并顺串，最后得到的结果存储在<code>REC.dat</code>中，且保留一份原<code>REC.dat</code>的拷贝文件(统称<code>cp_REC.dat</code>)。</p></li>
+<li><p>以追加的方式将排序的中间信息写入<strong>统计文件</strong>(统称<code>STAT.csv</code>)中。写入的信息至少包括：</p>
+<ul>
+<li>置换选择产生的顺串的个数</li>
+<li>排序所用的时间</li>
+</ul></li>
+</ol>
+<h2 id="分析与准备">分析与准备</h2>
+<ol type="1">
+<li><p>首先要考虑的是待排序文件要怎么得到，我选择了用随机数随机产生数据得到数据文件，源码很简单如下：</p>
+<blockquote>
+<p><code>random_creater.cc</code></p>
+</blockquote>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span>  </span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fstream&gt;</span>  </span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cstdlib&gt;</span>  </span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span>  </span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;ctime&gt;</span>  </span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cstring&gt;</span>  </span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-type">int</span> N;<br>string filename;<br><br><span class="hljs-type">const</span> <span class="hljs-type">int</span> maxn = <span class="hljs-number">1e6</span>;<br><span class="hljs-type">const</span> <span class="hljs-type">int</span> block_rec = <span class="hljs-number">512</span>;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span> </span>{<br>    <span class="hljs-built_in">srand</span>(<span class="hljs-built_in">time</span>(<span class="hljs-literal">NULL</span>));<br>    filename = argv[<span class="hljs-number">1</span>];<br>    N = <span class="hljs-built_in">atoi</span>(argv[<span class="hljs-number">2</span>]);<br>    <br>    <span class="hljs-function">ofstream <span class="hljs-title">outFile</span><span class="hljs-params">(filename.c_str(), ios::out | ios::binary)</span></span>;<br>    <span class="hljs-keyword">if</span> (!outFile.<span class="hljs-built_in">good</span>()) {<br>        cout &lt;&lt; <span class="hljs-string">"file open error!"</span> &lt;&lt; endl;<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">-1</span>);<br>    }<br>    <br>    <span class="hljs-type">int</span> total_ = block_rec * <span class="hljs-number">8</span> * N;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> inc = <span class="hljs-number">0</span>; inc &lt; total_; inc ++) {<br>        <span class="hljs-function">pair&lt;<span class="hljs-type">float</span>, <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>&gt; <span class="hljs-title">rec</span><span class="hljs-params">(<span class="hljs-number">1.0</span> * (rand() % maxn) / <span class="hljs-number">11</span>, rand() % maxn)</span></span>;<br>        outFile.<span class="hljs-built_in">write</span>((<span class="hljs-type">char</span> *)&amp;rec, <span class="hljs-built_in">sizeof</span>(rec));<br>    }<br><br>    cout &lt;&lt; <span class="hljs-string">"_____________________________________________________"</span> &lt;&lt; endl;<br>    cout &lt;&lt; <span class="hljs-string">"Succeed in writing 8 * 512 * "</span> &lt;&lt; N &lt;&lt; <span class="hljs-string">" = "</span> \<br>        &lt;&lt; <span class="hljs-number">8</span> * <span class="hljs-number">512</span> * N &lt;&lt; <span class="hljs-string">" records in file: "</span> &lt;&lt; filename &lt;&lt; endl;<br>    cout &lt;&lt; <span class="hljs-string">"File's size should be "</span> &lt;&lt; <span class="hljs-number">8</span> * <span class="hljs-number">4096</span> * N &lt;&lt; <span class="hljs-string">" bytes"</span> \<br>        &lt;&lt; <span class="hljs-string">" ("</span> &lt;&lt; <span class="hljs-number">32</span> * N &lt;&lt; <span class="hljs-string">" kb)"</span> &lt;&lt; endl;<br>    cout &lt;&lt; <span class="hljs-string">"_____________________________________________________"</span> &lt;&lt; endl;<br>    <br>    outFile.<span class="hljs-built_in">close</span>();<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>}<br></code></pre></td></tr></tbody></table></figure>
+<p>调用方式(git bash)：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ ./random_creater.exe REC.dat N<br></code></pre></td></tr></tbody></table></figure>
+<p>其中<code>REC.dat</code>为要产生的数据文件，<code>N</code>就是题目要求中的N，用来规定数据规模。</p>
+<p>效果如下：</p>
+<figure>
+<img src="https://imgbed.scubot.com/extsort-post-inf-random.jpg" srcset="/img/loading.gif" lazyload alt="random_creater演示">
+<figcaption aria-hidden="true">random_creater演示</figcaption>
+</figure>
+<p>检查生成文件大小：</p>
+<figure>
+<img src="https://imgbed.scubot.com/extsort-post-inf-random-check.jpg" srcset="/img/loading.gif" lazyload alt="random_creater-check演示">
+<figcaption aria-hidden="true">random_creater-check演示</figcaption>
+</figure>
+<p>与目标一致。</p></li>
+<li><p>其次就是怎么检查文件是否排序完成。由于所有记录以二进制方式存入，用文本编辑器打开会显示乱码，且记录条数达到<span class="math inline">\(512\times8N\)</span>，所以需要用程序辅助检查。</p>
+<p>我这里用简单的顺序查找方式来找出不符合<strong>键是升序</strong>这一要求的记录，如果查找完毕没有不符合要求的记录则认为文件已排序。源码如下：</p>
+<blockquote>
+<p><code>check_sorted.cc</code></p>
+</blockquote>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span>  </span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fstream&gt;</span>  </span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cstdlib&gt;</span>  </span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;algorithm&gt;</span>  </span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span>  </span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br>string filename;  <br>string statFile;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span> </span>{<br>    filename = argv[<span class="hljs-number">1</span>];<br>    <span class="hljs-function">ifstream <span class="hljs-title">inFile</span><span class="hljs-params">(filename.c_str(), ios::binary)</span></span>;  <br>    <span class="hljs-keyword">if</span> (!inFile.<span class="hljs-built_in">good</span>()) {<br>        cout &lt;&lt; <span class="hljs-string">"file open error"</span> &lt;&lt; endl;<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">-1</span>);<br>    }<br><br>    pair&lt;<span class="hljs-type">float</span>, <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>&gt; rec;<br>    <span class="hljs-type">double</span> prec = <span class="hljs-number">-1e7</span>;<br>    <span class="hljs-type">int</span> idx = <span class="hljs-number">0</span>;<br><br>    <span class="hljs-keyword">while</span> (inFile.<span class="hljs-built_in">read</span>((<span class="hljs-type">char</span> *)&amp;rec, <span class="hljs-built_in">sizeof</span>(rec))) {<br>        <span class="hljs-keyword">if</span> (rec.first &lt; prec) {<br>            cout &lt;&lt; <span class="hljs-string">"__________________________________"</span> &lt;&lt; endl;<br>            cout &lt;&lt; <span class="hljs-string">"file: "</span> &lt;&lt; filename &lt;&lt; <span class="hljs-string">" has not been sorted"</span> &lt;&lt; endl;<br>            cout &lt;&lt; <span class="hljs-string">"prev-idx: "</span> &lt;&lt; idx - <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-string">"  key: "</span> &lt;&lt; prec &lt;&lt; endl;<br>            cout &lt;&lt; <span class="hljs-string">"curr-idx: "</span> &lt;&lt; idx &lt;&lt; <span class="hljs-string">"  key: "</span> &lt;&lt; rec.first &lt;&lt; endl;<br>            cout &lt;&lt; <span class="hljs-string">"__________________________________"</span> &lt;&lt; endl;<br>            inFile.<span class="hljs-built_in">close</span>();<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        }<br>        prec = rec.first;<br>        idx ++;<br>    }<br><br>    cout &lt;&lt; <span class="hljs-string">"file: "</span> &lt;&lt; filename &lt;&lt; <span class="hljs-string">" has been sorted"</span> &lt;&lt; endl;<br>    cout &lt;&lt; <span class="hljs-string">"__________________________________"</span> &lt;&lt; endl;<br>    inFile.<span class="hljs-built_in">close</span>();<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>}<br></code></pre></td></tr></tbody></table></figure>
+<p>调用方式(git bash)：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ ./check_sorted.exe REC.dat<br></code></pre></td></tr></tbody></table></figure>
+<p>我们来查一下刚刚随机生成的数据文件的有序情况(大概率下是没有排好序的，有兴趣的话可以去考虑计算一下记录非升序的第一个索引的期望)</p>
+<figure>
+<img src="https://imgbed.scubot.com/extsort-post-inf-check.png" srcset="/img/loading.gif" lazyload alt="check_sorted演示">
+<figcaption aria-hidden="true">check_sorted演示</figcaption>
+</figure>
+<p>很明显，该随即数据的文件并没有被排序，且第一处出现非升序的索引是<code>prev-idx: 0</code>。</p></li>
+<li><p>接下来考虑外部排序的内容。</p>
+<p>算法和数据结构下面两部分详细讨论，这里考虑<code>STAT.csv</code>中存储的数据内容。</p>
+<ul>
+<li>待排序文件的大小，文件中记录的个数</li>
+<li>产生的顺串总个数</li>
+<li>八路归并的次数</li>
+<li>产生顺串消耗的时间</li>
+<li>归并消耗的时间</li>
+<li>总消耗的时间</li>
+</ul>
+<p>只需要在排序过程中记录以上数据，最后再输出到文件。</p></li>
+</ol>
+<h2 id="外部排序算法">外部排序算法</h2>
+<h3 id="说明">说明</h3>
+<p>外部排序是指对大型文件的排序算法，由于无法将文件内容全部读入到主存中，所以一般采用<strong>产生顺串</strong>再<strong>归并顺串</strong>这样的归并排序算法的思想。</p>
+<p>外部排序与内部排序的最大不同就是，制约算法效率的核心因素不同。</p>
+<ul>
+<li>内部排序制约算法效率的核心因素是<strong>数据比较/交换的次数(桶排序，基数排序等除外)</strong></li>
+<li>外部排序制约算法效率的核心因素是<strong>读取和写入文件的次数</strong></li>
+</ul>
+<p>外部排序是一类算法，具体的实现也不尽相同，这里实现的算法只是其中一种。不过不论哪一种外部排序算法，其核心思想都是<strong>将对文件的I/O操作次数降到最小</strong>，具体体现为<strong>利用特定的算法，使得产生的顺串个数尽可能小</strong>，这也是产生顺串的过程采用置换选择的原因。</p>
+<p>对所有置换选择产生的顺串进行归并，一般采用多路归并。考虑到主存空间及时间效率等限制，采用八路归并。</p>
+<h3 id="流程图">流程图</h3>
+<p>程序流程</p>
+<figure>
+<img src="https://imgbed.scubot.com/extsort-post-inf-path.jpg" srcset="/img/loading.gif" lazyload alt="流程展示">
+<figcaption aria-hidden="true">流程展示</figcaption>
+</figure>
+<h3 id="置换选择">置换选择</h3>
+<p><strong>置换选择(Replacement
+selection)</strong>是用来产生顺串的一种算法，其本质是最小堆的变形。</p>
+<h4 id="算法流程">算法流程</h4>
+<ol type="1">
+<li><p>从文件中读取数据，读到最小堆的数组里，这里根据要求读入8个块大小。记录最后一组数据的索引为<span class="math inline">\(LAST=8\times 512 -1\)</span>。</p></li>
+<li><p>利用数据中键的偏序关系建立最小堆。</p></li>
+<li><p>重复以下步骤直到最小堆为空(<span class="math inline">\(LAST &lt;
+0\)</span>)：</p>
+<ol type="1">
+<li><p>取出堆顶数据送到输出缓冲区。</p></li>
+<li><p>从输入缓冲区读入一组数据<span class="math inline">\(R\)</span>，将其放置在堆顶。</p></li>
+<li><p>如果<span class="math inline">\(R\)</span>比刚刚输出的堆顶数据小，则将<span class="math inline">\(R\)</span>与堆中索引为<span class="math inline">\(LAST\)</span>的数据交换位置，之后<span class="math inline">\(LAST=LAST-1\)</span>。</p></li>
+<li><p>对堆顶数据进行<strong>下沉(Sift down)</strong>操作。</p></li>
+</ol></li>
+<li><p>上一步完成后就产生了一个顺串，这时只需重复&lt;2&gt;和&lt;3&gt;直到输入缓冲区为空停止。</p></li>
+</ol>
+<h4 id="算法框架">算法框架</h4>
+<figure>
+<img src="https://imgbed.scubot.com/extsort-post-inf-rs.jpg" srcset="/img/loading.gif" lazyload alt="算法框架">
+<figcaption aria-hidden="true">算法框架</figcaption>
+</figure>
+<h4 id="算法分析">算法分析</h4>
+<p>堆的容量为<span class="math inline">\(8 \times
+512\)</span>，在平摊意义下每个顺串包含的数据个数为为<span class="math inline">\(2\times8\times 512\)</span>。</p>
+<p>若有<span class="math inline">\(8\times512N\)</span>条记录，最后的顺串个数约为<span class="math inline">\(\frac{8\times 512N}{2\times 8\times 512}= N
+/2\)</span>。</p>
+<h3 id="多路归并">多路归并</h3>
+<p>以八路归并为例子，将产生的多个顺串归并到一个文件中。</p>
+<p>由于归并路数不大，我们可以直接顺序搜索8个元素中最大的那个。</p>
+<p>例如：</p>
+<p>现在一共有<span class="math inline">\(M\)</span>份顺串，我们将他们在文件<span class="math inline">\(A\)</span>和<span class="math inline">\(B\)</span>间进行归并：</p>
+<ul>
+<li>首先将<span class="math inline">\(M\)</span>每8个分成一组，最后多出来的可能不够8个。</li>
+<li>构造一个输入缓冲池(8个块)，由8个输入缓冲区构成，每个缓冲区负责读入一份顺串。</li>
+<li>每个输入缓冲区取出一份记录，在8条记录中找到最小的那份送到输出缓冲区。</li>
+<li>一旦有输入缓冲区为空就继续读入文件，直到该文件读完该缓冲区搁置。</li>
+<li>一旦输出缓冲区为满则向输出文件<span class="math inline">\(A\)</span>中输出。</li>
+</ul>
+<p>每组顺串重复以上过程直到结果全部输出到<span class="math inline">\(A\)</span>。所以我们能在该文件中得到<span class="math inline">\(\lceil \frac{M}{8}\rceil\)</span>个顺串。</p>
+<p>然后对<span class="math inline">\(A\)</span>中的顺串进行同样过程的归并，得到的顺串输出到<span class="math inline">\(B\)</span>，再经过同样的过程输出到<span class="math inline">\(A\)</span>。直到顺串个数为1。</p>
+<p>所以我们得到八路归并<span class="math inline">\(M\)</span>条顺串的文件操作次数是<span class="math inline">\(\lceil \log_8M\rceil\)</span>次。</p>
+<h2 id="数据结构">数据结构</h2>
+<p>上面的内容更偏重理论的分析，这部分我们将着手于在C++中的算法实现。</p>
+<p>由于篇幅有限，接下来我给出一些设计思路于关键类的定义与说明，具体实现部分还请参考<strong><a target="_blank" rel="noopener" href="https://github.com/Herixth/External-sorting">External-sorting</a></strong>。</p>
+<h3 id="类定义缓冲区">类定义：缓冲区</h3>
+<p>根据题目的具体要求，程序需要进行多次文件操作，也是我们出于对主存利用效率更高的需求，程序中需要实现对输入输出缓冲区的模拟。故有<strong>Buffer</strong>类定义：</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Buffer</span> {<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Buffer</span>();<br>    ~<span class="hljs-built_in">Buffer</span>();<br>    <span class="hljs-comment">// 从参数指定的文件输入流中的指定参数字节位置开始读入一个缓冲区大小的数据</span><br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">get_input</span><span class="hljs-params">(std::ifstream &amp;, <span class="hljs-type">int</span> = <span class="hljs-number">-1</span>)</span></span>; <br>    <span class="hljs-comment">// 向参数指定的文件输出流中以二进制输出整个缓冲区内容</span><br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">write_output</span><span class="hljs-params">(std::ofstream &amp;)</span></span>;<br>	<br>    <span class="hljs-comment">// 获得当前__curr索引下的记录 </span><br>    <span class="hljs-comment">// typedef std::pair&lt;float, unsigned int&gt; pis;</span><br>    <span class="hljs-function">pis <span class="hljs-title">get_value</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-comment">// 获取当前__curr索引</span><br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">get_curr</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-comment">// 向缓冲区末尾追加新纪录</span><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">append_value</span><span class="hljs-params">(pis)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">move_to_start</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">move_to_end</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">move_to_next</span><span class="hljs-params">()</span></span>;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span></span>;  <span class="hljs-comment">// 清空缓冲区</span><br><br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">at_end</span><span class="hljs-params">()</span></span>; <span class="hljs-comment">// 判断是否读到末尾</span><br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span></span>;  <span class="hljs-comment">// 判断缓冲区是否为空</span><br><span class="hljs-keyword">private</span>:<br>    pis __buffer[rec_max];  <span class="hljs-comment">// 缓冲区数组定义</span><br>    <span class="hljs-type">int</span> __curr;  <span class="hljs-comment">// 当前记录索引</span><br>    <span class="hljs-type">int</span> __maxN;  <span class="hljs-comment">// 当前缓冲区的记录数目</span><br>    <span class="hljs-type">bool</span> is_empty;          <span class="hljs-comment">// 是否为空</span><br>};<br></code></pre></td></tr></tbody></table></figure>
+<h3 id="类定义最小堆">类定义：最小堆</h3>
+<p>支持置换选择算法的数据结构是最小堆的变体，下面给出最小堆<strong>Min_heap</strong>的类定义：</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Min_heap</span> {<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Min_heap</span>();<br>    ~<span class="hljs-built_in">Min_heap</span>();<br>    <span class="hljs-comment">// 根据缓冲区和文件输入流参数初始化最小堆中的值</span><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">init</span><span class="hljs-params">(Buffer &amp;, std::ifstream &amp;)</span></span>;<br>    <span class="hljs-comment">// 是否为空堆</span><br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;<br>    <span class="hljs-comment">// 关键函数，用来实现置换选择算法</span><br>    <span class="hljs-function">pis <span class="hljs-title">remove_add</span><span class="hljs-params">(pis)</span></span>;<br>    <span class="hljs-comment">// 建堆</span><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">build_heap</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-comment">// 当前堆大小</span><br>    <span class="hljs-function"><span class="hljs-type">int</span>  <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">int</span> __left(<span class="hljs-type">int</span>) <span class="hljs-type">const</span>;<br>    <span class="hljs-type">int</span> __right(<span class="hljs-type">int</span>) <span class="hljs-type">const</span>;<br>    <span class="hljs-type">bool</span> __isLeaf(<span class="hljs-type">int</span>) <span class="hljs-type">const</span>;<br>    <span class="hljs-comment">// 下沉</span><br>    <span class="hljs-type">void</span> __siftdown(<span class="hljs-type">int</span>);<br>    <span class="hljs-comment">// 最小堆数组</span><br>    pis heap[block_num * rec_max];<br>    <span class="hljs-type">int</span> __maxN;<br>    <span class="hljs-type">int</span> __curr;<br>};<br></code></pre></td></tr></tbody></table></figure>
+<h3 id="类定义外部排序管理">类定义：外部排序管理</h3>
+<p>整合外部排序算法，定义对外接口函数，使排序实现更简洁。</p>
+<p>给出<strong>Extsort_Manager</strong>类定义：</p>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Extsort_Manager</span> {<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">// 读入argv参数</span><br>    <span class="hljs-built_in">Extsort_Manager</span>(<span class="hljs-type">char</span> **);<br>    ~<span class="hljs-built_in">Extsort_Manager</span>();<br>    <span class="hljs-comment">// 初始化</span><br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">init</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-comment">// 置换选择建立顺串</span><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">create_runfile_RS</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-comment">// 顺串八路归并</span><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">merge</span><span class="hljs-params">()</span></span>;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">void</span> __merge(<span class="hljs-type">int</span>, std::vector&lt;pii&gt; &amp;);<br><br>    std::string rec_fname;  <span class="hljs-comment">// 待排序文件名</span><br>    std::string stat_fname; <span class="hljs-comment">// 信息统计文件名</span><br>    std::string run_fname;  <span class="hljs-comment">// 临时顺串的文件</span><br><br>    std::ifstream inFile;<br>    std::ofstream outFile;<br>    std::ofstream statFile;<br>    <span class="hljs-comment">// 记录临时顺串的索引信息</span><br>    std::vector&lt;pii&gt; run_idx;<br>    <br>    Buffer input_buffer; <span class="hljs-comment">// 单独的输入缓冲区</span><br>    Buffer output_buffer; <span class="hljs-comment">// 单独的输出缓冲区</span><br>    <span class="hljs-comment">// 归并中用到的输入缓冲池</span><br>    Buffer buffer_pool[block_num];<br>    <span class="hljs-comment">// 最小堆</span><br>    Min_heap min_heap;<br>    <span class="hljs-comment">// 实现计时功能</span><br>    std::<span class="hljs-type">clock_t</span> start_clc;<br>    std::<span class="hljs-type">clock_t</span> run_build_cost;<br>    std::<span class="hljs-type">clock_t</span> merge_cost;<br>};<br></code></pre></td></tr></tbody></table></figure>
+<h2 id="性能测试">性能测试</h2>
+<p>外部排序程序实现之后我们需要对其进行测试。</p>
+<h3 id="测试概况">测试概况</h3>
+<p>由于还需要进行多组的测试，所以<code>check_sorted.exe</code>将检查结果同样写入<code>STAT.csv</code>文件中，同样对<code>random_creater.cc</code>进行一部分修改。</p>
+<p>特别的，由于测试数据来源是完全随机的，很难避免测试结果的偶然性，所以我们采用多次测试结构取平均值的方法对某一个N值进行测试。</p>
+<p>为了更方便进行多组测试，我们利用shell脚本对测试逻辑打包，具体如下：</p>
+<blockquote>
+<p><code>autoTest.sh</code></p>
+</blockquote>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">########### 测试开始 ############</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">"-----info-----"</span>     <span class="hljs-comment"># 输入信息块</span><br>recFile=<span class="hljs-string">"REC.dat"</span>         <span class="hljs-comment"># 为了方便测试，规定待排序文件名称</span><br><span class="hljs-built_in">read</span> -p <span class="hljs-string">"input statfile: "</span> statFile  <span class="hljs-comment"># 输入信息统计文件名称</span><br><span class="hljs-built_in">read</span> -p <span class="hljs-string">"input minN: "</span> minN          <span class="hljs-comment"># 最小的N</span><br><span class="hljs-built_in">read</span> -p <span class="hljs-string">"input maxN: "</span> maxN          <span class="hljs-comment"># 最大的N    满足 minN &lt;= N &lt;= maxN</span><br><span class="hljs-built_in">read</span> -p <span class="hljs-string">"input step: "</span> step          <span class="hljs-comment"># N自增的步长  及每次循环N自增的数值</span><br><span class="hljs-built_in">read</span> -p <span class="hljs-string">"input test round: "</span> divide  <span class="hljs-comment"># 每一个N随机测试的次数，最后各项数据取平均值</span><br>srcFile=<span class="hljs-string">"src.tmp"</span>         <span class="hljs-comment"># 默认临时文件</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">"-----init-----"</span>     <span class="hljs-comment"># 初始化板块</span><br>cprecFile=<span class="hljs-string">"cp_"</span><span class="hljs-variable">${recFile}</span> <span class="hljs-comment"># 源文件的拷贝文件名称 </span><br><span class="hljs-keyword">if</span> [ <span class="hljs-variable">$minN</span> -eq 1 ]; <span class="hljs-keyword">then</span>  <span class="hljs-comment"># 如果N从1开始，则重置信息统计文件statFile</span><br>    <span class="hljs-built_in">rm</span> -f <span class="hljs-variable">$statFile</span>     <br>    <span class="hljs-comment"># 并把头信息重定向输入到statFile中</span><br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">"N,file size,records num,total runs,runs-var,\</span><br><span class="hljs-string">    run-build(s),run-build-var,run-merge(s),run-merge-var,\</span><br><span class="hljs-string">    total cost(s),total-var,state"</span> &gt; <span class="hljs-variable">$statFile</span><br><span class="hljs-keyword">fi</span><br><span class="hljs-comment"># 为了防止编译环境不同导致的程序运行错误，对辅助程序进行重新编译</span><br><span class="hljs-comment"># 由于我这里只是在本地测试就省去以下编译步骤以节省时间</span><br><span class="hljs-comment"># g++ random_creater.cc -o random_creater.exe</span><br><span class="hljs-comment"># g++ check_sorted.cc -o check_sorted.exe</span><br><span class="hljs-comment"># g++ unit.cc -o unit.exe</span><br>clear<br><span class="hljs-built_in">echo</span> <span class="hljs-string">"-----test-----"</span>     <span class="hljs-comment"># 测试板块</span><br><span class="hljs-comment"># 主循环：对N从minN到maxN以步长为step进行循环测试</span><br><span class="hljs-keyword">for</span> ((N=<span class="hljs-variable">$minN</span>; N&lt;=<span class="hljs-variable">$maxN</span>; N+=<span class="hljs-variable">$step</span>))<br><span class="hljs-keyword">do</span><br>    <span class="hljs-comment"># 强制删除每次测试产生的临时文件以及排序文件，只留下信息统计文件以保证测试所占用内存的大小</span><br>    <span class="hljs-built_in">rm</span> -f <span class="hljs-variable">$srcFile</span> <span class="hljs-variable">$recFile</span> <span class="hljs-variable">$cprecFile</span><br>    <span class="hljs-comment"># 次循环：针对每个N，测试divide次，最后的结果用unit.exe进行平均处理</span><br>    <span class="hljs-keyword">for</span> ((round=<span class="hljs-number">1</span>; round&lt;=divide; round++))<br>    <span class="hljs-keyword">do</span><br>        <span class="hljs-built_in">echo</span> <span class="hljs-string">"N: <span class="hljs-variable">$N</span>: round: <span class="hljs-variable">$round</span>"</span>           <span class="hljs-comment"># 终端中显示当前测试进度</span><br>        ./random_creater.exe <span class="hljs-variable">$recFile</span> <span class="hljs-variable">$N</span>      <span class="hljs-comment"># 产生随即数据</span><br>        ./extsort.exe <span class="hljs-variable">$recFile</span> <span class="hljs-variable">$srcFile</span>       <span class="hljs-comment"># 将该次排序的统计信息写入临时文件</span><br>        ./check_sorted.exe <span class="hljs-variable">$recFile</span> <span class="hljs-variable">$srcFile</span>  <span class="hljs-comment"># 将该次排序的检查结果写入临时文件</span><br>    <span class="hljs-keyword">done</span><br>    ./unit.exe <span class="hljs-variable">$srcFile</span> <span class="hljs-variable">$statFile</span>    <span class="hljs-comment"># 针对多次测试产生的临时文件进行均值处理写入统计文件</span><br>    <span class="hljs-built_in">rm</span> -f <span class="hljs-variable">$srcFile</span>                   <span class="hljs-comment"># 删除临时文件</span><br><span class="hljs-keyword">done</span><br><span class="hljs-built_in">rm</span> -f <span class="hljs-variable">$cprecFile</span> <span class="hljs-variable">$recFile</span>            <span class="hljs-comment"># 测试结束后删除除统计文件外的程序产生文件</span><br><span class="hljs-comment">########### 测试结束 ############</span><br></code></pre></td></tr></tbody></table></figure>
+<p>其中<code>statFile</code>中的头信息为：</p>
+<table>
+
+<thead>
+<tr>
+<th>N</th>
+<th>file size(M)</th>
+<th>records num</th>
+<th>total runs</th>
+<th>runs-var</th>
+<th>run-build(s)</th>
+<th>run-build-var</th>
+<th>run-merge(s)</th>
+<th>run-merge-var</th>
+<th>total cost(s)</th>
+<th>total-var</th>
+<th>state</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>N</td>
+<td>文件大小</td>
+<td>数据记录个数</td>
+<td>产生顺串个数</td>
+<td>顺串个数方差</td>
+<td>建立顺串耗时</td>
+<td>建立顺串耗时方差</td>
+<td>归并顺串耗时</td>
+<td>归并顺串耗时方差</td>
+<td>总耗时</td>
+<td>总耗时的方差</td>
+<td>sorted/unsorted</td>
+</tr>
+</tbody>
+</table>
+<h3 id="单点测试">单点测试</h3>
+<p>有了完整的测试逻辑，我们来测试一个N的值来看看效果：</p>
+<figure>
+<img src="https://imgbed.scubot.com/extsort-post-inf-init.png" srcset="/img/loading.gif" lazyload alt="单点测试_1">
+<figcaption aria-hidden="true">单点测试_1</figcaption>
+</figure>
+<figure>
+<img src="https://imgbed.scubot.com/extsort-post-inf-test.png" srcset="/img/loading.gif" lazyload alt="单点测试_2">
+<figcaption aria-hidden="true">单点测试_2</figcaption>
+</figure>
+<p>最后我们用EXCEL打开<code>STAT.csv</code>文件，得到：</p>
+<figure>
+<img src="https://imgbed.scubot.com/extsort-post-inf-result.png" srcset="/img/loading.gif" lazyload alt="结果">
+<figcaption aria-hidden="true">结果</figcaption>
+</figure>
+<p>N=1的测试10次的结果就很显然了，总耗时为0.0083 s。</p>
+<p>测了个最小的，那为什么不测一个大的呢。</p>
+<p>目前为止受限于我计算机硬盘的大小，我最大只测过N=100000即3.05GB规模的文件，结果如下：</p>
+<figure>
+<img src="https://imgbed.scubot.com/extsort-post-inf-res.png" srcset="/img/loading.gif" lazyload alt="结果">
+<figcaption aria-hidden="true">结果</figcaption>
+</figure>
+<p><span class="math inline">\(1375.91\text{ s} /60 \approx 22.93 \text{
+min}\)</span>，也就是花了几乎23分钟。这个结果直观看上去确实太慢了，而我个人也认为这个可以再快一点，由于耗时比较长，所以我没有多次测试，可能在平均条件下3.05GB的耗时可能会稍微好一点。</p>
+<h3 id="多点测试">多点测试</h3>
+<p>单点测试有很大的不确定性，而且我们也想知道该算法随时间增长的耗时是什么样子的趋势，所以我们可以继续用上面的测试脚本来测试N是一个范围内的所有数值。</p>
+<h5 id="mb58.0938mb">1—1859(0.03125mb—58.0938mb)</h5>
+<p>为了先有个直观的印象，我测了一组N从1到1859的数据，每组N只测了两次取平均值。得到的结果如下：</p>
+<ul>
+<li><p>顺串个数随N的变化趋势</p>
+<figure>
+<img src="https://imgbed.scubot.com/extsort-1_1859_run.png" srcset="/img/loading.gif" lazyload alt="顺串趋势">
+<figcaption aria-hidden="true">顺串趋势</figcaption>
+</figure>
+<p>经过线性回归模拟出来的方程为</p>
+<p><span class="math display">\[
+y = 0.4999x + 1.2492
+\]</span></p>
+<p>可以看出斜率<span class="math inline">\(k \approx
+0.5\)</span>，即说明之前的顺串个数是数据规模的一半(<a href="#算法分析">算法分析</a>)</p></li>
+<li><p>建立顺串耗时、归并顺串耗时、总耗时随N的变化趋势</p>
+<figure>
+<img src="https://imgbed.scubot.com/extsort-1_1859_cost.png" srcset="/img/loading.gif" lazyload alt="耗时趋势">
+<figcaption aria-hidden="true">耗时趋势</figcaption>
+</figure>
+<p>可以很明显的看出在<span class="math inline">\(N&gt;1000\)</span>之后各项耗时变得很不稳定，而且显然建立顺串的过程比归并顺串的过程要稳定得多，可能是每组数据测的次数太少导致的。</p></li>
+<li><p>各指标方差随N的变化趋势</p>
+<figure>
+<img src="https://imgbed.scubot.com/extsort-1_1859_var.png" srcset="/img/loading.gif" lazyload alt="方差趋势">
+<figcaption aria-hidden="true">方差趋势</figcaption>
+</figure>
+<p>可见随即数据对排序效率影响之大，尤其是在文件较大的时候方差非常不稳定。</p></li>
+</ul>
+<h5 id="mb17.0938mb">1—547(0.03125mb—17.0938mb)</h5>
+<p>前一种测试结果的数据不是很稳定，在同学的帮助下，我得到了一组N从1到547的数据，其中每组N测100次取平均，应该比上面的结果有更好的说服力。</p>
+<ul>
+<li><p>顺串个数的变化趋势和之前基本相同，这里省略。</p></li>
+<li><p>建立顺串耗时、归并顺串耗时、总耗时随N的变化趋势</p>
+<figure>
+<img src="https://imgbed.scubot.com/extsort-1_547_cost.png" srcset="/img/loading.gif" lazyload alt="耗时趋势">
+<figcaption aria-hidden="true">耗时趋势</figcaption>
+</figure>
+<p>总体上耗时和N的大小是正相关的，不过也N在250到300范围内的耗时出现了明显的断层，这个原因有很多，最有可能的是不同测试环境下的差异造成的，因为我把这些数据分成了很多个数据段分别发给同学们去测试。</p></li>
+<li><p>各指标方差随N的变化趋势</p>
+<figure>
+<img src="https://imgbed.scubot.com/extsort-1_547_var.png" srcset="/img/loading.gif" lazyload alt="方差趋势">
+<figcaption aria-hidden="true">方差趋势</figcaption>
+</figure>
+<p>除了N=373左右的那个方差值太大，可能是测试过程有误。其他的方差普遍比较小，也有几处方差比周围大得多的地方。</p></li>
+</ul>
+<h2 id="程序分析">程序分析</h2>
+<p>由于我没有找到更合适更快速的测试方法，向上面这样的测试会花费很长时间，所以我也希望从这些数据中总结出一些规律来。</p>
+<ul>
+<li>文件中数据的产生是随机的，而这种随机性对排序时间产生的影响是随着N的增大而增大的。第二组测试中每个N测了100次求均值，但是我们还是能明显看出时间消耗的不稳定性。</li>
+<li>决定排序时间的因素除了文件初始的随机性之外，还有对文件操作的时间。对单位文件操作的时间会因为不同的硬件环境而改变。程序中操作的文件在逻辑上是连续的但是在物理上是不连续的，计算机操作系统中有专门的部件负责文件内存的分配，而内存中文件的离散程度也会随着已有文件的增大而增大，这也增加了文件操作的时间。这也能说明为什么第二组数据中N在250和300范围内和邻接数据有不同，因为这一段数据是我发给同学们的，在他的硬件环境下的文件操作耗时可能更小。</li>
+<li>从第一组数据可以看出来，在N不超过一定范围的时候排序的耗时是接近稳定的，而一旦超过了这个范围，排序的耗时情况便不再那么有序，而对应的方差也明显变大。也就是说，这个排序程序实在一定范围内使用效果比较好，而超出这个范围也可以用，不过耗时可能便不那么容易预测。</li>
+</ul>
+<p>当然有了问题就要寻找解决优化的思路。</p>
+<ul>
+<li>在N小于一定范围时将所有数据都读入主存进行内部排序，减少文件的操作。我测了一下N=1000，即31.25MB的文件，全部读入主存调用头文件<code>algorithm</code>中的<code>std::sort</code>函数进行快速排序，同样测100次取平均数，得到的结果为<strong>2.78071
+s</strong>，要略小于外部排序的<strong>3.0785 s</strong>。</li>
+<li>由第一组测试图表可以看出，对总耗时影响最大的是归并的部分，所以我们可以针对顺串归并做一些优化。比如在主存允许的情况下采用更多路的归并，减少归并的次数。也可以优化查找最小值的办法，因为查找操作会重复非常多次，我们可以设法维护一种数据结构来实现快速查找多个元素的最小值：最小堆，BIT等数据结构。</li>
+<li>对于顺串的建立部分可以想办法在置换选择算法的基础上针对特殊情况进行改进，使得产生的顺串尽可能少。而产生的顺串可以存在不同的文件中方便归并的操作，不一定要存在一个文件中。</li>
+</ul>
+<h2 id="结语">结语</h2>
+<p>至此，我比较详细的描述了外部排序的一种算法的实现以及其性能的测试，也提出了一些改进的拙见。当然文章中算法部分的内容是参考了<em>Clifford
+A. Shaffer</em>的<strong><a target="_blank" rel="noopener" href="https://www.amazon.cn/dp/B00BR1VKXC/ref=sr_1_2?ie=UTF8&amp;qid=1547548378&amp;sr=8-2&amp;keywords=clifford+a.+shaffer">数据结构与算法分析(C++版)(第三版)英文版</a></strong>中<strong>8.5
+External
+Sorting</strong>的内容，我没有在网上找到该书原版的电子版，中文版倒是有，不过看过一点觉得翻译的质量并不高，所以希望大家有精力还是能够看一下这本书，这可能是我第一本一个词一个词啃了大半本的英文书了。</p>
+<h3 id="特别感谢">特别感谢</h3>
+<p>由于近期大家都在进行期末的备考，我也是终于有了大把的时间来做一些项目写一些内容。就这个题目而言，真正花费时间的不是程序的编写，而是数据的测试。曾经有连续三天的时间我几乎都在反复测试程序的性能，但到最后发现测试的脚本有问题，所以为了节省时间，我把测试的数据范围分成了很多小份，分别发给了同学进行测试，所以在这里感谢给我提供帮助的同学：</p>
+<div class="note note-primary">
+            <pre><code class="hljs">        &lt;input type="checkbox"  checked="checked"&gt;&lt;em&gt;Weijun-Lin&lt;/em&gt; (&lt;a</code></pre>
+<p>href="https://github.com/Weijun-Lin"&gt;Github)</p>
+<pre><code class="hljs">        &lt;input type="checkbox"  checked="checked"&gt;&lt;em&gt;Marikruz&lt;/em&gt; (&lt;a</code></pre>
+<p>href="https://github.com/Marikruz"&gt;Github)</p>
+<pre><code class="hljs">        &lt;input type="checkbox"  checked="checked"&gt;&lt;em&gt;KIIIKIII&lt;/em&gt; (&lt;a</code></pre>
+<p>href="https://github.com/KIIIKIII"&gt;Github)</p>
+          </div>
+<h3 id="题外话">题外话</h3>
+<p>说到这次的题目是我们DSAA课程lab3的第二个问题，该课的任课老师也是我的班主任，所以我也是对这门课格外上心，老师也非常负责，除了布置作业之外也给我们布置了三次lab。每次lab只有三四道实验题目，虽然我们有专门的数据结构实验课，但是显然，那个实验课的实验题目要比这个理论课的lab难度要小的多(至少我这么认为)。我还有另一篇文章是写了数据结构实验课的一个题目内容，不过文章的重点显然不在Huffman编码算法上，详细的见<a target="_blank" rel="noopener" href="https://herixth.top/2018/12/04/HuffmanFilestructure.html">Huffman编码压缩文件时的文件储存结构</a>。</p>
+<p>而DSAA理论课的lab确实给我留下了一些比较深的印象，我也确实从里面学到了一些东西。比如lab2里的<a target="_blank" rel="noopener" href="https://herixth.top/2018/11/20/DecisionTree.html">Decision
+Tree</a>(这是当时我的实验报告，主要就是看一下题目)，虽然这很难说是机器学习的入门，不过写过决策树之后直接给了我很大的信心去攻克了全连接神经网络的算法并在期末考试前完成了全连接神经网络手写体数字识别的项目(<a target="_blank" rel="noopener" href="https://github.com/Herixth/Handwritten-digit-recognition-CPP">Handwritten-digit-recognition-CPP</a>)。还有就是这次的外部排序，虽然这可能并不是考试的重点，但他确实是让我学到了一些关于内存和主存缓冲区方面的内容，更重要的是锻炼了我程序设计和实现的能力。</p>
+<p>每次的lab程序都需要在课堂上上台展示，这次的外部排序我也是代表小组去展示，但是演示程序的时候忽略了一点，导致测试N为1000规模的时候竟然跑了40多秒，现在的测试结果是3秒左右，而跟我们组竞争的小组他们的测试耗时也远小于40秒，这我也觉得很是尴尬，明明同样的算法思路居然效果差这么多。而到后来我才知道原因，因为我是用VS2017编译得到的可执行文件，在编译的时候一直用的<strong>Debug</strong>模式，这种条件下编译器不会对程序进行任何优化，而且会保存所有的调试信息以便进一步调试，而选择<strong>Release</strong>模式后编译，编译器会自动把程序优化，省去调试细节可以实现最好的效果。在<strong>Release</strong>下编译后程序不知道快了多少倍，这是展示几周之后同学告诉我的，也很遗憾当初没有用最好状态的程序进行演示。而更遗憾的是，当初展示的时候我几乎没有做多点测试，更没有做出图表这样可视化的变化趋势，所以连性能的分析也没有，明明我当时有时间去做但是就没想到。以后有这样的事情我就争取能做的更好吧。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/C/" class="print-no-link">#C++</a>
+      
+        <a href="/tags/%E7%AE%97%E6%B3%95/" class="print-no-link">#算法</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>外部排序及性能测试</div>
+      <div>https://blog.scubot.com/article/409/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>贺翔/CarOL</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年1月12日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/article/61319/" title="简单疏散模型(2019美赛)">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">简单疏散模型(2019美赛)</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/article/7421/" title="基本空间向量搜索引擎理论(译)">
+                        <span class="hidden-mobile">基本空间向量搜索引擎理论(译)</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="cusdis" style="width:100%">
+    <div id="cusdis_thread"
+      data-host="https://cusdis.com"
+      data-app-id="280bc35a-0483-4140-964a-ea45d33e7643"
+      data-page-id="37ab06a2d03cbbe10394442b0287de3f"
+      data-page-url="article/409/"
+      data-page-title="外部排序及性能测试"
+      data-theme="auto"
+    >
+    </div>
+  </div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#cusdis_thread', function() {
+      Fluid.utils.createScript('https://cusdis.com/js/widget/lang/zh-cn.js');
+      Fluid.utils.createScript('https://cusdis.com/js/cusdis.es.js');
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema) {
+        document.querySelector('#cusdis_thread').dataset.theme = schema
+      }
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> <div> <a href="https://beian.miit.gov.cn" target="_blank" rel="nofollow noopener"><span>蜀ICP备2022022819号</span></a> </div> 站点访问量 <span id="qexo-site-pv">Loading...</span> |  站点访客数 <span id="qexo-site-uv">Loading...</span> |  页面访问量 <span id="qexo-page-pv">Loading...</span> <script src="https://cdn.jsdelivr.net/npm/qexo-static@1.6.0/hexo/statistic.js"></script> <script> loadStatistic("https://qexo.scubot.com") </script> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":true,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  var relativeDate = function() {
+    var updatedTime = document.getElementById('updated-time');
+    if (updatedTime) {
+      var text = updatedTime.textContent;
+      var reg = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})/;
+      var matchs = text.match(reg);
+      if (matchs) {
+        var relativeTime = moment(matchs[0]).fromNow();
+        updatedTime.textContent = text.replace(reg, relativeTime);
+      }
+      updatedTime.style.display = '';
+    }
+  };
+  Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/moment.min.js', function() {
+    if (!'zh-cn'.startsWith('en')) {
+      Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/locale/zh-cn.min.js', function() {
+        relativeDate();
+      });
+    } else {
+      relativeDate();
+    }
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

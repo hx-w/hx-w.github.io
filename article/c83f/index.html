@@ -1,0 +1,967 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="https://blog-1256946954.cos.ap-chengdu.myqcloud.com/image/logo.png">
+  <link rel="icon" href="https://blog-1256946954.cos.ap-chengdu.myqcloud.com/image/logo.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="贺翔/CarOL">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="文件结构 说明  该文件结构针对ASCII码设计，字符的种类数设为\(N\)，由于ASCII码中可显示字符十进制编码范围是\([32,126]\) , 共\(95\)种，考虑进少量不可见字符则\(N_{max}&#x3D;127\)，又因为对于Huffman编码，如果\(N\leq2\)则编码没有任何效果，所以可设置范围\(N \in [3,127]\)。 设源文件大小不超过4GB(\(2^{32}\tex">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Huffman编码压缩文件时的文件储存结构">
+<meta property="og:url" content="https://blog.scubot.com/article/c83f/index.html">
+<meta property="og:site_name" content="CarOL的小站">
+<meta property="og:description" content="文件结构 说明  该文件结构针对ASCII码设计，字符的种类数设为\(N\)，由于ASCII码中可显示字符十进制编码范围是\([32,126]\) , 共\(95\)种，考虑进少量不可见字符则\(N_{max}&#x3D;127\)，又因为对于Huffman编码，如果\(N\leq2\)则编码没有任何效果，所以可设置范围\(N \in [3,127]\)。 设源文件大小不超过4GB(\(2^{32}\tex">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-12-03T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-08-20T00:57:09.092Z">
+<meta property="article:author" content="贺翔&#x2F;CarOL">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Huffman编码压缩文件时的文件储存结构 - CarOL的小站</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.scubot.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":true,"trickleSpeed":100}},"code_language":{"enable":true,"default":"txt"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="CarOL的小站" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>CarOL的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/atom.xml/" target="_self">
+                <i class="iconfont icon-rss"></i>
+                <span>rss</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于我</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/about/" target="_self">
+                    
+                    <span>我自己</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="https://running-page-blond.vercel.app/" target="_self">
+                    
+                    <span>跑步记录</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-book"></i>
+                <span>图书</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/" target="_self">
+                    
+                    <span>导读</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/detective/" target="_self">
+                    
+                    <span>推理小说</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://imgbed.scubot.com/ru') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Huffman编码压缩文件时的文件储存结构"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        贺翔/CarOL
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-12-04 00:00" pubdate>
+          2018年12月4日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          2.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          20 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Huffman编码压缩文件时的文件储存结构</h1>
+            
+              <p id="updated-time" class="note note-info" style="display: none">
+                
+                  
+                    <!-- compatible with older versions-->
+                    本文最后更新于：2024-08-20T08:57:09+08:00
+                  
+                  
+
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="文件结构">文件结构</h1>
+<h3 id="说明">说明</h3>
+<ul>
+<li>该文件结构针对ASCII码设计，字符的种类数设为<span class="math inline">\(N\)</span>，由于ASCII码中可显示字符十进制编码范围是<span class="math inline">\([32,126]\)</span> , 共<span class="math inline">\(95\)</span>种，考虑进少量不可见字符则<span class="math inline">\(N_{max}=127\)</span>，又因为对于Huffman编码，如果<span class="math inline">\(N\leq2\)</span>则编码没有任何效果，所以可设置范围<span class="math inline">\(N \in [3,127]\)</span>。</li>
+<li>设源文件大小不超过4GB(<span class="math inline">\(2^{32}\text{
+bytes}\)</span>)，又因为<span class="math inline">\(N&gt;2\)</span>，所以在平均情况下所有文本中的字符的频数都可以用32位整数表示为<span class="math inline">\(M_i\)</span>。</li>
+<li>由于Huffman编码方式确定，源文件文本对应的Huffman编码不可变，则设Huffman编码的长度为<span class="math inline">\(HLen\)</span>。</li>
+<li>用存储所有字符-频数键值对的方式间接表示原Huffman树结构，解压时先根据键值对构建Huffman树再进行解压操作以得到原文件。</li>
+<li>Huffman编码中最后一个字节设为<span class="math inline">\(HuffLast\)</span>，由于$HuffLast <span class="math inline">\(中存在编码余位不足8而补位的情况，故设\)</span>HuffLast[7:loc]<span class="math inline">\(为编码，而\)</span>HuffLast[loc-1,0]<span class="math inline">\(为补位，其中\)</span>loc<span class="math inline">\(，特别地，当\)</span>loc=0<span class="math inline">\(时表示\)</span>HuffLast$中没有补位。</li>
+<li>设每一个字符-频数对为<span class="math inline">\((K_i,
+M_i)\)</span>，其中<span class="math inline">\(M_i\)</span>经过计算后可得到等价的<span class="math inline">\(V_i\)</span>，所以字符-频数对<span class="math inline">\((K_i,M_i)\)</span>可转换成键值对<span class="math inline">\((K_i,V_i)\)</span>，则<span class="math inline">\(Pair=\{(K_1,
+V_1),(K_2,V_2),\dots,(K_N,V_N)\}\)</span>。</li>
+<li>在该文件结构下，文件大小为<span class="math inline">\((2\cdot N +
+HLen / 8 - 1)\)</span> bytes.</li>
+</ul>
+<span id="more"></span>
+<h3 id="整体结构">整体结构</h3>
+<table>
+<thead>
+<tr>
+<th>名称(简称)</th>
+<th>占用空间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>所有键值对集合(<span class="math inline">\(Pair\)</span>)</td>
+<td><span class="math inline">\((2 \cdot N - 1)\)</span> bytes</td>
+</tr>
+<tr>
+<td>文本Huffman编码(<span class="math inline">\(Huff\)</span>)</td>
+<td><span class="math inline">\((HLen/8)\)</span> bytes</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="pair"><span class="math inline">\(Pair\)</span></h3>
+<p><span class="math inline">\(Pair\)</span>为所有字符-频数变形后的键值对的集合。集合大小<span class="math inline">\(N &gt; 2\)</span>。</p>
+<p>对于<span class="math inline">\(Pair\)</span>中的除<span class="math inline">\((K_1,V_1)\)</span>外每一个元素<span class="math inline">\(Pair[i]=(K_i,V_i)\)</span>，分配2个字节。</p>
+<ul>
+<li>第一个字节表示该字符即<span class="math inline">\(K_i\)</span>。</li>
+<li>第二个字节表示该字符对应原文本中出现的频数<span class="math inline">\(M_i\)</span>的变形<span class="math inline">\(V_i\)</span>。</li>
+</ul>
+<blockquote>
+<p><span class="math inline">\((K_1,V_1)\)</span>只分配一个字节存<span class="math inline">\(K_1\)</span>，不存<span class="math inline">\(V_1\)</span>。</p>
+</blockquote>
+<p>由于每个字符在原文本中出现的频数<span class="math inline">\(M_i\)</span>属于32位整数，占四个字节，但是结合Huffman树构建的原理可将频数压缩至只占一个字节的<span class="math inline">\(V_i\)</span>。</p>
+<h5 id="pair的计算与存储"><span class="math inline">\(Pair\)</span>的计算与存储</h5>
+<ol type="1">
+<li><p>定义<span class="math inline">\((K_i,M_i)&lt;(K_j,M_j) \text{ : }
+M_i &lt;M_j \text{ or } (M_i=M_j \text{ and }
+K_i&lt;K_j)\)</span>。将字符-频数集合按升序排序后得到新的序列<span class="math inline">\(\{(K_1,M_1),(K_2,M_2),\dots,(K_N,M_N)\}\)</span>。</p></li>
+<li><p>设函数<span class="math inline">\(f(M_i)\)</span>: <span class="math display">\[
+f(M_i) = \begin{cases}
+1 &amp;&amp; i = 1 \\[2ex]
+M_{i-1} / M_{i} &amp;&amp; i\in[2,N]
+\end{cases}
+\]</span> &gt; 当<span class="math inline">\(i=1\)</span>时，设<span class="math inline">\(V_i=C\cdot f(M_i)=C\text{ 其中C为常数}\)</span>。
+&gt; &gt; 当<span class="math inline">\(i&gt;1\)</span>时，<span class="math inline">\(0&lt;f(M_i) &lt; 1\)</span>，设<span class="math inline">\(V_i\)</span>表示<span class="math inline">\(f(M_i)\)</span>小数点后前8位小数，精度为<span class="math inline">\(1/2^8 = 0.0039\)</span>。</p>
+<p>综上可得到有序序列<span class="math inline">\(V=\{i\in[1,N]\mid
+V_i\}\)</span>。</p></li>
+<li><p>由于<span class="math inline">\(K_i\)</span>表示字符种类，范围为ASCII码前127位，则<span class="math inline">\(Ki\)</span>最高位<span class="math inline">\(K_i[7]\)</span>不参与字符种类表示。由于键值对个数为<span class="math inline">\(N\)</span>，对<span class="math inline">\(K_i[7]\)</span>进行标记，使得以下关系成立： <span class="math display">\[
+((i &lt; N-1 \wedge \forall x\in[1,i])\to K_x[7]=0)\wedge K_{N-1}[7] = 1
+\]</span> 即对于前<span class="math inline">\(N-1\)</span>个键值对除了<span class="math inline">\(K_{N-1}[7]=1\)</span>，其余<span class="math inline">\(K\)</span>的最高为都为0。通过这种方法就可以判断出<span class="math inline">\(N\)</span>的大小。</p></li>
+<li><p>对于<span class="math inline">\(K_N[7]\)</span>进行标记。</p>
+<p><span class="math display">\[
+K_N[7]=\begin{cases}
+0 &amp; loc=0 \\[2ex]
+1 &amp; loc &gt; 0
+\end{cases}
+\]</span> 即可以来表示<span class="math inline">\(HuffLast\)</span>中是否有补位。</p></li>
+<li><p>综上所述可以得到$Pair={i(K_i, V_i)} <span class="math inline">\(，在存储时由于\)</span>V_1=C<span class="math inline">\(，\)</span>C<span class="math inline">\(可以任取，故存储时略过\)</span> V_1
+$。可得到占用空间为<span class="math inline">\(2\cdot N-1\)</span>
+bytes。</p></li>
+</ol>
+<hr>
+<h3 id="huff"><span class="math inline">\(Huff\)</span></h3>
+<p>对于长度为<span class="math inline">\(HLen\)</span>的二进制编码，每8位为一个字节以unsigned
+char类型储存进文件，对于最后不足8位的编码，长度满足 $ HLen 8 = (8 - loc)
+8 <span class="math inline">\(。
+由\)</span>K_N[7]<span class="math inline">\(可得\)</span>loc<span class="math inline">\(得两种状态，\)</span>loc=0<span class="math inline">\(时\)</span>HuffLast<span class="math inline">\(全是编码不用特殊处理；\)</span>loc=1<span class="math inline">\(时对补位\)</span>HuffLast[loc-1, 0]<span class="math inline">\(进行处理，使以下关系成立:\)</span>$ ((loc&gt;1
+x)HuffLast[x]=1) ((loc)HuffLast[loc-1]=0) $$</p>
+<p>即</p>
+<p><span class="math display">\[
+HuffLast[x]=\begin{cases} 1 &amp;&amp; loc &gt; 1 \text{ and }
+x\in[0,loc-2] \\[2ex] 0 &amp;&amp; loc \geq 1 \text{ and } x =
+loc-1\end{cases}
+\]</span></p>
+<p>用这种方法可以仅用一个额外的bit(<span class="math inline">\(K_N[7]\)</span>)，配合补位的内容就可以把<span class="math inline">\(HuffLast\)</span>中补位的个数表示出来。</p>
+<hr>
+<h3 id="总结">总结</h3>
+<p>用<span class="math inline">\(V_i\)</span>表示<span class="math inline">\(M_i\)</span>时由于二进制小数位数的限制会有精度的损失，故<span class="math inline">\(V_i\)</span>可能略小于$ M_{i-1}/M_{i} <span class="math inline">\(，而且\)</span>V_i<span class="math inline">\(的值仅和\)</span>M_{i-1}<span class="math inline">\(有关，而还原时是进行\)</span>M^{d}<em>i=M^{d}</em>{i-1}/V_i
+<span class="math inline">\(，会对通过\)</span> M^{d}_{i-1} <span class="math inline">\(对\)</span>V_i<span class="math inline">\(精度的误差进行累积，这两点共同导致还原出的\)</span>
+M^{d}_i <span class="math inline">\(略大于\)</span> M_i $。</p>
+<p>但是由于Huffman编码过程并不需要准确的<span class="math inline">\(M_i\)</span>，仅仅需要保存$ { iM_i }$
+各有可能的不相交子集元素之和大小关系，故这种方式在大概率下不会导致所建Huffman树与原树不同，也就保证了解压后文本的正确性。</p>
+<hr>
+<h3 id="代码片段huff.h">代码片段(Huff.h)</h3>
+<blockquote>
+<p>2018-12-06更新: 感谢室友的测试，已经更改了一些bug -
+修复了各种状态转移间的信息未清空的问题。 -
+修复了二进制小数转化的部分的临界问题。 -
+修复了如果huffman编码部分没有补位，文件末尾仍有一个空字符的问题。 -
+通过测试采用<code>initC</code> = 2替换原来的4。</p>
+</blockquote>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fstream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;algorithm&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;queue&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cmath&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;map&gt;</span></span><br><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SHOW_DETAIL</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> COMPRESS   0x1</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> DECOMPRESS 0x2</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> EXIT       0x3</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BITSIZE    0x8</span><br><br><span class="hljs-type">const</span> <span class="hljs-type">int</span> maxN = <span class="hljs-number">1e4</span> + <span class="hljs-number">1</span>;<br><span class="hljs-type">const</span> <span class="hljs-type">int</span> initC = <span class="hljs-number">2</span>;<br><span class="hljs-type">int</span> timestamp;<br><br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> <span class="hljs-title">dbToCh</span><span class="hljs-params">(<span class="hljs-type">double</span>)</span></span>;<br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">double</span> <span class="hljs-title">chToDb</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>)</span></span>;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">VarAndFrec</span> {<br>    <span class="hljs-type">char</span> var;<br>    <span class="hljs-type">int</span> frec;<br>    <span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span> &lt; (<span class="hljs-type">const</span> VarAndFrec &amp;obj) <span class="hljs-type">const</span> {<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>-&gt;frec &lt; obj.frec;<br>    }<br>    <span class="hljs-built_in">VarAndFrec</span>(<span class="hljs-type">char</span> v = <span class="hljs-string">'\0'</span>, <span class="hljs-type">int</span> f = <span class="hljs-number">0</span>) :<br>        <span class="hljs-built_in">var</span>(v), <span class="hljs-built_in">frec</span>(f) { }<br>    ~<span class="hljs-built_in">VarAndFrec</span>() { }<br>};<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Node</span> {<br>    <span class="hljs-type">int</span> frec;<br>    <span class="hljs-type">bool</span> isLeaf;<br>    <span class="hljs-type">char</span> var;<br>    Node *left;<br>    Node *right;<br><br>    <span class="hljs-built_in">Node</span>(<span class="hljs-type">int</span> frec = <span class="hljs-number">0</span>, <span class="hljs-type">char</span> var = <span class="hljs-string">'\0'</span>) :<br>        <span class="hljs-built_in">frec</span>(frec), <span class="hljs-built_in">var</span>(var), <span class="hljs-built_in">isLeaf</span>(<span class="hljs-literal">true</span>), <span class="hljs-built_in">left</span>(<span class="hljs-literal">NULL</span>), <span class="hljs-built_in">right</span>(<span class="hljs-literal">NULL</span>) { }<br>    ~<span class="hljs-built_in">Node</span>() { }<br>};<br><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">HuffMan</span> {<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">HuffMan</span>() {<br>        root = <span class="hljs-keyword">new</span> Node;<br>    }<br>    ~<span class="hljs-built_in">HuffMan</span>() { <span class="hljs-built_in">removeAll</span>(root); }<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Operate</span><span class="hljs-params">()</span></span>;<br><br><span class="hljs-keyword">private</span>:<br>    Node *root;<br>    std::map&lt;<span class="hljs-type">char</span>, <span class="hljs-type">int</span>&gt; varToFrec;<br>    std::map&lt;<span class="hljs-type">char</span>, std::string&gt; codeList;<br>    std::ifstream input;<br>    std::ofstream output;<br>    std::string texts;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">removeAll</span><span class="hljs-params">(Node *)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">coding</span><span class="hljs-params">(Node *, std::string)</span></span>;<br><br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">getFilestream</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">buildTree</span><span class="hljs-params">(<span class="hljs-type">bool</span>)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">compress</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">decompress</span><span class="hljs-params">()</span></span>;<br>};<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">HuffMan::removeAll</span><span class="hljs-params">(Node *root)</span> </span>{<br>    <span class="hljs-keyword">if</span> (root == <span class="hljs-literal">NULL</span>) <span class="hljs-keyword">return</span>;<br><br>    <span class="hljs-built_in">removeAll</span>(root-&gt;left);<br>    <span class="hljs-built_in">removeAll</span>(root-&gt;right);<br><br>    <span class="hljs-keyword">delete</span> root;<br>}<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">HuffMan::coding</span><span class="hljs-params">(Node *root, std::string code)</span> </span>{<br>    <span class="hljs-keyword">if</span> (root-&gt;isLeaf) {<br>        codeList[root-&gt;var] = code;<br>        <span class="hljs-keyword">return</span>;<br>    }<br>    <span class="hljs-built_in">coding</span>(root-&gt;left, code + <span class="hljs-string">"0"</span>);<br>    <span class="hljs-built_in">coding</span>(root-&gt;right, code + <span class="hljs-string">"1"</span>);<br>}<br><br><br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">HuffMan::getFilestream</span><span class="hljs-params">()</span> </span>{<br>    std::string getin = <span class="hljs-string">""</span>, getout = <span class="hljs-string">""</span>;<br><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Please input source file name(size less than 4GB)\n&gt;&gt; "</span>);<br>    <span class="hljs-built_in">getline</span>(std::cin, getin);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Please input code file name\n&gt;&gt; "</span>);<br>    <span class="hljs-built_in">getline</span>(std::cin, getout);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"\n"</span>);<br><br>    input.<span class="hljs-built_in">open</span>(getin.<span class="hljs-built_in">c_str</span>(), std::ios::in | std::ios::binary);<br>    output.<span class="hljs-built_in">open</span>(getout.<span class="hljs-built_in">c_str</span>(), std::ios::out | std::ios::binary);<br><br>    <span class="hljs-keyword">return</span> input.<span class="hljs-built_in">good</span>();<br>}<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">HuffMan::buildTree</span><span class="hljs-params">(<span class="hljs-type">bool</span> sign = <span class="hljs-literal">true</span>)</span> </span>{<br>    <span class="hljs-comment">// read text</span><br>    <span class="hljs-keyword">if</span> (sign) {<br>        <span class="hljs-type">char</span> alpha = <span class="hljs-string">'\0'</span>;<br>        varToFrec.<span class="hljs-built_in">clear</span>();<br>        <span class="hljs-keyword">while</span> (input.<span class="hljs-built_in">get</span>(alpha)) {<br>            texts += alpha;<br>            varToFrec.<span class="hljs-built_in">find</span>(alpha) != varToFrec.<span class="hljs-built_in">end</span>() ?<br>                varToFrec[alpha] ++ : varToFrec[alpha] = <span class="hljs-number">1</span>;<br>        }<br>        <span class="hljs-keyword">if</span> (varToFrec.<span class="hljs-built_in">size</span>() &lt; <span class="hljs-number">3</span>) {<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"File no need to be compressed!\n"</span>);<br>            <span class="hljs-keyword">return</span>;<br>        }<br>    }<br>    <span class="hljs-comment">//</span><br><span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> SHOW_DETAIL</span><br>    std::map&lt;<span class="hljs-type">char</span>, <span class="hljs-type">int</span>&gt;::iterator mpiter = varToFrec.<span class="hljs-built_in">begin</span>();<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"char     frec\n"</span>);<br>    <span class="hljs-keyword">for</span> (; mpiter != varToFrec.<span class="hljs-built_in">end</span>(); mpiter++) {<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">" %c        %d\n"</span>, mpiter-&gt;first, mpiter-&gt;second);<br>    }<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span> <span class="hljs-comment">// SHOWDETAIL</span></span><br><br>    <span class="hljs-comment">// build queue</span><br>    <span class="hljs-built_in">removeAll</span>(root);<br>    root = <span class="hljs-keyword">new</span> Node;<br>    std::map&lt;std::pair&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;, Node *&gt; priQ;<br>    <span class="hljs-comment">// init</span><br>    std::map&lt;<span class="hljs-type">char</span>, <span class="hljs-type">int</span>&gt;::iterator iter = varToFrec.<span class="hljs-built_in">begin</span>();<br>    <span class="hljs-keyword">for</span> (; iter != varToFrec.<span class="hljs-built_in">end</span>(); iter++) {<br>        priQ[std::<span class="hljs-built_in">pair</span>&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;(iter-&gt;second, timestamp++)] = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>(iter-&gt;second, iter-&gt;first);<br>    }<br>    <span class="hljs-keyword">while</span> (priQ.<span class="hljs-built_in">size</span>() &gt; <span class="hljs-number">1</span>) {<br>        Node *fir = priQ.<span class="hljs-built_in">begin</span>()-&gt;second; priQ.<span class="hljs-built_in">erase</span>(priQ.<span class="hljs-built_in">begin</span>());<br>        Node *sec = priQ.<span class="hljs-built_in">begin</span>()-&gt;second; priQ.<span class="hljs-built_in">erase</span>(priQ.<span class="hljs-built_in">begin</span>());<br><br>        Node *inter = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Node</span>(fir-&gt;frec + sec-&gt;frec);<br>        inter-&gt;isLeaf = <span class="hljs-literal">false</span>;<br>        inter-&gt;left = fir-&gt;frec &lt; sec-&gt;frec ? fir : sec;<br>        inter-&gt;right = fir-&gt;frec &lt; sec-&gt;frec ? sec : fir;<br><br>        priQ[std::<span class="hljs-built_in">pair</span>&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;(inter-&gt;frec, timestamp++)] = inter;<br>    }<br><br>    root = priQ.<span class="hljs-built_in">begin</span>()-&gt;second; priQ.<span class="hljs-built_in">clear</span>();<br>}<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">HuffMan::compress</span><span class="hljs-params">()</span> </span>{<br>    codeList.<span class="hljs-built_in">clear</span>();<br>    <span class="hljs-built_in">coding</span>(root, <span class="hljs-string">""</span>);<br><br><span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> SHOW_DETAIL</span><br>    std::map&lt;<span class="hljs-type">char</span>, std::string&gt;::iterator iter = codeList.<span class="hljs-built_in">begin</span>();<br>    <span class="hljs-keyword">for</span> (; iter != codeList.<span class="hljs-built_in">end</span>(); iter++) {<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">" %c     %s\n"</span>, iter-&gt;first, iter-&gt;second.<span class="hljs-built_in">c_str</span>());<br>    }<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span> <span class="hljs-comment">// SHOW_DETAIL</span></span><br><br>    std::string LastCode = <span class="hljs-string">""</span>;<br>    <span class="hljs-keyword">for</span> (std::string::iterator iter = texts.<span class="hljs-built_in">begin</span>(); iter != texts.<span class="hljs-built_in">end</span>(); iter++) {<br>        LastCode += codeList[*iter];<br>    }<br><br>    <span class="hljs-type">int</span> recLen = LastCode.<span class="hljs-built_in">length</span>();<br>    <span class="hljs-comment">/************ Pair ****************/</span><br>    <span class="hljs-type">int</span> PairNum = varToFrec.<span class="hljs-built_in">size</span>();<br>    VarAndFrec FTV[maxN];<br>    std::map&lt;<span class="hljs-type">char</span>, <span class="hljs-type">int</span>&gt;::iterator iterC = varToFrec.<span class="hljs-built_in">begin</span>();<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> inc = <span class="hljs-number">0</span>; iterC != varToFrec.<span class="hljs-built_in">end</span>(); iterC++, inc++) {<br>        FTV[inc] = <span class="hljs-built_in">VarAndFrec</span>(iterC-&gt;first, iterC-&gt;second);<br>    }<br>    std::<span class="hljs-built_in">sort</span>(FTV, FTV + PairNum);<br><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> idx = <span class="hljs-number">0</span>; idx &lt; PairNum; idx++) {<br>        <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> K_i = FTV[idx].var, V_i = <span class="hljs-string">'\0'</span>;<br>        <span class="hljs-keyword">if</span> (idx == PairNum - <span class="hljs-number">1</span>) {<br>            K_i |= (recLen % BITSIZE != <span class="hljs-number">0</span>) &lt;&lt; (BITSIZE - <span class="hljs-number">1</span>);<br>        }<br>        <span class="hljs-keyword">else</span> {<br>            K_i |= (idx == PairNum - <span class="hljs-number">2</span>) ? <span class="hljs-number">0x80</span> : <span class="hljs-number">0x00</span>;<br>        }<br><br>        output &lt;&lt; K_i;<br>        <span class="hljs-keyword">if</span> (idx) {<br>            V_i = <span class="hljs-built_in">dbToCh</span>(<span class="hljs-number">1.0</span> * FTV[idx - <span class="hljs-number">1</span>].frec / FTV[idx].frec);<br>            output &lt;&lt; V_i;<br>        }<br>    }<br>    <span class="hljs-comment">/************ Pair ****************/</span><br><br>    <span class="hljs-type">int</span> len = recLen / BITSIZE;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> inc = <span class="hljs-number">0</span>; inc &lt; len; inc++) {<br>        <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> Tm = <span class="hljs-string">'\0'</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> snc = <span class="hljs-number">0</span>; snc &lt; BITSIZE; snc++) {<br>            Tm |= (<span class="hljs-built_in">int</span>(*(LastCode.<span class="hljs-built_in">begin</span>() + inc * BITSIZE + snc) - <span class="hljs-string">'0'</span>) &lt;&lt; snc);<br>        }<br>        output &lt;&lt; Tm; <br>    }<br><br>    <span class="hljs-type">int</span> Modlen = LastCode.<span class="hljs-built_in">length</span>() % BITSIZE;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> Ch = <span class="hljs-string">'\0'</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> inc = <span class="hljs-number">0</span>; inc &lt; BITSIZE; inc++) {<br>        <span class="hljs-keyword">if</span> (inc &lt; Modlen)<br>            Ch |= (<span class="hljs-built_in">int</span>(*(LastCode.<span class="hljs-built_in">begin</span>() + len * BITSIZE + inc) - <span class="hljs-string">'0'</span>) &lt;&lt; inc);<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (inc &gt; Modlen)<br>            Ch |= (<span class="hljs-number">0x1</span> &lt;&lt; inc);<br>    }<br><br>    <span class="hljs-keyword">if</span> (Modlen)<br>        output &lt;&lt; Ch;<br><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Compress succeed!\n"</span>);<br><br>    input.<span class="hljs-built_in">close</span>();<br>    output.<span class="hljs-built_in">close</span>();<br>}<br><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">HuffMan::decompress</span><span class="hljs-params">()</span> </span>{<br>    std::string line;<br>    std::string text;<br>    <span class="hljs-type">bool</span> needEnter = <span class="hljs-literal">false</span>;<br>    <span class="hljs-keyword">while</span> (std::<span class="hljs-built_in">getline</span>(input, line)) {<br>        <span class="hljs-keyword">if</span> (needEnter) line = <span class="hljs-string">"\n"</span> + line;<br>        text += line;<br>        needEnter = <span class="hljs-literal">true</span>;<br>    }<br><br>    <span class="hljs-type">int</span> KVpairNum = <span class="hljs-number">0</span>, loc = <span class="hljs-number">0</span>;<br>    <span class="hljs-type">int</span> nextStop = <span class="hljs-number">0</span>;<br>    <span class="hljs-comment">// Read Pair</span><br>    varToFrec.<span class="hljs-built_in">clear</span>();<br>    <span class="hljs-keyword">for</span> (std::string::iterator iter = text.<span class="hljs-built_in">begin</span>(); iter != text.<span class="hljs-built_in">end</span>(); iter++) {<br>        <span class="hljs-keyword">if</span> (iter != text.<span class="hljs-built_in">begin</span>()) {<br>            varToFrec[(*iter) &amp; <span class="hljs-number">0x7F</span>] = std::<span class="hljs-built_in">floor</span>(varToFrec[(*(iter - <span class="hljs-number">1</span> - (varToFrec.<span class="hljs-built_in">size</span>() &gt;= <span class="hljs-number">2</span>))) &amp; <span class="hljs-number">0x7F</span>] / <span class="hljs-built_in">chToDb</span>(*(iter + <span class="hljs-number">1</span>)));<br>            <span class="hljs-keyword">if</span> (nextStop) {<br>                loc = ((*iter) &gt;&gt; (BITSIZE - <span class="hljs-number">1</span>)) &amp; <span class="hljs-number">0x01</span>;<br>                <span class="hljs-keyword">break</span>;<br>            }<br>            <span class="hljs-keyword">else</span> {<br>                nextStop = ((*iter) &gt;&gt; (BITSIZE - <span class="hljs-number">1</span>)) &amp; <span class="hljs-number">0x01</span>;<br>            }<br>            iter++;<br>        }<br>        <span class="hljs-keyword">else</span> {<br>            nextStop = ((*iter) &gt;&gt; (BITSIZE - <span class="hljs-number">1</span>)) &amp; <span class="hljs-number">0x01</span>;<br>            varToFrec[(*iter) &amp; <span class="hljs-number">0x7F</span>] = initC;<br>        }<br>    }<br>    <span class="hljs-built_in">buildTree</span>(<span class="hljs-literal">false</span>);<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> HFLast = *text.<span class="hljs-built_in">rbegin</span>();<br>    <span class="hljs-keyword">if</span> (loc) {<br>        loc = BITSIZE;<br>        <span class="hljs-keyword">while</span> (HFLast &amp; (<span class="hljs-number">1</span> &lt;&lt; (--loc)));<br>    }<br>    <span class="hljs-keyword">else</span> {<br>        loc = BITSIZE;<br>    }<br><br>    <span class="hljs-type">int</span> PairSize = <span class="hljs-number">2</span> * varToFrec.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>;<br>    <span class="hljs-comment">// Read Huffman Code</span><br>    Node *curr = root;<br>    <span class="hljs-keyword">for</span> (std::string::iterator iter = text.<span class="hljs-built_in">begin</span>() + PairSize; iter != text.<span class="hljs-built_in">end</span>(); iter++) {<br>        <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> Tm = *iter;<br>        <span class="hljs-type">int</span> Range = (iter + <span class="hljs-number">1</span> == text.<span class="hljs-built_in">end</span>() ? loc : BITSIZE);<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> inc = <span class="hljs-number">0</span>; inc &lt; Range; inc++) {<br>            curr = ((Tm &gt;&gt; inc) &amp; <span class="hljs-number">0x1</span>) ? curr-&gt;right : curr-&gt;left;<br>            <span class="hljs-keyword">if</span> (curr-&gt;isLeaf) {<br>                output &lt;&lt; curr-&gt;var;<br>                curr = root;<br>            }<br>        }<br>    }<br><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Decompress succeed!\n"</span>);<br><br>    input.<span class="hljs-built_in">close</span>();<br>    output.<span class="hljs-built_in">close</span>();<br>}<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">HuffMan::Operate</span><span class="hljs-params">()</span> </span>{<br>    <span class="hljs-type">bool</span> quit = <span class="hljs-literal">false</span>;<br>    <span class="hljs-type">int</span>  opeNum = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span> (!quit) {<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"-------------------\n"</span>);<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"1. Compress   \n"</span>);<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"2. Decompress \n"</span>);<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"3. Exit       \n"</span>);<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"-------------------\n"</span>);<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"&gt;&gt; "</span>);<br>        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>, &amp;opeNum);<br>        <span class="hljs-built_in">getchar</span>();<br><br>        <span class="hljs-keyword">if</span> (opeNum == COMPRESS) {<br>            <span class="hljs-keyword">if</span> (<span class="hljs-built_in">getFilestream</span>()) {<br>                <span class="hljs-built_in">buildTree</span>();<br>                <span class="hljs-built_in">compress</span>();<br>            }<br>        }<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (opeNum == DECOMPRESS) {<br>            <span class="hljs-keyword">if</span> (<span class="hljs-built_in">getFilestream</span>()) {<br>                <span class="hljs-built_in">decompress</span>();<br>            }<br>        }<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (opeNum == EXIT) {<br>            quit = <span class="hljs-literal">true</span>;<br>        }<br>    }<br>}<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> <span class="hljs-title">dbToCh</span><span class="hljs-params">(<span class="hljs-type">double</span> db)</span> </span>{<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> Ch = <span class="hljs-string">'\0'</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> mv = <span class="hljs-number">0</span>; mv &lt; <span class="hljs-number">8</span>; mv++) {<br>        Ch |= (<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>)((db * <span class="hljs-number">2</span> &gt;= <span class="hljs-number">1</span>) &lt;&lt; (<span class="hljs-number">7</span> - mv));<br>        db = <span class="hljs-number">2</span> * db &gt;= <span class="hljs-number">1</span> ? <span class="hljs-number">2</span> * db - <span class="hljs-number">1</span> : <span class="hljs-number">2</span> * db;<br>    }<br>    <span class="hljs-keyword">return</span> Ch;<br>}<br><br><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">double</span> <span class="hljs-title">chToDb</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> Ch)</span> </span>{<br>    <span class="hljs-type">double</span> db = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> mv = <span class="hljs-number">0</span>; mv &lt; <span class="hljs-number">8</span>; mv++) {<br>        db += <span class="hljs-built_in">pow</span>(<span class="hljs-number">2</span>, mv - <span class="hljs-number">8</span>) * ((Ch &gt;&gt; mv) &amp; <span class="hljs-number">0x01</span>);<br>    }<br>    <span class="hljs-keyword">return</span> db;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AE%97%E6%B3%95/" class="print-no-link">#算法</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Huffman编码压缩文件时的文件储存结构</div>
+      <div>https://blog.scubot.com/article/c83f/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>贺翔/CarOL</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2018年12月4日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/article/7421/" title="基本空间向量搜索引擎理论(译)">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">基本空间向量搜索引擎理论(译)</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/article/36aa/" title="基于ID3算法的决策树实现">
+                        <span class="hidden-mobile">基于ID3算法的决策树实现</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="cusdis" style="width:100%">
+    <div id="cusdis_thread"
+      data-host="https://cusdis.com"
+      data-app-id="280bc35a-0483-4140-964a-ea45d33e7643"
+      data-page-id="d1539ab05f4ed3b7353ca4ebd395327d"
+      data-page-url="article/c83f/"
+      data-page-title="Huffman编码压缩文件时的文件储存结构"
+      data-theme="auto"
+    >
+    </div>
+  </div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#cusdis_thread', function() {
+      Fluid.utils.createScript('https://cusdis.com/js/widget/lang/zh-cn.js');
+      Fluid.utils.createScript('https://cusdis.com/js/cusdis.es.js');
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema) {
+        document.querySelector('#cusdis_thread').dataset.theme = schema
+      }
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> <div> <a href="https://beian.miit.gov.cn" target="_blank" rel="nofollow noopener"><span>蜀ICP备2022022819号</span></a> </div> 站点访问量 <span id="qexo-site-pv">Loading...</span> |  站点访客数 <span id="qexo-site-uv">Loading...</span> |  页面访问量 <span id="qexo-page-pv">Loading...</span> <script src="https://cdn.jsdelivr.net/npm/qexo-static@1.6.0/hexo/statistic.js"></script> <script> loadStatistic("https://qexo.scubot.com") </script> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":true,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  var relativeDate = function() {
+    var updatedTime = document.getElementById('updated-time');
+    if (updatedTime) {
+      var text = updatedTime.textContent;
+      var reg = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})/;
+      var matchs = text.match(reg);
+      if (matchs) {
+        var relativeTime = moment(matchs[0]).fromNow();
+        updatedTime.textContent = text.replace(reg, relativeTime);
+      }
+      updatedTime.style.display = '';
+    }
+  };
+  Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/moment.min.js', function() {
+    if (!'zh-cn'.startsWith('en')) {
+      Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/locale/zh-cn.min.js', function() {
+        relativeDate();
+      });
+    } else {
+      relativeDate();
+    }
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

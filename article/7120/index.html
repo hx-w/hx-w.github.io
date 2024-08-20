@@ -1,0 +1,960 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="https://blog-1256946954.cos.ap-chengdu.myqcloud.com/image/logo.png">
+  <link rel="icon" href="https://blog-1256946954.cos.ap-chengdu.myqcloud.com/image/logo.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="贺翔/CarOL">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="概述 在计算机科学领域，CYK算法（也称为Cocke–Younger–Kasami算法）是一种用来对上下文无关文法（CFG，Context Free Grammar）进行语法分析（parsing）的算法。该算法最早由John Cocke, Daniel Younger and Tadao Kasami分别独立提出，其中John Cocke还是1987年度的图灵奖得主。CYK算法是基于动态规划思想设">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CYK算法实现">
+<meta property="og:url" content="https://blog.scubot.com/article/7120/index.html">
+<meta property="og:site_name" content="CarOL的小站">
+<meta property="og:description" content="概述 在计算机科学领域，CYK算法（也称为Cocke–Younger–Kasami算法）是一种用来对上下文无关文法（CFG，Context Free Grammar）进行语法分析（parsing）的算法。该算法最早由John Cocke, Daniel Younger and Tadao Kasami分别独立提出，其中John Cocke还是1987年度的图灵奖得主。CYK算法是基于动态规划思想设">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://imgbed.scubot.com/CYK-CYK_1.png">
+<meta property="og:image" content="https://imgbed.scubot.com/CYK-CYK_2.png">
+<meta property="article:published_time" content="2019-04-28T11:26:15.000Z">
+<meta property="article:modified_time" content="2024-08-20T00:57:09.091Z">
+<meta property="article:author" content="贺翔&#x2F;CarOL">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://imgbed.scubot.com/CYK-CYK_1.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>CYK算法实现 - CarOL的小站</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.scubot.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":true,"trickleSpeed":100}},"code_language":{"enable":true,"default":"txt"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="CarOL的小站" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>CarOL的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/atom.xml/" target="_self">
+                <i class="iconfont icon-rss"></i>
+                <span>rss</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于我</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/about/" target="_self">
+                    
+                    <span>我自己</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="https://running-page-blond.vercel.app/" target="_self">
+                    
+                    <span>跑步记录</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-book"></i>
+                <span>图书</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/" target="_self">
+                    
+                    <span>导读</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/books/detective/" target="_self">
+                    
+                    <span>推理小说</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://imgbed.scubot.com/ru') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CYK算法实现"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        贺翔/CarOL
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2019-04-28 19:26" pubdate>
+          2019年4月28日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          1.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          11 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">CYK算法实现</h1>
+            
+              <p id="updated-time" class="note note-info" style="display: none">
+                
+                  
+                    <!-- compatible with older versions-->
+                    本文最后更新于：2024-08-20T08:57:09+08:00
+                  
+                  
+
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="概述">概述</h2>
+<p>在计算机科学领域，CYK算法（也称为Cocke–Younger–Kasami算法）是一种用来对上下文无关文法（CFG，Context
+Free Grammar）进行语法分析（parsing）的算法。该算法最早由John Cocke,
+Daniel Younger and Tadao Kasami分别独立提出，其中John
+Cocke还是1987年度的图灵奖得主。CYK算法是基于动态规划思想设计的一种自底向上语法分析算法。</p>
+<span id="more"></span>
+<h2 id="乔姆斯基范式">乔姆斯基范式</h2>
+<p>CNF(Chomsky Normal Form)是一种这样的语法标准： 如果一个CFG <span class="math inline">\(\epsilon-free\)</span>，而且它的规则只有如下两种形式:</p>
+<ul>
+<li><span class="math inline">\(A \rightarrow B C\)</span></li>
+<li><span class="math inline">\(A \rightarrow a\)</span></li>
+</ul>
+<p>那么这个CFG就是CNF形式的，可见CNF语法都是二分叉的。任何语法都可以转化成一个弱等价的CNF形式，具体方法如下：</p>
+<ul>
+<li>Step 1: Convert <span class="math inline">\(A \rightarrow
+Bc\)</span> to <span class="math inline">\(A\rightarrow BC, C\rightarrow
+c\)</span></li>
+<li>Step 2: Convert <span class="math inline">\(A \rightarrow
+BCD\)</span> to <span class="math inline">\(A \rightarrow BX, X
+\rightarrow CD\)</span></li>
+</ul>
+<h2 id="cyk算法">CYK算法</h2>
+<p>CYK算法处理的语法必须是CNF形式的，所以如果输入的是任意文法，那么需要按照前面的步骤把CFG转换成CNF形式。</p>
+<p>CYK算法是用来判断一个字符串是否属于某个CNF语法，故设输入的字符串w长度为n。</p>
+<p>接下来我们需要用程序填一个动态规划的状态转移表，这里我们叫这个表parse
+table。</p>
+<p>parse table的规模为<span class="math inline">\((n + 1) \times
+n\)</span></p>
+<p>我们定义<span class="math inline">\(PT[n + 1][n]\)</span>表示parse
+table，且<span class="math inline">\(PT[n,
+:]\)</span>依次存储字符串w中的每一个符号(<span class="math inline">\(a_1, a_2, \dots, a_n\)</span>)。</p>
+<p><span class="math display">\[
+\begin{pmatrix}
+&amp;   &amp;\dots &amp; \\
+&amp; \vdots &amp;  \ddots &amp; \\
+a_1 &amp; a_2 &amp; \dots &amp;a_n
+\end{pmatrix}
+\]</span></p>
+<p>我们设根据给定CNF，即G能推导出w中第i到第j个字符的串的集合为<span class="math inline">\(x_{i,j}\)</span>。</p>
+<p>为了填写这个表，我们一行一行，自下而上地处理。每一行对应一种长度的子串。最下面一行对应长度为1的子串，倒数第二行对应长度为2的子串，以此类推。最上面一行就对应长度为n的子串，即w本身。计算该表的任何一个表项的方法如下：</p>
+<ol type="1">
+<li>对于最下面一行的元素，即<span class="math inline">\(x_{i,i}\)</span>，是使得<span class="math inline">\(A \rightarrow
+a_i\)</span>是G的产生式的变元A的<strong>集合</strong>。</li>
+<li>对于不在最下面一行的元素，我们需要找到符合以下条件的变元A的集合：
+<ol type="1">
+<li>整数k满足<span class="math inline">\(i \leq k &lt; j\)</span></li>
+<li><span class="math inline">\(B \in X_{i,k}\)</span></li>
+<li><span class="math inline">\(C \in X_{k+1, j}\)</span></li>
+<li><span class="math inline">\(A \rightarrow
+BC\)</span>是G的产生式</li>
+</ol></li>
+</ol>
+<p>根据这样的方法，我们可以填出一个下三角矩阵。</p>
+<p>例如：</p>
+<p>CNF文法G的产生式：</p>
+<p><span class="math display">\[
+S \rightarrow AB|BC \\
+A \rightarrow BA|a \\
+B \rightarrow CC|b \\
+C \rightarrow AB|a
+\]</span> 对L(G)测试字符串<span class="math inline">\(w =
+baaba\)</span>的成员性构造Parse Table如下：</p>
+<p><span class="math display">\[
+\begin{pmatrix}
+x_{1,5}=\{S, A,C\} &amp; &amp; &amp; &amp; \\
+&amp; x_{2,5}=\{S, A, C\} &amp; &amp; &amp; \\
+&amp; x_{2,4}=\{B\} &amp; x_{3,5}=\{B\} &amp; &amp; \\
+x_{1,2} = \{S, A\} &amp; x_{2,3}=\{B\} &amp; x_{3,4}=\{S, C\} &amp;
+x_{4,5}=\{S, A\} &amp;\\
+x_{1,1} = \{B\} &amp; x_{2,2} = \{A, C\} &amp; x_{3,3} =\{A, C\} &amp;
+x_{4,4}=\{B \} &amp; x_{5,5}=\{A,C\} \\
+a_1 = b &amp; a_2 = a &amp; a_3 = a &amp; a_4 = b &amp; a_5 = a
+\end{pmatrix}
+\]</span></p>
+<p>最终得到<span class="math inline">\(x_{1,5}\)</span>集合之后，判断起始变元<span class="math inline">\(S\)</span>是否属于<span class="math inline">\(x_{1,5}\)</span>。如果是，则w可被G接受，反之不接受。</p>
+<h2 id="程序展示">程序展示</h2>
+<blockquote>
+<p>CNF.cfg</p>
+</blockquote>
+<figure class="highlight coq"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs coq">S -&gt; AB<br>A -&gt; BC | <span class="hljs-type">a</span><br>B -&gt; AC | <span class="hljs-type">b</span> <br>C -&gt; a | <span class="hljs-type">b</span> <br></code></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>CYK_algo.py</p>
+</blockquote>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#!usr/bin/env/python 3.6.5</span><br><span class="hljs-comment">#-*- coding: utf-8 -*-</span><br><span class="hljs-string">'''</span><br><span class="hljs-string">Python 3.6.5</span><br><span class="hljs-string">installed module:</span><br><span class="hljs-string">    - tkinter</span><br><span class="hljs-string">'''</span><br><br><span class="hljs-keyword">import</span> re<br><span class="hljs-keyword">import</span> itertools<br><span class="hljs-keyword">import</span> tkinter<br><span class="hljs-keyword">from</span> tkinter <span class="hljs-keyword">import</span> ttk<br><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">CNF</span>(<span class="hljs-title class_ inherited__">object</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-variable language_">self</span>.__rules = {}<br><br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">read_file</span>(<span class="hljs-params">self, filename</span>):<br>        <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(filename, <span class="hljs-string">'r'</span>) <span class="hljs-keyword">as</span> inFile:<br>            <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> inFile.readlines():<br>                line = re.sub(<span class="hljs-string">'[\n\t ]'</span>, <span class="hljs-string">''</span>, line)<br>                rec_begin = line[:line.find(<span class="hljs-string">'-'</span>)]<br>                <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> line[line.find(<span class="hljs-string">'&gt;'</span>) + <span class="hljs-number">1</span>:].split(<span class="hljs-string">'|'</span>):<br>                    <span class="hljs-keyword">if</span> element <span class="hljs-keyword">in</span> <span class="hljs-variable language_">self</span>._CNF__rules:<br>                        <span class="hljs-variable language_">self</span>.__rules[element].append(rec_begin)<br>                    <span class="hljs-keyword">else</span>:<br>                        <span class="hljs-variable language_">self</span>._CNF__rules[element] = [rec_begin]<br><br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">get_inf</span>(<span class="hljs-params">self, tar</span>):<br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">isinstance</span>(tar, <span class="hljs-built_in">list</span>) == <span class="hljs-literal">False</span>: exit()<br>        inf_set = []<br>        <span class="hljs-keyword">for</span> tarEle <span class="hljs-keyword">in</span> tar:<br>            inf_set.extend(<span class="hljs-variable language_">self</span>.__rules.get(tarEle, []))<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">list</span>(<span class="hljs-built_in">set</span>(inf_set))<br><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">CYK</span>(<span class="hljs-title class_ inherited__">object</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, filename</span>):<br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">isinstance</span>(filename, <span class="hljs-built_in">str</span>) == <span class="hljs-literal">False</span>: exit()<br>        <span class="hljs-variable language_">self</span>.__<span class="hljs-built_in">str</span> = <span class="hljs-string">''</span><br>        <span class="hljs-variable language_">self</span>.__srtlen = <span class="hljs-number">0</span><br>        <span class="hljs-variable language_">self</span>.__canvas = [] <br>        <span class="hljs-variable language_">self</span>.__myCNF = CNF() <br>        <span class="hljs-variable language_">self</span>.__myCNF.read_file(filename) <br><br>        <br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">get_str</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-variable language_">self</span>._CYK__str = <span class="hljs-built_in">input</span>(<span class="hljs-string">'input string:\n'</span>).strip() <br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(<span class="hljs-variable language_">self</span>._CYK__str) == <span class="hljs-number">0</span>: exit()<br>        <span class="hljs-variable language_">self</span>._CYK__srtlen = <span class="hljs-built_in">len</span>(<span class="hljs-variable language_">self</span>._CYK__str)<br>        <span class="hljs-comment"># MaxRow == MaxCol + 1 </span><br>        <span class="hljs-variable language_">self</span>._CYK__canvas = <span class="hljs-built_in">list</span>(<span class="hljs-built_in">list</span>([] <span class="hljs-keyword">for</span> tmp <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-variable language_">self</span>._CYK__srtlen)) <span class="hljs-keyword">for</span> tmp <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-variable language_">self</span>._CYK__srtlen + <span class="hljs-number">1</span>))<br>        <span class="hljs-keyword">for</span> <span class="hljs-built_in">iter</span> <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-variable language_">self</span>._CYK__srtlen):<br>            <span class="hljs-variable language_">self</span>._CYK__canvas[<span class="hljs-variable language_">self</span>._CYK__srtlen][<span class="hljs-built_in">iter</span>].append(<span class="hljs-variable language_">self</span>._CYK__str[<span class="hljs-built_in">iter</span>])<br>    <br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">CYK_process</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-comment"># for lowest level</span><br>        <span class="hljs-keyword">for</span> col <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-variable language_">self</span>._CYK__srtlen):<br>            <span class="hljs-variable language_">self</span>._CYK__canvas[<span class="hljs-variable language_">self</span>._CYK__srtlen - <span class="hljs-number">1</span>][col].extend(<span class="hljs-variable language_">self</span>._CYK__myCNF.get_inf(<span class="hljs-variable language_">self</span>._CYK__canvas[<span class="hljs-variable language_">self</span>._CYK__srtlen][col]))<br>        <span class="hljs-comment"># for upper level</span><br>        <span class="hljs-keyword">for</span> row <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-variable language_">self</span>._CYK__srtlen - <span class="hljs-number">2</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>):<br>            <span class="hljs-keyword">for</span> col <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(row + <span class="hljs-number">1</span>):<br>                mid_set = <span class="hljs-built_in">set</span>()<br>                idx_i, idx_j = col + <span class="hljs-number">1</span>, col - row + <span class="hljs-variable language_">self</span>._CYK__srtlen               <br>                <span class="hljs-keyword">for</span> mid_k <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(idx_i, idx_j):<br>                    fir_row, fir_col = idx_i - mid_k - <span class="hljs-number">1</span> + <span class="hljs-variable language_">self</span>._CYK__srtlen, idx_i - <span class="hljs-number">1</span><br>                    sec_row, sec_col = mid_k - idx_j + <span class="hljs-variable language_">self</span>._CYK__srtlen, mid_k<br>                    mid_set |= <span class="hljs-built_in">set</span>(obj[<span class="hljs-number">0</span>] + obj[<span class="hljs-number">1</span>] <span class="hljs-keyword">for</span> obj <span class="hljs-keyword">in</span> itertools.product(<span class="hljs-variable language_">self</span>._CYK__canvas[fir_row][fir_col], <span class="hljs-variable language_">self</span>._CYK__canvas[sec_row][sec_col]))<br>                <span class="hljs-variable language_">self</span>._CYK__canvas[row][col].extend(<span class="hljs-variable language_">self</span>._CYK__myCNF.get_inf(<span class="hljs-built_in">list</span>(mid_set)))<br>        <span class="hljs-comment"># get answer</span><br>        <span class="hljs-keyword">if</span> <span class="hljs-string">'S'</span> <span class="hljs-keyword">in</span> <span class="hljs-variable language_">self</span>._CYK__canvas[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>]:<br>            <span class="hljs-built_in">print</span> (<span class="hljs-string">'%s can be accepted.'</span> % <span class="hljs-variable language_">self</span>._CYK__str)<br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-built_in">print</span> (<span class="hljs-string">'%s can not be accepted.'</span> % <span class="hljs-variable language_">self</span>._CYK__str)<br>    <br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">GUI_show</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-keyword">def</span> <span class="hljs-title function_">exc</span>(<span class="hljs-params">line, step, row</span>):<br>            <span class="hljs-keyword">if</span> <span class="hljs-built_in">isinstance</span>(line, <span class="hljs-built_in">list</span>) == <span class="hljs-literal">False</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">isinstance</span>(line[<span class="hljs-number">0</span>], <span class="hljs-built_in">list</span>) == <span class="hljs-literal">False</span>: exit()<br>            <span class="hljs-keyword">for</span> col <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(line)):<br>                line[col] = <span class="hljs-built_in">str</span>(<span class="hljs-string">'{'</span> + <span class="hljs-string">'%s, '</span> * (<span class="hljs-built_in">len</span>(line[col]) - <span class="hljs-number">1</span>) + <span class="hljs-string">'%s'</span> * (<span class="hljs-built_in">len</span>(line[col]) &gt; <span class="hljs-number">0</span>) + <span class="hljs-string">'}'</span>) % (<span class="hljs-built_in">tuple</span>(line[col]))<br>                <span class="hljs-keyword">if</span> col &lt;= row: line[col] = <span class="hljs-string">'X%d,%d = '</span> % (col + <span class="hljs-number">1</span>, step + col + <span class="hljs-number">1</span>) + line[col]<br>            <span class="hljs-keyword">return</span> (line)<br><br>        <span class="hljs-comment"># default</span><br>        window = tkinter.Tk()<br>        window.geometry(<span class="hljs-string">'800x400'</span>)<br>        window.title(<span class="hljs-string">'CYK algorithm'</span>)<br>        table = ttk.Treeview(window, height = <span class="hljs-number">10</span>, show = <span class="hljs-string">'headings'</span>)<br>        table[<span class="hljs-string">'columns'</span>] = (<span class="hljs-built_in">list</span>(elem <span class="hljs-keyword">for</span> elem <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-variable language_">self</span>._CYK__srtlen)))<br>        <span class="hljs-keyword">for</span> col <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-variable language_">self</span>._CYK__srtlen):<br>            table.column(<span class="hljs-built_in">str</span>(col), width = <span class="hljs-number">100</span>)<br>        <span class="hljs-comment"># y&amp;x scrollbar</span><br>        yscrollbar = tkinter.Scrollbar(window, orient = tkinter.VERTICAL, command = table.yview)<br>        table.configure(yscrollcommand = yscrollbar.<span class="hljs-built_in">set</span>)<br>        yscrollbar.pack(side = tkinter.RIGHT, fill = tkinter.Y)<br><br>        xscrollbar = tkinter.Scrollbar(window, orient = tkinter.HORIZONTAL, command = table.xview)<br>        table.configure(xscrollcommand = xscrollbar.<span class="hljs-built_in">set</span>)<br>        xscrollbar.pack(side = tkinter.TOP, fill = tkinter.X)<br>        <span class="hljs-comment"># insert information</span><br>        <span class="hljs-keyword">for</span> row <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-variable language_">self</span>._CYK__srtlen):<br>            table.insert(<span class="hljs-string">''</span>, row, values = exc(<span class="hljs-variable language_">self</span>._CYK__canvas[row], <span class="hljs-variable language_">self</span>._CYK__srtlen - row - <span class="hljs-number">1</span>, row))<br>        table.insert(<span class="hljs-string">''</span>, <span class="hljs-variable language_">self</span>._CYK__srtlen, values = (<span class="hljs-variable language_">self</span>._CYK__canvas[<span class="hljs-variable language_">self</span>._CYK__srtlen]))<br><br>        <span class="hljs-comment"># end</span><br>        table.pack(side = tkinter.TOP, expand = <span class="hljs-number">1</span>, fill = tkinter.BOTH)<br>        window.mainloop()<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">main</span>():<br>    myCYK = CYK(<span class="hljs-string">'./CNF.cfg'</span>)<br>    myCYK.get_str()<br>    myCYK.CYK_process()<br>    myCYK.GUI_show()<br><br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:<br>    main()<br><br></code></pre></td></tr></tbody></table></figure>
+<p>实验效果：</p>
+<figure>
+<img src="https://imgbed.scubot.com/CYK-CYK_1.png" srcset="/img/loading.gif" lazyload alt="commandline">
+<figcaption aria-hidden="true">commandline</figcaption>
+</figure>
+<figure>
+<img src="https://imgbed.scubot.com/CYK-CYK_2.png" srcset="/img/loading.gif" lazyload alt="GUI">
+<figcaption aria-hidden="true">GUI</figcaption>
+</figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AE%97%E6%B3%95/" class="print-no-link">#算法</a>
+      
+        <a href="/tags/Python/" class="print-no-link">#Python</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CYK算法实现</div>
+      <div>https://blog.scubot.com/article/7120/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>贺翔/CarOL</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年4月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/article/14fd/" title="sourcemod插件开发记录">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">sourcemod插件开发记录</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/article/5630/" title="深入理解奇偶校验">
+                        <span class="hidden-mobile">深入理解奇偶校验</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="cusdis" style="width:100%">
+    <div id="cusdis_thread"
+      data-host="https://cusdis.com"
+      data-app-id="280bc35a-0483-4140-964a-ea45d33e7643"
+      data-page-id="749053553fb6cf38d5f9311e7e187689"
+      data-page-url="article/7120/"
+      data-page-title="CYK算法实现"
+      data-theme="auto"
+    >
+    </div>
+  </div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#cusdis_thread', function() {
+      Fluid.utils.createScript('https://cusdis.com/js/widget/lang/zh-cn.js');
+      Fluid.utils.createScript('https://cusdis.com/js/cusdis.es.js');
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema) {
+        document.querySelector('#cusdis_thread').dataset.theme = schema
+      }
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> <div> <a href="https://beian.miit.gov.cn" target="_blank" rel="nofollow noopener"><span>蜀ICP备2022022819号</span></a> </div> 站点访问量 <span id="qexo-site-pv">Loading...</span> |  站点访客数 <span id="qexo-site-uv">Loading...</span> |  页面访问量 <span id="qexo-page-pv">Loading...</span> <script src="https://cdn.jsdelivr.net/npm/qexo-static@1.6.0/hexo/statistic.js"></script> <script> loadStatistic("https://qexo.scubot.com") </script> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":true,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  var relativeDate = function() {
+    var updatedTime = document.getElementById('updated-time');
+    if (updatedTime) {
+      var text = updatedTime.textContent;
+      var reg = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})/;
+      var matchs = text.match(reg);
+      if (matchs) {
+        var relativeTime = moment(matchs[0]).fromNow();
+        updatedTime.textContent = text.replace(reg, relativeTime);
+      }
+      updatedTime.style.display = '';
+    }
+  };
+  Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/moment.min.js', function() {
+    if (!'zh-cn'.startsWith('en')) {
+      Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/locale/zh-cn.min.js', function() {
+        relativeDate();
+      });
+    } else {
+      relativeDate();
+    }
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>
