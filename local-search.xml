@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>客户端开发-事件流</title>
+    <link href="/article/6477/"/>
+    <url>/article/6477/</url>
+    
+    <content type="html"><![CDATA[<h1 id="背景">背景</h1><p>客户端开发中存在多个实例之间相互通讯的需求。一般这种需求是通过函数调用实现的。而在需要广播消息的场景中，往往需要一个实例向多个实例发送消息。当业务变得复杂时，通讯也变得难以维护。以我工作中实际遇到的问题举例。</p><h2 id="操作回退">操作回退</h2><h2 id="关键帧相关">关键帧相关</h2><h1 id="解决方案">解决方案</h1>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>MacOS中manim安装问题</title>
     <link href="/article/62c3/"/>
     <url>/article/62c3/</url>

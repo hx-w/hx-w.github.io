@@ -6,7 +6,7 @@
   <link href="https://blog.scubot.com/atom.xml" rel="self"/>
   
   <link href="https://blog.scubot.com/"/>
-  <updated>2024-08-20T00:57:09.091Z</updated>
+  <updated>2024-09-01T12:34:49.702Z</updated>
   <id>https://blog.scubot.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>客户端开发-事件流</title>
+    <link href="https://blog.scubot.com/article/6477/"/>
+    <id>https://blog.scubot.com/article/6477/</id>
+    <published>2024-09-01T12:29:24.000Z</published>
+    <updated>2024-09-01T12:34:49.702Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="背景">背景</h1><p>客户端开发中存在多个实例之间相互通讯的需求。一般这种需求是通过函数调用实现的。而在需要广播消息的场景中，往往需要一个实例向多个实例发送消息。当业务变得复杂时，通讯也变得难以维护。以我工作中实际遇到的问题举例。</p><h2 id="操作回退">操作回退</h2><h2 id="关键帧相关">关键帧相关</h2><h1 id="解决方案">解决方案</h1>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;背景&quot;&gt;背景&lt;/h1&gt;
+&lt;p&gt;客户端开发中存在多个实例之间相互通讯的需求。一般这种需求是通过函数调用实现的。
+而在需要广播消息的场景中，往往需要一个实例向多个实例发送消息。当业务变得复杂时，通讯也变得难以维护。
+以我工作中实际遇到的问题举例。&lt;/p&gt;
+&lt;h2 id</summary>
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>MacOS中manim安装问题</title>
@@ -455,29 +479,6 @@ y = \frac{1} {\sqrt x}
     <summary type="html">&lt;h2 id=&quot;概述&quot;&gt;概述&lt;/h2&gt;
 &lt;p&gt;记录描述计算机图形学中 &lt;strong&gt;实时渲染管线&lt;/strong&gt; (Real-time
 Rendering Pipeline)的内容。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="学习记录" scheme="https://blog.scubot.com/categories/%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/"/>
-    
-    
-    <category term="Computer Graphics" scheme="https://blog.scubot.com/tags/Computer-Graphics/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>计算机图形学-着色</title>
-    <link href="https://blog.scubot.com/article/313c/"/>
-    <id>https://blog.scubot.com/article/313c/</id>
-    <published>2020-11-30T11:54:32.000Z</published>
-    <updated>2024-08-20T00:57:09.095Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="概述">概述</h2><p>本文章用来记录计算机图形学中与 <strong>着色(shading)</strong>相关的知识。</p><span id="more"></span><h2 id="着色的定义">着色的定义</h2><p>在绘画过程中引入<strong>明暗</strong>或<strong>颜色</strong>的不同。</p><blockquote><p>"The darkening or coloring of an illustration or diagram withparallel lines or a block of color."</p><p>—Merriam-Webster Dictionary</p></blockquote><p>在计算机图形学中，可以理解为：对不同的物体应用不同材质的过程。</p><h2 id="基础着色模型">基础着色模型</h2><h3 id="blinn-phong光照模型blinn-phong-reflectance-model"><em>Blinn-Phong</em>光照模型—<em>Blinn-Phong</em>Reflectance Model</h3><p><em>Blinn-Phong</em>光照模型认为图像中体现在物体上的光分为三部分：</p><ul><li><strong>高光</strong>(Specular highlights)</li><li><strong>漫反射</strong>(Diffuse reflection)</li><li><strong>环境光</strong>(Ambient lighting)</li></ul><p><img src="https://imgbed.scubot.com/CG-3-1.png" style="zoom:50%;"></p><p>对物体表面的每一个点抽象出以下属性：</p><ul><li>观察方向 <span class="math inline">\(\vec v\)</span></li><li>该点(局部平面)的法线向量 <span class="math inline">\(\vecn\)</span></li><li>光照方向 <span class="math inline">\(\vec l\)</span></li><li>该点(平面)的参数：颜色、反光系数等</li></ul><p><strong>着色操作只考虑物体局部的显示，不将阴影或其他物体考虑在内，即shading</strong><span class="math inline">\(\not =\)</span><strong>shadow</strong>。</p><p>下面介绍<em>Blinn-Phong</em>模型中光照的三个部分。</p><h4 id="漫反射-diffuse-reflection">漫反射 Diffuse reflection</h4><p>对于漫反射考虑以下因素的影响：</p><ol type="1"><li><p>着色点上光的接收</p><p>光是一种能量形式，着色点周围单位面积接受到的光能量越大，显示的就应该越亮。</p><p>根据上述分析引出 <em>Lambert's</em>余弦定理：着色点接受到的光照的强度与光照方向和平面法线方向的余弦成正比。</p><p><img src="https://imgbed.scubot.com/CG-3-2.png"></p></li><li><p>光能量的衰弱</p><p>假设点光源在某一时刻发出的光照能量在三维空间中以球壳形式传播且没有能量损耗，那么根据能量守恒，任意时刻球壳上的光的能量总和都应该相等。</p><p>根据球面积公式<span class="math inline">\(S=4\piR^2\)</span>，着色点距离光源<span class="math inline">\(r\)</span>，着色点收到的光能量为<span class="math inline">\(I\)</span>，那么<span class="math inline">\(I\propto 1/r^2\)</span>，即光照强度与离光源的距离呈现<strong>平方反比</strong> 关系。</p><blockquote><p>这里将光能与光强做等价处理并不严谨，不过鉴于<em>Blinn-Phong</em>本身就是个简化模型，就不多考虑其中的问题。</p></blockquote></li></ol><p>根据上面两点可以写出着色点的漫反射光照强度表达式：</p><p><span class="math display">\[L_d = k_d(I/r^2)\max(0, \vec n \cdot \vec l)\]</span></p><p>其中：<span class="math inline">\(L_d\)</span>为着色点的漫反射光照强度，<span class="math inline">\(k_d\)</span>为漫反射参数(颜色等)，<span class="math inline">\(I\)</span> 为光源处光照强度，<span class="math inline">\(r\)</span> 为着色点到光源处距离。</p><blockquote><p>解释：</p><ol type="1"><li><span class="math inline">\(\vec n \cdot \vec l\)</span>如果为负数，则认为该点不被照亮(不考虑折射等)。</li><li><span class="math inline">\(k_d\)</span>表示为单个小数时表示物体的光反射率，影响物体的亮暗程度；如果将<span class="math inline">\(k_d\)</span>表示为向量即可表示物体对不同颜色的反射率，影响物体的颜色。</li><li><span class="math inline">\(L_d\)</span>的表达式中没有观察方向<span class="math inline">\(\vecv\)</span>的参与，因为模型中假设了某点的漫反射总是均匀的，不管从哪个角度观察都能看到同样的漫反射效果，故与<span class="math inline">\(\vec v\)</span>无关。</li><li>表示方向的向量：<span class="math inline">\(\vec n\)</span>，<span class="math inline">\(\vec v\)</span>和<span class="math inline">\(\vecl\)</span>都是单位向量。</li></ol></blockquote><p>漫反射示例：</p><p><img src="https://imgbed.scubot.com/CG-3-3.png"></p><h4 id="高光-specular-highlights">高光 Specular highlights</h4><p>假设光照在物体的局部平面发生镜面反射，镜面反射的光线方向是<span class="math inline">\(\vec R\)</span>，那么如果观察方向<span class="math inline">\(\vec v\)</span>与<span class="math inline">\(\vecR\)</span>接近时会观测到高光。</p><p><img src="https://imgbed.scubot.com/CG-3-4.png" style="zoom:50%;"></p><p><span class="math inline">\(\vecR\)</span>的计算比较麻烦，<em>Blinn-Phong</em>模型中引入<strong>半程向量</strong>(halfvector)来解决这个问题。</p><p>如果<span class="math inline">\(\vec v\)</span>与<span class="math inline">\(\vec R\)</span>很接近，那么<span class="math inline">\(\vec n\)</span>与<span class="math inline">\(\vecl\)</span>和<span class="math inline">\(\vecv\)</span>的角平分线的方向向量很接近，定义半程向量<span class="math inline">\(\vec h\)</span>为<span class="math inline">\(\vecl\)</span>和<span class="math inline">\(\vecv\)</span>的角平分线方向的单位向量：<span class="math inline">\(\vec h =\rm{bisector}(\vec v, \vec l) = \frac{\vec v + \vec l}{\mid \mid \vec v+ \vec l \mid \mid}\)</span></p><blockquote><p>推导<span class="math inline">\(\vec R=(X_R, Y_R, Z_R)\)</span>：<span class="math display">\[\begin{align*}\frac{\vec R + \vec l}{\mid \mid \vec R + \vec l \mid \mid} &amp;= \vecn \\[2ex]\begin{pmatrix}\frac{X_l + X_R}{\sqrt{(X_l + X_R)^2 + (Y_l + Y_R)^2 + (Z_l + Z_R)^2}}\\ \frac{Y_l + Y_R}{\sqrt{(X_l + X_R)^2 + (Y_l + Y_R)^2 + (Z_l +Z_R)^2}} \\ \frac{Z_l + Z_R}{\sqrt{(X_l + X_R)^2 + (Y_l + Y_R)^2 + (Z_l+ Z_R)^2}}\end{pmatrix} ^\top&amp;= (X_n, Y_n, Z_n)\end{align*}\]</span> 可以列出三个等式，求三个分量，计算量太大不继续算了。</p></blockquote><p><img src="https://imgbed.scubot.com/CG-3-5.png" style="zoom:50%;"></p><p>可以写出着色点的高光亮度表达式： <span class="math display">\[\begin{align*}L_s &amp;= k_s(I/r^2) \max (0, \cos \alpha) ^ p \\ &amp;= k_s(I/r^2)\max(0, \vec n \cdot \vec h)\end{align*}\]</span> 其中<span class="math inline">\(L_s\)</span>为着色点的高光亮度，<span class="math inline">\(k_s\)</span>为高光反射系数， <span class="math inline">\(p\)</span>表示高光敏感度。</p><blockquote><p>解释：</p><ol type="1"><li><p><em>Blinn-Phong</em>光照模型中使用<span class="math inline">\(\vec n\)</span>与<span class="math inline">\(\vech\)</span>来表示高光角度，<em>Phong</em>光照模型中使用<span class="math inline">\(\vec R\)</span>与<span class="math inline">\(\vecv\)</span>来表示高光角度。</p></li><li><p>用指数<span class="math inline">\(p\)</span>来表示可以产生高光的角度区间(敏感程度)，<span class="math inline">\(p\)</span>越大，能看到高光的角度就越小：</p><p><img src="https://imgbed.scubot.com/CG-3-6.png"></p></li></ol></blockquote><p>漫反射+高光示例：</p><p><img src="https://imgbed.scubot.com/CG-3-7.png"></p><h4 id="环境光-ambient-lighting">环境光 Ambient lighting</h4><p>真实的环境光照很复杂，<em>Blinn-Phong</em>模型做了一个大胆的假设：所有着色点的环境光照均相同：<span class="math display">\[L_a = k_a I_a\]</span> 其中：<span class="math inline">\(L_a\)</span>为着色点环境光的光照强度，<span class="math inline">\(k_a\)</span>是环境光反射系数， <span class="math inline">\(I_a\)</span>为环境光强度常数。</p><blockquote><p>解释：</p><ol type="1"><li>在这个模型中环境光与观测方向和光照方向均无关。</li><li>可以将环境光理解成物体本来的颜色，使得不是所有地方都是黑色的。</li><li>精确地计算需要利用到环境光照的知识(不在本文章)。</li></ol></blockquote><h4 id="模型效果">模型效果</h4><p>将以上三种光照效果加在一起，就可以得到某一着色点的光照强度： <span class="math display">\[\begin{align*}L &amp;= L_a + L_d + L_s \\&amp;= k_a I_a + k_d(I/r^2 )\max(0, \vec n \cdot \vec l) + k_s (I /r^2)\max(0, \vec n \cdot \vec h) ^ p\end{align*}\]</span> 效果：</p><p><img src="https://imgbed.scubot.com/CG-3-8.png"></p><h2 id="着色频率">着色频率</h2><p>三种不同的着色方式：</p><ol type="1"><li><p><strong>Flatshading</strong>：以一个三角形为单位，三角形内部颜色不变化，只针对三角形一个点做着色处理就可以对三角形中所有点应用。(逐三角形)</p><p><img src="https://imgbed.scubot.com/CG-3-9.png"></p></li><li><p><strong>Gouraudshading</strong>：对三角形三个顶点求出其法线向量，并算出三个顶点的着色情况，再在三角形内部对三个顶点的颜色做插值。(逐顶点)</p><blockquote><p>关于顶点的发现向量计算：<a href="#顶点法线向量">顶点法线向量</a></p></blockquote><p><img src="https://imgbed.scubot.com/CG-3-10.png"></p></li><li><p><strong>Phongshading</strong>：对三角形三个顶点求出其法线向量，对三角形内部每个点插值出对应的法线，对每一个像素进行着色。(逐像素)</p><blockquote><p><strong>Phongshading</strong>是一种着色频率，与<em>Blinn-Phong</em>着色模型不是一个概念。</p><p>关于像素的法线插值：<a href="#像素法线插值">像素法线插值</a></p></blockquote><p><img src="https://imgbed.scubot.com/CG-3-11.png"></p></li></ol><p>当模型足够复杂(顶点数量足够多时)，Flat shading的效果不一定比Phongshading(计算量大)差。而当模型过于复杂时，顶点数量多余屏幕像素数量，则Flatshading的计算量比Phongshading还要大，具体采取什么样的着色频率要根据实际情况考虑。</p><p><img src="https://imgbed.scubot.com/CG-3-12.png"></p><h3 id="顶点法线向量">顶点法线向量</h3><p>任何一个顶点都与周围若干个三角形所关联，可以简单的认为该点的法线向量是周围三角形的法线向量的平均：</p><p><img src="https://imgbed.scubot.com/CG-3-13.png"> <span class="math display">\[\vec N_v = \frac {\sum_i \vec N_i}{ \mid \mid \sum_i \vec N_i \mid \mid}\]</span></p><blockquote><p>改进：认为每个三角形面积越大权重越大，取得法线的加权平均，效果更好。</p></blockquote><h3 id="像素法线插值">像素法线插值</h3><p>使用<strong>重心坐标</strong>(Barycentricinterpolation)插值，后归一化每个向量。详细的插值方法见后续。</p><p><img src="https://imgbed.scubot.com/CG-3-14.png"></p>]]></content>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;概述&quot;&gt;概述&lt;/h2&gt;
-&lt;p&gt;本文章用来记录计算机图形学中与 &lt;strong&gt;着色(shading)&lt;/strong&gt;
-相关的知识。&lt;/p&gt;</summary>
     
     
     
